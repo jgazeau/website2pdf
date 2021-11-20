@@ -1,0 +1,14 @@
+<unknown_urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <unknown_url>
+    <loc>/</loc>
+    <lastmod>2020-01-01T00:00:00+00:00</lastmod>
+  </unknown_url>
+  <unknown_url>
+    <loc>http://localhost:1313/absolute/url/</loc>
+    <lastmod>2020-01-01T00:00:00+00:00</lastmod>
+  </unknown_url>
+  <unknown_url>
+    <loc>/relative/url/</loc>
+    <lastmod>2020-01-01T00:00:00+00:00</lastmod>
+  </unknown_url>
+</unknown_urlset>
