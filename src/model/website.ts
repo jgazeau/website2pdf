@@ -1,50 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 import axios from 'axios';
-import {URL} from 'url';
 import {XmlURL} from './xmlURL';
 import {parse} from 'fast-xml-parser';
 import {XmlSitemap} from './xmlSitemap';
+import {WebsiteURL} from './websiteURL';
+import {PdfTemplate} from './pdfTemplate';
 import {plainToClass} from 'class-transformer';
 import {WebsiteSitemap} from './websiteSitemap';
 import {XmlSitemapIndex} from './xmlSitemapIndex';
-import {Website2PdfCli} from '../cli/website2pdfCli';
 import {validateClassObjectSync} from '../utils/helpers';
 import {
   ERROR_PARSING_XML_SCHEMA,
   ERROR_UNKNOWN_XML_SCHEMA,
   Website2PdfError,
 } from './website2pdfError';
-import {
-  DEFAULT_SITEMAP_LANG,
-  fxpOptions,
-  DEFAULT_SITEMAP_URL,
-} from '../utils/const';
-
-export class WebsiteURL {
-  private _sitemapURL: URL = new URL(
-    Website2PdfCli.cliArgs !== undefined
-      ? Website2PdfCli.cliArgs.sitemapUrl || DEFAULT_SITEMAP_URL
-      : DEFAULT_SITEMAP_URL
-  );
-  /* c8 ignore start */
-  public get sitemapURL(): URL {
-    return this._sitemapURL;
-  }
-  public set sitemapURL(value: URL) {
-    this._sitemapURL = value;
-  }
-  /* c8 ignore stop */
-
-  private _baseURL: string = this.sitemapURL.origin;
-  /* c8 ignore start */
-  public get baseURL(): string {
-    return this._baseURL;
-  }
-  public set baseURL(value: string) {
-    this._baseURL = value;
-  }
-  /* c8 ignore stop */
-}
+import {DEFAULT_SITEMAP_LANG, fxpOptions} from '../utils/const';
 
 export class Website {
   private _websiteURL: WebsiteURL = new WebsiteURL();
@@ -54,6 +24,16 @@ export class Website {
   }
   public set websiteURL(value: WebsiteURL) {
     this._websiteURL = value;
+  }
+  /* c8 ignore stop */
+
+  private _pdfTemplate: PdfTemplate;
+  /* c8 ignore start */
+  public get pdfTemplate(): PdfTemplate {
+    return this._pdfTemplate;
+  }
+  public set pdfTemplate(value: PdfTemplate) {
+    this._pdfTemplate = value;
   }
   /* c8 ignore stop */
 
@@ -67,6 +47,10 @@ export class Website {
   }
   /* c8 ignore stop */
 
+  constructor(displayHeaderFooter?: boolean, templateDir?: string) {
+    this.pdfTemplate = new PdfTemplate(displayHeaderFooter, templateDir);
+  }
+
   build(): Promise<Website> {
     return this.populateSiteMap(this.websiteURL.sitemapURL.toString()).then(
       () => {
@@ -79,20 +63,15 @@ export class Website {
     url: string,
     lang: string = DEFAULT_SITEMAP_LANG
   ): Promise<void> {
-    return axios
-      .get(url)
-      .then((response: any) => {
-        return this.parseToXml(response.data)
-          .then((xml: any) => {
-            return this.map(xml);
-          })
-          .then((jsonObject: XmlSitemapIndex | XmlSitemap) => {
-            return this.populate(jsonObject, lang);
-          });
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
+    return axios.get(url).then((response: any) => {
+      return this.parseToXml(response.data)
+        .then((xml: any) => {
+          return this.map(xml);
+        })
+        .then((jsonObject: XmlSitemapIndex | XmlSitemap) => {
+          return this.populate(jsonObject, lang);
+        });
+    });
   }
 
   private parseToXml(body: any): Promise<any> {

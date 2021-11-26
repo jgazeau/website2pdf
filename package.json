@@ -50,6 +50,7 @@
     "kleur": "^4.1.4",
     "puppeteer": "^11.0.0",
     "reflect-metadata": "^0.1.13",
+    "table": "^6.7.3",
     "tslog": "^3.2.2",
     "yargs": "^17.2.1"
   },

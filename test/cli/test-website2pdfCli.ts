@@ -9,6 +9,9 @@ import {
   DEFAULT_OUTPUT_DIR,
   DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
+  DISPLAY_HEADER_FOOTER_OPTION,
+  OUTPUT_DIR_OPTION,
+  TEMPLATE_DIR_OPTION,
 } from '../../src/utils/const';
 
 describe('Website2Pdf CLI tests', () => {
@@ -53,9 +56,14 @@ describe('Website2Pdf CLI tests', () => {
     mockArgs([]);
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
+      expect(argv.displayHeaderFooter).to.be.equal(false);
       expect(argv.sitemapUrl).to.be.equal(DEFAULT_SITEMAP_URL);
       expect(argv.templateDir).to.be.equal(DEFAULT_TEMPLATE_DIR);
       expect(argv.outputDir).to.be.equal(DEFAULT_OUTPUT_DIR);
+      const website: Website = new Website();
+      expect(website.websiteURL.sitemapURL.toString()).to.equal(
+        DEFAULT_SITEMAP_URL
+      );
     });
   });
   it('parse with sitemapUrl option should have specific sitemap URL argument and other default arguments', () => {
@@ -63,6 +71,7 @@ describe('Website2Pdf CLI tests', () => {
     mockArgs(['--sitemapUrl', `"${SPECIFIC_URL}"`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
+      expect(argv.displayHeaderFooter).to.be.equal(false);
       expect(argv.sitemapUrl).to.be.equal(SPECIFIC_URL);
       expect(argv.templateDir).to.be.equal(DEFAULT_TEMPLATE_DIR);
       expect(argv.outputDir).to.be.equal(DEFAULT_OUTPUT_DIR);
@@ -70,21 +79,34 @@ describe('Website2Pdf CLI tests', () => {
       expect(website.websiteURL.sitemapURL.toString()).to.equal(SPECIFIC_URL);
     });
   });
-  it('parse with templateDir option should have specific template directory argument and other default arguments', () => {
+  it(`parse with ${DISPLAY_HEADER_FOOTER_OPTION} option should have display header and footer argument and other default arguments`, () => {
     setChaiAsPromised();
-    mockArgs(['--templateDir', `"${SPECIFIC_DIR}"`]);
+    mockArgs([`--${DISPLAY_HEADER_FOOTER_OPTION}`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
+      expect(argv.displayHeaderFooter).to.be.equal(true);
+      expect(argv.sitemapUrl).to.be.equal(DEFAULT_SITEMAP_URL);
+      expect(argv.templateDir).to.be.equal(DEFAULT_TEMPLATE_DIR);
+      expect(argv.outputDir).to.be.equal(DEFAULT_OUTPUT_DIR);
+    });
+  });
+  it(`parse with ${TEMPLATE_DIR_OPTION} option should have specific template directory argument and other default arguments`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${TEMPLATE_DIR_OPTION}`, `"${SPECIFIC_DIR}"`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.displayHeaderFooter).to.be.equal(false);
       expect(argv.sitemapUrl).to.be.equal(DEFAULT_SITEMAP_URL);
       expect(argv.templateDir).to.be.equal(SPECIFIC_DIR);
       expect(argv.outputDir).to.be.equal(DEFAULT_OUTPUT_DIR);
     });
   });
-  it('parse with outputDir option should have specific output directory argument and other default arguments', () => {
+  it(`parse with ${OUTPUT_DIR_OPTION} option should have specific output directory argument and other default arguments`, () => {
     setChaiAsPromised();
-    mockArgs(['--outputDir', `"${SPECIFIC_DIR}"`]);
+    mockArgs([`--${OUTPUT_DIR_OPTION}`, `"${SPECIFIC_DIR}"`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
+      expect(argv.displayHeaderFooter).to.be.equal(false);
       expect(argv.sitemapUrl).to.be.equal(DEFAULT_SITEMAP_URL);
       expect(argv.templateDir).to.be.equal(DEFAULT_TEMPLATE_DIR);
       expect(argv.outputDir).to.be.equal(SPECIFIC_DIR);

@@ -12,9 +12,12 @@ export class LoggerFactory {
 
   public static getInstance(): Logger {
     if (!this.logger) {
-      const loggerLevel: TLogLevelName = Website2PdfCli.cliArgs.debug
-        ? 'debug'
-        : 'info';
+      const loggerLevel: TLogLevelName =
+        Website2PdfCli.cliArgs !== undefined
+          ? Website2PdfCli.cliArgs.debug
+            ? 'debug'
+            : 'info'
+          : 'info';
       this.logger = new Logger({
         type: 'pretty',
         minLevel: loggerLevel,

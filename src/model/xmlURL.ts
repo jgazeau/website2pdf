@@ -1,5 +1,5 @@
 import {URL} from 'url';
-import {WebsiteURL} from './website';
+import {WebsiteURL} from './websiteURL';
 import {IsDefined} from 'class-validator';
 import {Transform, Type} from 'class-transformer';
 

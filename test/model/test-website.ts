@@ -84,6 +84,16 @@ describe('Website model tests', () => {
       Website2PdfError
     );
   });
+  it('Website model should throw a Website2PdfError when unvalid xml', () => {
+    setChaiAsPromised();
+    setAxiosStub('get', [
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, 'sitemap_invalid.xml'),
+    ]);
+    const website: Website = new Website();
+    return expect(website.build()).to.eventually.be.rejectedWith(
+      Website2PdfError
+    );
+  });
   it('Website model should build and populate sitemap when empty sitemapindex', () => {
     setChaiAsPromised();
     setAxiosStub('get', [

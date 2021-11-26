@@ -6,6 +6,8 @@ import {
   DEFAULT_OUTPUT_DIR,
   DEFAULT_TEMPLATE_DIR,
   DEFAULT_SITEMAP_URL,
+  TEMPLATE_DIR_OPTION,
+  OUTPUT_DIR_OPTION,
 } from '../utils/const';
 const yargs = require('yargs');
 
@@ -52,8 +54,15 @@ export class Website2PdfCli {
           '$0 --sitemapUrl "http://localhost:80/sitemap.xml"',
           'Use specific sitemap URL',
         ],
-        ['$0 --templateDir "./templates"', 'Use specific template directory'],
-        ['$0 --outputDir "./output"', 'Use specific output directory'],
+        ['$0 --displayHeaderFooter', 'Print PDFs with header and footer'],
+        [
+          `$0 --${TEMPLATE_DIR_OPTION} "./templates"`,
+          'Use specific template directory',
+        ],
+        [
+          `$0 --${OUTPUT_DIR_OPTION} "./output"`,
+          'Use specific output directory',
+        ],
       ])
       .options({
         debug: {
@@ -66,6 +75,12 @@ export class Website2PdfCli {
           type: 'string',
           default: DEFAULT_SITEMAP_URL,
           description: 'Sitemap URL',
+          group: this.GROUPS.COMMONS,
+        },
+        displayHeaderFooter: {
+          type: 'boolean',
+          default: false,
+          description: 'Turn on header and footer printing',
           group: this.GROUPS.COMMONS,
         },
         templateDir: {
