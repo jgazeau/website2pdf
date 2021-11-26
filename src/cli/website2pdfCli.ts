@@ -1,5 +1,6 @@
 import kleur = require('kleur');
 import {hideBin} from 'yargs/helpers';
+import {getOutputWidth} from '../utils/helpers';
 import {IArgumentsParser, ICliArguments} from './iArgumentsParser';
 import {
   CLI_USAGE,
@@ -98,7 +99,7 @@ export class Website2PdfCli {
           group: this.GROUPS.COMMONS,
         },
       })
-      .wrap(null)
+      .wrap(getOutputWidth())
       .epilog(
         `Additional information:
   GitHub: ${kleur.green('https://github.com/jgazeau/website2pdf.git')}
