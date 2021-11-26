@@ -1,0 +1,42 @@
+name: Tags
+on:
+  release:
+    types: [created]
+jobs:
+  Publish:
+    name: Publish
+    runs-on: ubuntu-18.04
+    env:
+      CHANGELOG_FILE: CHANGELOG.md
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: 'main'
+          submodules: recursive
+          fetch-depth: 1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Generate changelog
+        env:
+          GREN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export TAG_NAME=${GITHUB_REF##*/}
+          npm install github-release-notes
+          npx gren changelog --generate --override --tags=all
+          npm version ${TAG_NAME} --no-git-tag-version
+          git add package.json
+          git add package-lock.json
+          git add ${CHANGELOG_FILE}
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git commit -m "tag/${TAG_NAME}"
+          git tag ${TAG_NAME}
+          git push
+          git push -f origin ${TAG_NAME}
+      - name: Publish on Npm
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}

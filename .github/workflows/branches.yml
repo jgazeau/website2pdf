@@ -1,0 +1,39 @@
+name: Tests
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+    paths:
+      - '**'
+      - '!CHANGELOG.md'
+env:
+  NPM_CACHE_NAME: "npm-cache"
+  NPM_CACHE_PATH: "~/.npm"
+jobs:
+  Test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          fetch-depth: 1
+      - name: Cache node modules
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Npm install
+        run: |
+          printf "%70s\n" | tr ' ' '-'
+          npm ci
+          printf "%70s\n" | tr ' ' '-'
+      - name: Mocha tests, coverage and lint
+        run: |
+          printf "%70s\n" | tr ' ' '-'
+          npm run test
+          printf "%70s\n" | tr ' ' '-'
