@@ -8,13 +8,14 @@ import {PdfTemplate} from './pdfTemplate';
 import {plainToClass} from 'class-transformer';
 import {WebsiteSitemap} from './websiteSitemap';
 import {XmlSitemapIndex} from './xmlSitemapIndex';
+import {ICliArguments} from '../cli/iArgumentsParser';
 import {validateClassObjectSync} from '../utils/helpers';
+import {DEFAULT_SITEMAP_LANG, fxpOptions} from '../utils/const';
 import {
   ERROR_PARSING_XML_SCHEMA,
   ERROR_UNKNOWN_XML_SCHEMA,
   Website2PdfError,
 } from './website2pdfError';
-import {DEFAULT_SITEMAP_LANG, fxpOptions} from '../utils/const';
 
 export class Website {
   private _websiteURL: WebsiteURL = new WebsiteURL();
@@ -47,8 +48,11 @@ export class Website {
   }
   /* c8 ignore stop */
 
-  constructor(displayHeaderFooter?: boolean, templateDir?: string) {
-    this.pdfTemplate = new PdfTemplate(displayHeaderFooter, templateDir);
+  constructor(cliArgs?: ICliArguments) {
+    this.pdfTemplate = new PdfTemplate(
+      cliArgs?.displayHeaderFooter,
+      cliArgs?.templateDir
+    );
   }
 
   build(): Promise<Website> {

@@ -113,3 +113,6 @@ npm-debug.log
 yarn-error.log
 yarn.lock
 __pycache__
+
+#website2pdf
+test/temp

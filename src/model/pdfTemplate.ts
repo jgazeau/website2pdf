@@ -1,3 +1,4 @@
+import {PathLike} from 'fs';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import {
@@ -27,13 +28,13 @@ export class PdfTemplate {
   }
   /* c8 ignore stop */
 
-  constructor(displayHeaderFooter?: boolean, templateDir?: string) {
+  constructor(displayHeaderFooter?: boolean, templateDir?: PathLike) {
     if (displayHeaderFooter) {
       const headerPath = templateDir
-        ? path.join(templateDir, DEFAULT_HEADER_FILE)
+        ? path.join(templateDir.toString(), DEFAULT_HEADER_FILE)
         : path.join(DEFAULT_TEMPLATE_DIR, DEFAULT_HEADER_FILE);
       const footerPath = templateDir
-        ? path.join(templateDir, DEFAULT_FOOTER_FILE)
+        ? path.join(templateDir.toString(), DEFAULT_FOOTER_FILE)
         : path.join(DEFAULT_TEMPLATE_DIR, DEFAULT_FOOTER_FILE);
       this.header = fs.existsSync(headerPath)
         ? fs.readFileSync(headerPath, 'utf8')

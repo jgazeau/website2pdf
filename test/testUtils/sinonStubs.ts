@@ -1,11 +1,8 @@
 /* c8 ignore start */
 import * as chai from 'chai';
-import * as path from 'path';
-import * as fs from 'fs-extra';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 import axios, {AxiosStatic} from 'axios';
-import {testResourcesPath} from './const';
 import {logger} from '../../src/utils/logger';
 
 export class SinonStubs {
@@ -70,12 +67,12 @@ export function restoreSandbox() {
 
 export class AxiosMethodStub {
   url: string;
-  resourceFilename: string;
+  responseData: string;
   httpStatus: number;
 
-  constructor(url: string, resourceFilename: string, httpStatus = 200) {
+  constructor(url: string, responseData: string, httpStatus = 200) {
     this.url = url;
-    this.resourceFilename = resourceFilename;
+    this.responseData = responseData;
     this.httpStatus = httpStatus;
   }
 }
@@ -86,11 +83,10 @@ export function setAxiosStub(
 ) {
   const stub: sinon.SinonStub = sandbox.stub(axios, method);
   for (const methodStub of methodStubs) {
-    const responseData = fs.readFileSync(
-      path.join(testResourcesPath, methodStub.resourceFilename),
-      'utf8'
-    );
-    const response = {status: methodStub.httpStatus, data: responseData};
+    const response = {
+      status: methodStub.httpStatus,
+      data: methodStub.responseData,
+    };
     const stubResponse = new Promise(r => r(response));
     stub.withArgs(methodStub.url).returns(stubResponse);
   }

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 import 'reflect-metadata';
 import * as path from 'path';
@@ -18,7 +19,7 @@ export class Website2Pdf {
   static main(): Promise<void> {
     return new Website2PdfCli().parse().then(cliArgs => {
       headerFactory();
-      const website = new Website();
+      const website = new Website(cliArgs);
       return website.build().then((website: Website) => {
         if (website.sitemaps.length !== 0) {
           return processSitemaps(cliArgs, website);
@@ -139,7 +140,7 @@ function printToPDF(
             displayHeaderFooter: cliArgs.displayHeaderFooter,
             headerTemplate: pdfTemplate.header,
             footerTemplate: pdfTemplate.footer,
-            margin: {top: 40, bottom: 40, left: 40, right: 40},
+            margin: {top: '40px', bottom: '40px', left: '40px', right: '40px'},
             printBackground: true,
           })
           .then(() => {

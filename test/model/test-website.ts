@@ -4,6 +4,20 @@ import {Website} from '../../src/model/website';
 import {setChaiAsPromised} from '../testUtils/helpers';
 import {Website2PdfError} from '../../src/model/website2pdfError';
 import {
+  SITEMAP_EN_ABSURL,
+  SITEMAP_FR_ABSURL,
+  SITEMAP_EXTENDED_PAGE,
+  SITEMAP_EN_PAGE,
+  SITEMAP_FR_PAGE,
+  SITEMAP_UNKNOWN_PAGE,
+  SITEMAP_INVALID_PAGE,
+  SITEMAP_EMPTY_PAGE,
+  SITEMAPINDEX_EMPTY_PAGE,
+  SITEMAP_STANDARD_PAGE,
+  ABSOLUTE_URL,
+  RELATIVE_URL,
+} from '../testUtils/const';
+import {
   AxiosMethodStub,
   createSandbox,
   restoreSandbox,
@@ -13,8 +27,6 @@ import {
   DEFAULT_SITEMAP_LANG,
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_URL,
-  DEFAULT_SITEMAP_URL_EN,
-  DEFAULT_SITEMAP_URL_FR,
 } from '../../src/utils/const';
 
 describe('Website model tests', () => {
@@ -33,9 +45,9 @@ describe('Website model tests', () => {
   it('Website model should build and populate sitemaps when extended sitemap', () => {
     setChaiAsPromised();
     setAxiosStub('get', [
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL, 'sitemapindex.xml'),
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL_EN, 'sitemap_en.xml'),
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL_FR, 'sitemap_fr.xml'),
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_EXTENDED_PAGE),
+      new AxiosMethodStub(SITEMAP_EN_ABSURL, SITEMAP_EN_PAGE),
+      new AxiosMethodStub(SITEMAP_FR_ABSURL, SITEMAP_FR_PAGE),
     ]);
     const website: Website = new Website();
     return website.build().then(() => {
@@ -45,9 +57,9 @@ describe('Website model tests', () => {
         expect(sitemap.urls).to.have.length(3);
         sitemap.urls.forEach(url => {
           expect(url.toString()).to.be.oneOf([
-            `${DEFAULT_SITEMAP_HOST}/`,
-            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/absolute/url/`,
-            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/relative/url/`,
+            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/`,
+            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/${ABSOLUTE_URL}`,
+            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/${RELATIVE_URL}`,
           ]);
         });
       });
@@ -56,7 +68,7 @@ describe('Website model tests', () => {
   it('Website model should build and populate sitemap when standard sitemap', () => {
     setChaiAsPromised();
     setAxiosStub('get', [
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL, 'sitemap.xml'),
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_STANDARD_PAGE),
     ]);
     const website: Website = new Website();
     return website.build().then(() => {
@@ -67,8 +79,8 @@ describe('Website model tests', () => {
         sitemap.urls.forEach(url => {
           expect(url.toString()).to.be.oneOf([
             `${DEFAULT_SITEMAP_HOST}/`,
-            `${DEFAULT_SITEMAP_HOST}/absolute/url/`,
-            `${DEFAULT_SITEMAP_HOST}/relative/url/`,
+            `${DEFAULT_SITEMAP_HOST}/${ABSOLUTE_URL}`,
+            `${DEFAULT_SITEMAP_HOST}/${RELATIVE_URL}`,
           ]);
         });
       });
@@ -77,7 +89,7 @@ describe('Website model tests', () => {
   it('Website model should throw a Website2PdfError when unknown sitemap', () => {
     setChaiAsPromised();
     setAxiosStub('get', [
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL, 'sitemap_unknown.xml'),
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_UNKNOWN_PAGE),
     ]);
     const website: Website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
@@ -87,7 +99,7 @@ describe('Website model tests', () => {
   it('Website model should throw a Website2PdfError when unvalid xml', () => {
     setChaiAsPromised();
     setAxiosStub('get', [
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL, 'sitemap_invalid.xml'),
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_INVALID_PAGE),
     ]);
     const website: Website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
@@ -97,7 +109,7 @@ describe('Website model tests', () => {
   it('Website model should build and populate sitemap when empty sitemapindex', () => {
     setChaiAsPromised();
     setAxiosStub('get', [
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL, 'sitemapindex_empty.xml'),
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAPINDEX_EMPTY_PAGE),
     ]);
     const website: Website = new Website();
     return website.build().then(() => {
@@ -107,7 +119,7 @@ describe('Website model tests', () => {
   it('Website model should build and populate sitemap when empty sitemap', () => {
     setChaiAsPromised();
     setAxiosStub('get', [
-      new AxiosMethodStub(DEFAULT_SITEMAP_URL, 'sitemap_empty.xml'),
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_EMPTY_PAGE),
     ]);
     const website: Website = new Website();
     return website.build().then(() => {
