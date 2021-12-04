@@ -124,6 +124,7 @@ function printToPDF(
   pdfTemplate: PdfTemplate
 ): Promise<void> {
   return browserContext.newPage().then(page => {
+    page.setDefaultNavigationTimeout(0);
     return page
       .goto(url.toString(), {waitUntil: 'networkidle2'})
       .then(() => {
