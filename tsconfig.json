@@ -6,12 +6,13 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "sourceMap": true,
+    "outDir": "build",
     "rootDir": ".",
-    "outDir": "build"
+    "lib": ["dom"],
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts"
+    "test/**/*.ts",
   ],
   "exclude": [
     "test/resources/**/*",

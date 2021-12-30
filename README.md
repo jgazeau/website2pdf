@@ -59,11 +59,13 @@ Additional information:
   Issues: https://github.com/jgazeau/website2pdf/issues
 ```
 
-# Examples
+## Examples
+
+### Default example
 
 ```
 $ npx website2pdf
-2021-11-28 19:14:15.642  INFO 
+2022-01-01 00:00:00.000  INFO 
 ●      __          __  _         _ _       ___  _____    _  __
 ●      \ \        / / | |       (_) |     |__ \|  __ \  | |/ _|
 ●       \ \  /\  / /__| |__  ___ _| |_ ___   ) | |__) |_| | |_
@@ -71,9 +73,9 @@ $ npx website2pdf
 ●         \  /\  /  __/ |_) \__ \ | ||  __// /_| |  | (_| | |
 ●          \/  \/ \___|_.__/|___/_|\__\___|____|_|   \__,_|_|
  
-2021-11-28 19:14:16.053  INFO Printing 2 PDF(s) to w2pdf_output\fr 
-2021-11-28 19:14:16.059  INFO Printing 2 PDF(s) to w2pdf_output\en
-2021-11-28 19:14:31.562  INFO 
+2022-01-01 00:00:00.000  INFO Printing 2 PDF(s) to w2pdf_output\fr 
+2022-01-01 00:00:00.000  INFO Printing 2 PDF(s) to w2pdf_output\en
+2022-01-01 00:00:00.000  INFO 
 ┌───────────────────────────────────────────────────────────────┐
 │                   Results summary                             │
 ├─────────────────┬───────────────────────────────────┬─────────┤
@@ -89,8 +91,43 @@ $ npx website2pdf
 └─────────────────┴───────────────────────────────────┴─────────┘
 ```
 
+## How to use Header and Footer?
+
+To include specific header and footer in PDF pages, two HTML files must be provided, named respectively **header.html** and **footer.html** (in **./w2pdf_template** by default).  
+The following types of configurations are available to expand header and footer:
+* standard options of [headerTemplate and footerTemplate from Puppeteer](https://devdocs.io/puppeteer/index#pagepdfoptions)
+* expanded variables from meta tags of HTML page:
+    * Given the following HTML meta tag:
+        ```
+        <meta name="specificKey" content="A specific value">
+        ```
+        And the following header and/or footer template:
+        ```
+        ...
+        <span>${specificKey}</span>
+        ...
+        ```
+        The result template will be:
+        ```
+        ...
+        <span>A specific value</span>
+        ...
+        ```
+* images encoded as base64 from local files (:warning: only available for png files):
+    * Given the following header and/or footer template:
+        ```
+        ...
+        <image src="${image:./local_image_path/image.png}">
+        ...
+        ```
+        The result template will be:
+        ```
+        ...
+        <image src="data:image/png;base64,XXXXXXXXXXXXXX">
+        ...
+        ```
+
 ## Upcoming features
 
 * Allow to override default configuration of the [Puppeteer page.pdf options](https://devdocs.io/puppeteer/index#pagepdfoptions)
-* Feature to include more variables in header/footer
 * Dockerfile to be able to generate PDF files from a CI/CD pipeline
