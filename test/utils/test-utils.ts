@@ -4,7 +4,13 @@ import {logger} from '../../src/utils/logger';
 import {logTestLevel} from '../testUtils/const';
 import {SinonStubs} from '../testUtils/sinonStubs';
 import {MAX_TTY_LENGTH} from '../../src/utils/const';
-import {getOutputWidth, headerFactory} from '../../src/utils/helpers';
+import {
+  getOutputWidth,
+  headerFactory,
+  imageEncode,
+  interpolate,
+  toFilename,
+} from '../../src/utils/helpers';
 
 describe('Utils tests', () => {
   const sinonMock = new SinonStubs({});
@@ -24,5 +30,29 @@ describe('Utils tests', () => {
     sinonMock.sinonSetStubs();
     headerFactory(red, logTestLevel);
     expect(logger()[logTestLevel]).to.be.calledOnce;
+  });
+  it('toFilename should return filename with title', () => {
+    expect(toFilename('file_title_éè%$@')).to.equal('file_title_éè');
+  });
+  it('toFilename should return filename with UUID', () => {
+    expect(toFilename(undefined)).to.match(
+      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+    );
+  });
+  it('interpolate should replace placeholders with value from map of variable', () => {
+    const variableMap = new Map<string, string>([
+      ['key1', 'value1'],
+      ['key2', 'value2'],
+    ]);
+    const input = 'key1=${key1},key2=${key2}';
+    expect(interpolate(input, variableMap)).to.be.equal(
+      'key1=value1,key2=value2'
+    );
+  });
+  it('imageEncode should return source of image as base64', () => {
+    const inputPath = './test/resources/images/test.png';
+    expect(imageEncode(inputPath)).to.be.equal(
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U9tCF8gAAAAAAAAAG41HX4AASRYHnsAAAAASUVORK5CYII='
+    );
   });
 });

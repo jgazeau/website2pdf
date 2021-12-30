@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 import axios from 'axios';
 import {XmlURL} from './xmlURL';
-import {parse} from 'fast-xml-parser';
+import {XMLParser} from 'fast-xml-parser';
 import {XmlSitemap} from './xmlSitemap';
 import {WebsiteURL} from './websiteURL';
 import {PdfTemplate} from './pdfTemplate';
@@ -80,7 +80,8 @@ export class Website {
 
   private parseToXml(body: any): Promise<any> {
     try {
-      return Promise.resolve(parse(body, fxpOptions, true));
+      const parser = new XMLParser(fxpOptions);
+      return Promise.resolve(parser.parse(body));
     } catch (error: any) {
       return Promise.reject(
         new Website2PdfError(`${ERROR_PARSING_XML_SCHEMA}: ${error.message}`)

@@ -8,11 +8,11 @@ import {URL} from 'url';
 import {red} from 'kleur';
 import {logger} from './utils/logger';
 import {Website} from './model/website';
-import {headerFactory} from './utils/helpers';
 import {PdfTemplate} from './model/pdfTemplate';
 import {Website2PdfCli} from './cli/website2pdfCli';
 import {ICliArguments} from './cli/iArgumentsParser';
 import {WebsiteSitemap} from './model/websiteSitemap';
+import {headerFactory, interpolate, toFilename} from './utils/helpers';
 import {PrintResults, STATUS_PRINTED, STATUS_ERROR} from './utils/stats';
 
 export class Website2Pdf {
@@ -125,13 +125,38 @@ function printToPDF(
 ): Promise<void> {
   return browserContext.newPage().then(page => {
     page.setDefaultNavigationTimeout(0);
+    const metadatas = new Map<string, string>();
     return page
       .goto(url.toString(), {waitUntil: 'networkidle2'})
       .then(() => {
-        return page.title();
+        page.title().then(title => {
+          metadatas.set('title', title);
+        });
       })
-      .then(title => {
-        const filePath = path.join(outputDir, `${toFilename(title)}.pdf`);
+      .then(() => {
+        return page
+          .$$eval('meta', metas =>
+            metas
+              .filter(meta => meta !== null)
+              .map(meta => {
+                const metaName = meta.getAttribute('name');
+                return metaName
+                  ? [metaName, meta.getAttribute('content')]
+                  : null;
+              })
+          )
+          .then(metas => {
+            metas.forEach(meta => {
+              if (meta) metadatas.set(meta[0]!, meta[1]!);
+            });
+            return metadatas;
+          });
+      })
+      .then(metadatas => {
+        const filePath = path.join(
+          outputDir,
+          `${toFilename(metadatas.get('title')?.toString())}.pdf`
+        );
         logger().debug(`Printing page "${filePath}" from url "${url}"`);
         return page
           .pdf({
@@ -139,8 +164,8 @@ function printToPDF(
             path: filePath,
             format: 'a4',
             displayHeaderFooter: cliArgs.displayHeaderFooter,
-            headerTemplate: pdfTemplate.header,
-            footerTemplate: pdfTemplate.footer,
+            headerTemplate: interpolate(pdfTemplate.header, metadatas),
+            footerTemplate: interpolate(pdfTemplate.footer, metadatas),
             margin: {top: '40px', bottom: '40px', left: '40px', right: '40px'},
             printBackground: true,
           })
@@ -157,12 +182,4 @@ function printToPDF(
         return page.close();
       });
   });
-}
-
-function toFilename(title: string): string {
-  return title
-    .replace(/[^a-z0-9\u00C0-\u024F\u1E00-\u1EFF]/gi, ' ')
-    .trim()
-    .replace(/ /g, '_')
-    .replace(/([_])\1+/g, '_');
 }
