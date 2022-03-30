@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 /* c8 ignore start */
-import {DEFAULT_HOST, DEFAULT_PORT} from '../../src/utils/const';
+import {DEFAULT_PORT} from '../../src/utils/const';
 import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
 
 export class TestRequest {
@@ -65,7 +65,7 @@ export class TestServer {
     });
     this.testServer.listen(
       {
-        host: DEFAULT_HOST,
+        host: '::',
         port: DEFAULT_PORT,
       },
       () => {

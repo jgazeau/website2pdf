@@ -15,6 +15,10 @@ export const testTemplatesPath: string = path.join(
   testResourcesPath,
   DEFAULT_TEMPLATE_DIR
 );
+export const testTemplatesMetaPath: string = path.join(
+  testResourcesPath,
+  `${DEFAULT_TEMPLATE_DIR}_meta`
+);
 export const SPECIFIC_URL = 'https://example.com/sitemap.xml';
 export const SPECIFIC_DIR = './aSpecificDir/';
 
@@ -50,12 +54,19 @@ export const SITEMAP_INVALID_PAGE = fs.readFileSync(
   path.join(testResourcesPath, '/sitemap_invalid.xml'),
   'utf8'
 );
+export const SITEMAP_EMPTY_RELURL = '/empty/sitemap.xml';
 export const SITEMAP_EMPTY_PAGE = fs.readFileSync(
   path.join(testResourcesPath, '/sitemap_empty.xml'),
   'utf8'
 );
+export const SITEMAPINDEX_EMPTY_RELURL = '/empty/sitemapindex.xml';
 export const SITEMAPINDEX_EMPTY_PAGE = fs.readFileSync(
   path.join(testResourcesPath, '/sitemapindex_empty.xml'),
+  'utf8'
+);
+export const SITEMAPINDEX_EMPTY_URL_RELURL = '/empty_url/sitemapindex.xml';
+export const SITEMAPINDEX_EMPTY_URL_PAGE = fs.readFileSync(
+  path.join(testResourcesPath, '/sitemapindex_empty_url.xml'),
   'utf8'
 );
 export const EN_HOMEPAGE_URL = '/en/';

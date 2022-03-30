@@ -1,3 +1,5 @@
+import * as http from 'http';
+import axios from 'axios';
 import {cyan} from 'kleur';
 
 export const MAX_TTY_LENGTH = 120;
@@ -18,6 +20,9 @@ export const fxpOptions = {
   parseNodeValue: true,
   trimValues: true,
 };
+
+// Force ipv4 for Axios client
+axios.defaults.httpAgent = new http.Agent({family: 4});
 
 export const WEBSITE2PDF_HEADER = `
 \u25CF      __          __  _         _ _       ___  _____    _  __ 

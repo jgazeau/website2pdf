@@ -32,6 +32,12 @@ import {
   FR_RELATIVE_URL,
   RELATIVE_URL,
   rootPath,
+  SITEMAPINDEX_EMPTY_URL_PAGE,
+  SITEMAPINDEX_EMPTY_URL_RELURL,
+  SITEMAPINDEX_EMPTY_PAGE,
+  SITEMAPINDEX_EMPTY_RELURL,
+  SITEMAP_EMPTY_PAGE,
+  SITEMAP_EMPTY_RELURL,
   SITEMAP_EN_PAGE,
   SITEMAP_EN_RELURL,
   SITEMAP_EXTENDED_PAGE,
@@ -42,6 +48,7 @@ import {
   SITEMAP_STANDARD_RELURL,
   testTemplatesPath,
   testTempPath,
+  testTemplatesMetaPath,
 } from './testUtils/const';
 
 const testRequests: TestRequest[] = [
@@ -60,6 +67,17 @@ const testRequests: TestRequest[] = [
   ),
   new TestRequest(SITEMAP_EN_RELURL, SITEMAP_EN_PAGE, 'application/xml'),
   new TestRequest(SITEMAP_FR_RELURL, SITEMAP_FR_PAGE, 'application/xml'),
+  new TestRequest(SITEMAP_EMPTY_RELURL, SITEMAP_EMPTY_PAGE, 'application/xml'),
+  new TestRequest(
+    SITEMAPINDEX_EMPTY_RELURL,
+    SITEMAPINDEX_EMPTY_PAGE,
+    'application/xml'
+  ),
+  new TestRequest(
+    SITEMAPINDEX_EMPTY_URL_RELURL,
+    SITEMAPINDEX_EMPTY_URL_PAGE,
+    'application/xml'
+  ),
   new TestRequest(EN_HOMEPAGE_URL, EN_HOMEPAGE_PAGE),
   new TestRequest(EN_ABSOLUTE_URL, EN_ABSOLUTE_PAGE),
   new TestRequest(EN_RELATIVE_URL, EN_RELATIVE_PAGE),
@@ -98,7 +116,61 @@ describe('Website2pdf tests', () => {
   afterEach(() => {
     sinonMock.sinonRestoreStubs();
   });
-  it('website2pdf should work with standard sitemap', () => {
+  it('website2pdf should not create any file when empty standard sitemap', () => {
+    setChaiAsPromised();
+    mockArgs([
+      '--sitemapUrl',
+      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EMPTY_RELURL}`,
+    ]);
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      const tempDir = path.join(
+        testTempPath,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_SITEMAP_LANG
+      );
+      return fs.pathExists(tempDir).then(isDirExists => {
+        expect(isDirExists).to.be.false;
+      });
+    });
+  });
+  it('website2pdf should not create any file when empty extended sitemap', () => {
+    setChaiAsPromised();
+    mockArgs([
+      '--sitemapUrl',
+      `${DEFAULT_SITEMAP_HOST}${SITEMAPINDEX_EMPTY_RELURL}`,
+    ]);
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      const tempDir = path.join(
+        testTempPath,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_SITEMAP_LANG
+      );
+      return fs.pathExists(tempDir).then(isDirExists => {
+        expect(isDirExists).to.be.false;
+      });
+    });
+  });
+  it('website2pdf should not create any file when extended sitemap with empty standard sitemap', () => {
+    setChaiAsPromised();
+    mockArgs([
+      '--sitemapUrl',
+      `${DEFAULT_SITEMAP_HOST}${SITEMAPINDEX_EMPTY_URL_RELURL}`,
+    ]);
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      const tempDir = path.join(
+        testTempPath,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_SITEMAP_LANG
+      );
+      return fs.pathExists(tempDir).then(isDirExists => {
+        expect(isDirExists).to.be.false;
+      });
+    });
+  });
+  it('website2pdf should work', () => {
     setChaiAsPromised();
     mockArgs([]);
     process.chdir(testTempPath);
@@ -126,7 +198,7 @@ describe('Website2pdf tests', () => {
       });
     });
   });
-  it('website2pdf should work with standard sitemap and displayHeaderFooter', () => {
+  it('website2pdf should work when standard sitemap and displayHeaderFooter', () => {
     setChaiAsPromised();
     mockArgs(['--displayHeaderFooter']);
     process.chdir(testTempPath);
@@ -154,7 +226,7 @@ describe('Website2pdf tests', () => {
       });
     });
   });
-  it('website2pdf should work with extended sitemap and displayHeaderFooter', () => {
+  it('website2pdf should work when extended sitemap and displayHeaderFooter', () => {
     setChaiAsPromised();
     mockArgs([
       '--displayHeaderFooter',
@@ -191,7 +263,7 @@ describe('Website2pdf tests', () => {
       );
     });
   });
-  it('website2pdf should work with standard sitemap, displayHeaderFooter and header/footer from default templateDir', () => {
+  it('website2pdf should work when standard sitemap, displayHeaderFooter and header/footer from default templateDir', () => {
     setChaiAsPromised();
     mockArgs(['--displayHeaderFooter']);
     fs.copySync(
@@ -223,7 +295,7 @@ describe('Website2pdf tests', () => {
       });
     });
   });
-  it('website2pdf should work with extended sitemap, displayHeaderFooter, header/footer from specific templateDir and specific outputDir', () => {
+  it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer from specific templateDir and specific outputDir', () => {
     setChaiAsPromised();
     mockArgs([
       '--displayHeaderFooter',
@@ -231,6 +303,46 @@ describe('Website2pdf tests', () => {
       `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
       '--templateDir',
       `${testTemplatesPath}`,
+      '--outputDir',
+      `${testTempPath}`,
+    ]);
+    return Website2Pdf.main().then(() => {
+      const tempDirs = [
+        path.join(testTempPath, 'en'),
+        path.join(testTempPath, 'fr'),
+      ];
+      return Promise.all(
+        tempDirs.map(tempDir => {
+          return fs.pathExists(tempDir).then(isDirExists => {
+            expect(isDirExists).to.be.true;
+            return fs.readdir(tempDir).then(files => {
+              expect(files).to.have.length(3);
+              return Promise.all(
+                files.map(file => {
+                  return fs
+                    .pathExists(path.join(tempDir, file))
+                    .then(isFileExists => {
+                      expect(isFileExists).to.be.true;
+                      expect(file).to.be.oneOf(
+                        enFilesGenerated.concat(frFilesGenerated)
+                      );
+                    });
+                })
+              );
+            });
+          });
+        })
+      );
+    });
+  });
+  it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer from specific templateDir with metadatas', () => {
+    setChaiAsPromised();
+    mockArgs([
+      '--displayHeaderFooter',
+      '--sitemapUrl',
+      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
+      '--templateDir',
+      `${testTemplatesMetaPath}`,
       '--outputDir',
       `${testTempPath}`,
     ]);

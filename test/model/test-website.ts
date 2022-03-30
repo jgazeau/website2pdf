@@ -2,7 +2,10 @@ import 'reflect-metadata';
 import {expect} from 'chai';
 import {Website} from '../../src/model/website';
 import {setChaiAsPromised} from '../testUtils/helpers';
-import {Website2PdfError} from '../../src/model/website2pdfError';
+import {
+  ERROR_UNKNOWN_XML_SCHEMA,
+  Website2PdfError,
+} from '../../src/model/website2pdfError';
 import {
   SITEMAP_EN_ABSURL,
   SITEMAP_FR_ABSURL,
@@ -93,17 +96,19 @@ describe('Website model tests', () => {
     ]);
     const website: Website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
-      Website2PdfError
+      Website2PdfError,
+      ERROR_UNKNOWN_XML_SCHEMA
     );
   });
-  it('Website model should throw a Website2PdfError when unvalid xml', () => {
+  it('Website model should throw a Website2PdfError when invalid xml', () => {
     setChaiAsPromised();
     setAxiosStub('get', [
       new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_INVALID_PAGE),
     ]);
     const website: Website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
-      Website2PdfError
+      Website2PdfError,
+      ERROR_UNKNOWN_XML_SCHEMA
     );
   });
   it('Website model should build and populate sitemap when empty sitemapindex', () => {
@@ -123,7 +128,7 @@ describe('Website model tests', () => {
     ]);
     const website: Website = new Website();
     return website.build().then(() => {
-      expect(website.sitemaps).to.have.length(0);
+      expect(website.sitemaps).to.have.length(1);
     });
   });
 });

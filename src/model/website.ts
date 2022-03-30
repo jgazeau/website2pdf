@@ -114,15 +114,16 @@ export class Website {
     lang: string
   ): Promise<void> {
     if (json instanceof XmlSitemap) {
-      !json._urlset._url.length ||
-        this._sitemaps.push(
-          new WebsiteSitemap(
-            lang,
-            json._urlset._url.flatMap((xmlURL: XmlURL) => xmlURL._loc)
+      json._urlset._url.length
+        ? this._sitemaps.push(
+            new WebsiteSitemap(
+              lang,
+              json._urlset._url.flatMap((xmlURL: XmlURL) => xmlURL._loc)
+            )
           )
-        );
+        : this._sitemaps.push(new WebsiteSitemap(lang, []));
       return Promise.resolve();
-    } else if (json instanceof XmlSitemapIndex) {
+    } else {
       return Promise.all(
         json._sitemapindex._sitemap.map(xmlURL => {
           return this.populateSiteMap(
@@ -133,8 +134,6 @@ export class Website {
       ).then(() => {
         return Promise.resolve();
       });
-    } else {
-      throw new Website2PdfError(ERROR_UNKNOWN_XML_SCHEMA);
     }
   }
 }
