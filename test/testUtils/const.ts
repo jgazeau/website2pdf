@@ -19,6 +19,10 @@ export const testTemplatesMetaPath: string = path.join(
   testResourcesPath,
   `${DEFAULT_TEMPLATE_DIR}_meta`
 );
+export const testTemplatesImagePath: string = path.join(
+  testResourcesPath,
+  `${DEFAULT_TEMPLATE_DIR}_image`
+);
 export const SPECIFIC_URL = 'https://example.com/sitemap.xml';
 export const SPECIFIC_DIR = './aSpecificDir/';
 
