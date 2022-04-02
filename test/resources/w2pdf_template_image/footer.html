@@ -10,12 +10,18 @@
     width: 100%;
   }
   .footer-left, .footer-right {
+    flex-wrap: nowrap;
+    display: flex;
     padding: 0;
+  }
+  img {
+    max-height: 8px;
+    max-width: 8px;
   }
 </style>
 <div class="footer">
   <div class="footer-left">
-    <span>class="date": </span><span class="date"></span> / <span>${specificKey}</span>
+    <img src="${image:./test/resources/images/test.png}"></img><span>class="date": </span><span class="date"></span> / <span>${specificKey}</span>
   </div>
   <div class="footer-right">
     <span>class="pageNumber" / class="totalPages": </span><span class="pageNumber"></span> / <span class="totalPages"></span>

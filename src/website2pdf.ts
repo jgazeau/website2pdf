@@ -166,7 +166,12 @@ function printToPDF(
             displayHeaderFooter: cliArgs.displayHeaderFooter,
             headerTemplate: interpolate(pdfTemplate.header, metadatas),
             footerTemplate: interpolate(pdfTemplate.footer, metadatas),
-            margin: {top: '0px', bottom: '0px', left: '0px', right: '0px'},
+            margin: {
+              top: cliArgs.marginTop,
+              bottom: cliArgs.marginBottom,
+              left: cliArgs.marginLeft,
+              right: cliArgs.marginRight,
+            },
             printBackground: true,
           })
           .then(() => {

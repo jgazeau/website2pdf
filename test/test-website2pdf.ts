@@ -49,6 +49,7 @@ import {
   testTemplatesPath,
   testTempPath,
   testTemplatesMetaPath,
+  testTemplatesImagePath,
 } from './testUtils/const';
 
 const testRequests: TestRequest[] = [
@@ -335,7 +336,7 @@ describe('Website2pdf tests', () => {
       );
     });
   });
-  it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer from specific templateDir with metadatas', () => {
+  it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer with metadatas from specific templateDir', () => {
     setChaiAsPromised();
     mockArgs([
       '--displayHeaderFooter',
@@ -343,6 +344,46 @@ describe('Website2pdf tests', () => {
       `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
       '--templateDir',
       `${testTemplatesMetaPath}`,
+      '--outputDir',
+      `${testTempPath}`,
+    ]);
+    return Website2Pdf.main().then(() => {
+      const tempDirs = [
+        path.join(testTempPath, 'en'),
+        path.join(testTempPath, 'fr'),
+      ];
+      return Promise.all(
+        tempDirs.map(tempDir => {
+          return fs.pathExists(tempDir).then(isDirExists => {
+            expect(isDirExists).to.be.true;
+            return fs.readdir(tempDir).then(files => {
+              expect(files).to.have.length(3);
+              return Promise.all(
+                files.map(file => {
+                  return fs
+                    .pathExists(path.join(tempDir, file))
+                    .then(isFileExists => {
+                      expect(isFileExists).to.be.true;
+                      expect(file).to.be.oneOf(
+                        enFilesGenerated.concat(frFilesGenerated)
+                      );
+                    });
+                })
+              );
+            });
+          });
+        })
+      );
+    });
+  });
+  it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer with image from specific templateDir', () => {
+    setChaiAsPromised();
+    mockArgs([
+      '--displayHeaderFooter',
+      '--sitemapUrl',
+      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
+      '--templateDir',
+      `${testTemplatesImagePath}`,
       '--outputDir',
       `${testTempPath}`,
     ]);

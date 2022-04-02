@@ -11,4 +11,8 @@ export interface ICliArguments extends yargs.Arguments {
   sitemapUrl: string;
   templateDir: PathLike;
   outputDir: PathLike;
+  marginTop: string;
+  marginBottom: string;
+  marginLeft: string;
+  marginRight: string;
 }

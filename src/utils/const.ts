@@ -6,8 +6,15 @@ export const MAX_TTY_LENGTH = 120;
 export const DISPLAY_HEADER_FOOTER_OPTION = 'displayHeaderFooter';
 export const TEMPLATE_DIR_OPTION = 'templateDir';
 export const OUTPUT_DIR_OPTION = 'outputDir';
+export const MARGIN_TOP_OPTION = 'marginTop';
+export const MARGIN_BOTTOM_OPTION = 'marginBottom';
+export const MARGIN_LEFT_OPTION = 'marginLeft';
+export const MARGIN_RIGHT_OPTION = 'marginRight';
+
 export const DEFAULT_TEMPLATE_DIR = './w2pdf_template';
 export const DEFAULT_OUTPUT_DIR = './w2pdf_output';
+export const DEFAULT_MARGIN_MAX = '50px';
+export const DEFAULT_MARGIN_MIN = '0px';
 export const DEFAULT_HEADER_FILE = 'header.html';
 export const DEFAULT_FOOTER_FILE = 'footer.html';
 export const DEFAULT_SITEMAP_LANG = 'default';
@@ -36,8 +43,16 @@ export const WEBSITE2PDF_HEADER = `
 export const CLI_USAGE = `${WEBSITE2PDF_HEADER}
 Usage: $0 [options]
 
-NB: Website2Pdf will search for ${cyan(DEFAULT_HEADER_FILE)} and ${cyan(
+NB1: Website2Pdf will search for ${cyan(DEFAULT_HEADER_FILE)} and ${cyan(
   DEFAULT_FOOTER_FILE
 )} files from the ${cyan(
   TEMPLATE_DIR_OPTION
-)} and use them respectively as header and footer definition when printing PDFs.`;
+)} and use them respectively as header and footer definition when printing PDFs.
+
+NB2: Margins have default values depending on the option used:
+===> when displayHeaderFooter=true
+-      marginTop  = marginBottom = 50px
+-      marginLeft = marginRight  = 0px
+===> when displayHeaderFooter=false
+-      marginTop  = marginBottom = 0px
+-      marginLeft = marginRight  = 0px`;

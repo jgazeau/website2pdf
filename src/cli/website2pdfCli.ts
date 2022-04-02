@@ -9,6 +9,8 @@ import {
   DEFAULT_SITEMAP_URL,
   TEMPLATE_DIR_OPTION,
   OUTPUT_DIR_OPTION,
+  DEFAULT_MARGIN_MAX,
+  DEFAULT_MARGIN_MIN,
 } from '../utils/const';
 const yargs = require('yargs');
 
@@ -98,6 +100,28 @@ export class Website2PdfCli {
           description: 'Relative path of the output directory',
           group: this.GROUPS.COMMONS,
         },
+        marginTop: {
+          type: 'string',
+          description: 'Margin top (50px or 0px)',
+          group: this.GROUPS.COMMONS,
+        },
+        marginBottom: {
+          type: 'string',
+          description: 'Margin bottom (50px or 0px)',
+          group: this.GROUPS.COMMONS,
+        },
+        marginLeft: {
+          type: 'string',
+          default: DEFAULT_MARGIN_MIN,
+          description: 'Margin left',
+          group: this.GROUPS.COMMONS,
+        },
+        marginRight: {
+          type: 'string',
+          default: DEFAULT_MARGIN_MIN,
+          description: 'Margin right',
+          group: this.GROUPS.COMMONS,
+        },
       })
       .wrap(getOutputWidth())
       .epilog(
@@ -111,6 +135,21 @@ export class Website2PdfCli {
 
   parse(): Promise<ICliArguments> {
     this._parser.argv;
+    this.defaultValues(Website2PdfCli.cliArgs);
     return Promise.resolve(Website2PdfCli.cliArgs);
+  }
+
+  private defaultValues(args: ICliArguments): void {
+    if (args.displayHeaderFooter) {
+      args.marginTop = args.marginTop ? args.marginTop : DEFAULT_MARGIN_MAX;
+      args.marginBottom = args.marginBottom
+        ? args.marginBottom
+        : DEFAULT_MARGIN_MAX;
+    } else {
+      args.marginTop = args.marginTop ? args.marginTop : DEFAULT_MARGIN_MIN;
+      args.marginBottom = args.marginBottom
+        ? args.marginBottom
+        : DEFAULT_MARGIN_MIN;
+    }
   }
 }
