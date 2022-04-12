@@ -10,6 +10,7 @@ export const MARGIN_TOP_OPTION = 'marginTop';
 export const MARGIN_BOTTOM_OPTION = 'marginBottom';
 export const MARGIN_LEFT_OPTION = 'marginLeft';
 export const MARGIN_RIGHT_OPTION = 'marginRight';
+export const CHROMIUM_FLAGS_OPTION = 'chromiumFlags';
 
 export const DEFAULT_TEMPLATE_DIR = './w2pdf_template';
 export const DEFAULT_OUTPUT_DIR = './w2pdf_output';

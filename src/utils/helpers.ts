@@ -4,6 +4,7 @@ import {logger} from './logger';
 import {randomUUID} from 'crypto';
 import {Color, white} from 'kleur';
 import {TLogLevelName} from 'tslog';
+import {PuppeteerNodeLaunchOptions} from 'puppeteer';
 import {WEBSITE2PDF_HEADER, MAX_TTY_LENGTH} from './const';
 import {validateSync, ValidationError} from 'class-validator';
 
@@ -59,4 +60,10 @@ export function base64Encode(path: fs.PathOrFileDescriptor): string {
 
 export function imageEncode(path: fs.PathOrFileDescriptor): string {
   return `data:image/png;base64,${base64Encode(path)}`;
+}
+
+export function puppeteerBrowserLaunchArgs(
+  chromiumFlags: string
+): PuppeteerNodeLaunchOptions {
+  return chromiumFlags ? {args: [...chromiumFlags.split(' ')]} : {};
 }

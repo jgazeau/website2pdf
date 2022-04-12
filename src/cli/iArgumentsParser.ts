@@ -15,4 +15,5 @@ export interface ICliArguments extends yargs.Arguments {
   marginBottom: string;
   marginLeft: string;
   marginRight: string;
+  chromiumFlags: string;
 }

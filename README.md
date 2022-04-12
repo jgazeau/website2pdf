@@ -49,10 +49,11 @@ Common options:
       --displayHeaderFooter  Turn on header and footer printing                               [boolean] [default: false]
   -t, --templateDir          Relative path of the templates directory                      [default: "./w2pdf_template"]
   -o, --outputDir            Relative path of the output directory                           [default: "./w2pdf_output"]
-      --marginTop            Margin top                                               [string] [default: "50px or 50px"]
-      --marginBottom         Margin bottom                                            [string] [default: "50px or 50px"]
+      --marginTop            Margin top (50px or 0px)                                                           [string]
+      --marginBottom         Margin bottom (50px or 0px)                                                        [string]
       --marginLeft           Margin left                                                       [string] [default: "0px"]
       --marginRight          Margin right                                                      [string] [default: "0px"]
+      --chromiumFlags        Chromium flags set at Puppeteer launch                                             [string]
 
 Other Options:
       --debug    Turn on debug logging                                                        [boolean] [default: false]
@@ -60,10 +61,14 @@ Other Options:
   -h, --help     Show help                                                                                     [boolean]
 
 Examples:
-  website2pdf --sitemapUrl "http://localhost:80/sitemap.xml"  Use specific sitemap URL
-  website2pdf --displayHeaderFooter                           Print PDFs with header and footer
-  website2pdf --templateDir "./templates"                     Use specific template directory
-  website2pdf --outputDir "./output"                          Use specific output directory
+  website2pdf --sitemapUrl "http://localhost:80/sitemap.xml"    Use specific sitemap URL
+  website2pdf --displayHeaderFooter                             Print PDFs with header and footer
+  website2pdf --templateDir "./templates"                       Use specific template directory
+  website2pdf --outputDir "./output"                            Use specific output directory
+  website2pdf --displayHeaderFooter --marginLeft "50px"         Use header and footer and set specific margins
+  --marginRight "50px"
+  website2pdf --chromiumFlags "--no-sandbox                     Use specific chromium options at Puppeteer launch
+  --disable-dev-shm-usage"
 
 Additional information:
   GitHub: https://github.com/jgazeau/website2pdf.git
@@ -169,8 +174,3 @@ The following types of configurations are available to expand header and footer:
         <image src="data:image/png;base64,XXXXXXXXXXXXXX">
         ...
         ```
-
-## Upcoming features
-
-* Allow to override default configuration of the [Puppeteer page.pdf options](https://devdocs.io/puppeteer/index#pagepdfoptions)
-* Dockerfile to be able to generate PDF files from a CI/CD pipeline

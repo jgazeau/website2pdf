@@ -9,6 +9,7 @@ import {
   headerFactory,
   imageEncode,
   interpolate,
+  puppeteerBrowserLaunchArgs,
   toFilename,
 } from '../../src/utils/helpers';
 
@@ -54,5 +55,15 @@ describe('Utils tests', () => {
     expect(imageEncode(inputPath)).to.be.equal(
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U9tCF8gAAAAAAAAAG41HX4AASRYHnsAAAAASUVORK5CYII='
     );
+  });
+  it('puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when chromiumFlags', () => {
+    const chromiumFlags = '--no-sandbox --disable-dev-shm-usage';
+    expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({
+      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+    });
+  });
+  it('puppeteerBrowserLaunchArgs should return empty PuppeteerNodeLaunchOptions when empty chromiumFlags', () => {
+    const chromiumFlags = '';
+    expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({});
   });
 });

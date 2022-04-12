@@ -12,8 +12,13 @@ import {PdfTemplate} from './model/pdfTemplate';
 import {Website2PdfCli} from './cli/website2pdfCli';
 import {ICliArguments} from './cli/iArgumentsParser';
 import {WebsiteSitemap} from './model/websiteSitemap';
-import {headerFactory, interpolate, toFilename} from './utils/helpers';
 import {PrintResults, STATUS_PRINTED, STATUS_ERROR} from './utils/stats';
+import {
+  headerFactory,
+  interpolate,
+  puppeteerBrowserLaunchArgs,
+  toFilename,
+} from './utils/helpers';
 
 export class Website2Pdf {
   static main(): Promise<void> {
@@ -43,45 +48,47 @@ function processSitemaps(
   cliArgs: ICliArguments,
   website: Website
 ): Promise<void> {
-  return puppeteer.launch().then(browser => {
-    browser.version().then(version => {
-      logger().debug(`Starting browser instance: ${version}`);
-    });
-    return browser
-      .createIncognitoBrowserContext()
-      .then(browserContext => {
-        logger().debug(
-          `Creating incognito browser context: ${browserContext.isIncognito()}`
-        );
-        return Promise.all(
-          website.sitemaps.map(sitemap => {
-            if (sitemap.urls.length !== 0) {
-              const outputDir = path.normalize(
-                path.join(cliArgs.outputDir.toString(), sitemap.lang)
-              );
-              return processSitemap(
-                browserContext,
-                cliArgs,
-                outputDir,
-                sitemap,
-                website.pdfTemplate
-              );
-            } else {
-              logger().warn(
-                `No URLs found for sitemap ${sitemap.lang}. Please check ${website.websiteURL}`
-              );
-              return Promise.resolve();
-            }
-          })
-        ).then(() => {
-          return Promise.resolve();
-        });
-      })
-      .finally(() => {
-        PrintResults.printResults();
-        return browser.close();
+  return puppeteer
+    .launch(puppeteerBrowserLaunchArgs(cliArgs.chromiumFlags))
+    .then(browser => {
+      browser.version().then(version => {
+        logger().debug(`Starting browser instance: ${version}`);
       });
-  });
+      return browser
+        .createIncognitoBrowserContext()
+        .then(browserContext => {
+          logger().debug(
+            `Creating incognito browser context: ${browserContext.isIncognito()}`
+          );
+          return Promise.all(
+            website.sitemaps.map(sitemap => {
+              if (sitemap.urls.length !== 0) {
+                const outputDir = path.normalize(
+                  path.join(cliArgs.outputDir.toString(), sitemap.lang)
+                );
+                return processSitemap(
+                  browserContext,
+                  cliArgs,
+                  outputDir,
+                  sitemap,
+                  website.pdfTemplate
+                );
+              } else {
+                logger().warn(
+                  `No URLs found for sitemap ${sitemap.lang}. Please check ${website.websiteURL}`
+                );
+                return Promise.resolve();
+              }
+            })
+          ).then(() => {
+            return Promise.resolve();
+          });
+        })
+        .finally(() => {
+          PrintResults.printResults();
+          return browser.close();
+        });
+    });
 }
 
 function processSitemap(

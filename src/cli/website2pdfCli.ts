@@ -11,6 +11,10 @@ import {
   OUTPUT_DIR_OPTION,
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
+  CHROMIUM_FLAGS_OPTION,
+  DISPLAY_HEADER_FOOTER_OPTION,
+  MARGIN_LEFT_OPTION,
+  MARGIN_RIGHT_OPTION,
 } from '../utils/const';
 const yargs = require('yargs');
 
@@ -66,6 +70,14 @@ export class Website2PdfCli {
           `$0 --${OUTPUT_DIR_OPTION} "./output"`,
           'Use specific output directory',
         ],
+        [
+          `$0 --${DISPLAY_HEADER_FOOTER_OPTION} --${MARGIN_LEFT_OPTION} "50px" --${MARGIN_RIGHT_OPTION} "50px"`,
+          'Use header and footer and set specific margins',
+        ],
+        [
+          `$0 --${CHROMIUM_FLAGS_OPTION} "--no-sandbox --disable-dev-shm-usage"`,
+          'Use specific chromium options at Puppeteer launch',
+        ],
       ])
       .options({
         debug: {
@@ -120,6 +132,11 @@ export class Website2PdfCli {
           type: 'string',
           default: DEFAULT_MARGIN_MIN,
           description: 'Margin right',
+          group: this.GROUPS.COMMONS,
+        },
+        chromiumFlags: {
+          type: 'string',
+          description: 'Chromium flags set at Puppeteer launch',
           group: this.GROUPS.COMMONS,
         },
       })
