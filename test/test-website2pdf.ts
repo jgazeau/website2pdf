@@ -416,4 +416,32 @@ describe('Website2pdf tests', () => {
       );
     });
   });
+  it('website2pdf should work when standard sitemap and chromiumFlags', () => {
+    setChaiAsPromised();
+    mockArgs(['--chromiumFlags="--disable-dev-shm-usage"']);
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      const tempDir = path.join(
+        testTempPath,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_SITEMAP_LANG
+      );
+      return fs.pathExists(tempDir).then(isDirExists => {
+        expect(isDirExists).to.be.true;
+        return fs.readdir(tempDir).then(files => {
+          expect(files).to.have.length(3);
+          return Promise.all(
+            files.map(file => {
+              return fs
+                .pathExists(path.join(tempDir, file))
+                .then(isFileExists => {
+                  expect(isFileExists).to.be.true;
+                  expect(file).to.be.oneOf(enFilesGenerated);
+                });
+            })
+          );
+        });
+      });
+    });
+  });
 });

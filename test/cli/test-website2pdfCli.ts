@@ -3,9 +3,14 @@ import {expect} from 'chai';
 import {Website} from '../../src/model/website';
 import {SinonStubs} from '../testUtils/sinonStubs';
 import {Website2PdfCli} from '../../src/cli/website2pdfCli';
-import {SPECIFIC_DIR, SPECIFIC_URL} from '../testUtils/const';
+import {
+  SPECIFIC_CHROMIUM_FLAGS,
+  SPECIFIC_DIR,
+  SPECIFIC_URL,
+} from '../testUtils/const';
 import {mockArgs, setChaiAsPromised} from '../testUtils/helpers';
 import {
+  CHROMIUM_FLAGS_OPTION,
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
@@ -145,6 +150,14 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.marginRight).to.be.equal(testMargin);
+    });
+  });
+  it(`parse with ${CHROMIUM_FLAGS_OPTION} option should have specific ${CHROMIUM_FLAGS_OPTION} argument`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${CHROMIUM_FLAGS_OPTION}=${SPECIFIC_CHROMIUM_FLAGS}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.chromiumFlags).to.be.equal(SPECIFIC_CHROMIUM_FLAGS);
     });
   });
 });

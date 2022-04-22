@@ -75,7 +75,7 @@ export class Website2PdfCli {
           'Use header and footer and set specific margins',
         ],
         [
-          `$0 --${CHROMIUM_FLAGS_OPTION} "--no-sandbox --disable-dev-shm-usage"`,
+          `$0 --${CHROMIUM_FLAGS_OPTION}="--no-sandbox --disable-dev-shm-usage"`,
           'Use specific chromium options at Puppeteer launch',
         ],
       ])

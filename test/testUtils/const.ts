@@ -15,6 +15,10 @@ export const testTemplatesPath: string = path.join(
   testResourcesPath,
   DEFAULT_TEMPLATE_DIR
 );
+export const testResourcesImagePath: string = path.join(
+  testResourcesPath,
+  '/images'
+);
 export const testTemplatesMetaPath: string = path.join(
   testResourcesPath,
   `${DEFAULT_TEMPLATE_DIR}_meta`
@@ -25,6 +29,7 @@ export const testTemplatesImagePath: string = path.join(
 );
 export const SPECIFIC_URL = 'https://example.com/sitemap.xml';
 export const SPECIFIC_DIR = './aSpecificDir/';
+export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
 
 export const ABSOLUTE_URL = 'absolute/url/';
 export const RELATIVE_URL = 'relative/url/';

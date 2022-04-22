@@ -67,7 +67,7 @@ Examples:
   website2pdf --outputDir "./output"                            Use specific output directory
   website2pdf --displayHeaderFooter --marginLeft "50px"         Use header and footer and set specific margins
   --marginRight "50px"
-  website2pdf --chromiumFlags "--no-sandbox                     Use specific chromium options at Puppeteer launch
+  website2pdf --chromiumFlags="--no-sandbox                     Use specific chromium options at Puppeteer launch
   --disable-dev-shm-usage"
 
 Additional information:

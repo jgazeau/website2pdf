@@ -1,9 +1,10 @@
+import * as path from 'path';
 import {red} from 'kleur';
 import {expect} from 'chai';
 import {logger} from '../../src/utils/logger';
-import {logTestLevel} from '../testUtils/const';
 import {SinonStubs} from '../testUtils/sinonStubs';
 import {MAX_TTY_LENGTH} from '../../src/utils/const';
+import {logTestLevel, testResourcesImagePath} from '../testUtils/const';
 import {
   getOutputWidth,
   headerFactory,
@@ -51,7 +52,7 @@ describe('Utils tests', () => {
     );
   });
   it('imageEncode should return source of image as base64', () => {
-    const inputPath = './test/resources/images/test.png';
+    const inputPath = path.join(testResourcesImagePath, 'test.png');
     expect(imageEncode(inputPath)).to.be.equal(
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U9tCF8gAAAAAAAAAG41HX4AASRYHnsAAAAASUVORK5CYII='
     );
