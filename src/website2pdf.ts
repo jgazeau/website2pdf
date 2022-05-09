@@ -18,6 +18,7 @@ import {
   interpolate,
   puppeteerBrowserLaunchArgs,
   toFilename,
+  toFilePath,
 } from './utils/helpers';
 
 export class Website2Pdf {
@@ -30,7 +31,7 @@ export class Website2Pdf {
           return processSitemaps(cliArgs, website);
         } else {
           logger().warn(
-            `No sitemap found. Please check ${website.websiteURL.sitemapURL}`
+            `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`
           );
           return Promise.resolve();
         }
@@ -63,9 +64,7 @@ function processSitemaps(
           return Promise.all(
             website.sitemaps.map(sitemap => {
               if (sitemap.urls.length !== 0) {
-                const outputDir = path.normalize(
-                  path.join(cliArgs.outputDir.toString(), sitemap.lang)
-                );
+                const outputDir = path.normalize(cliArgs.outputDir.toString());
                 return processSitemap(
                   browserContext,
                   cliArgs,
@@ -75,7 +74,7 @@ function processSitemaps(
                 );
               } else {
                 logger().warn(
-                  `No URLs found for sitemap ${sitemap.lang}. Please check ${website.websiteURL}`
+                  `No URLs found for sitemap ${sitemap.rootUrl.toString()}. Please check ${website.websiteURL.sitemapURL.toString()}`
                 );
                 return Promise.resolve();
               }
@@ -133,65 +132,75 @@ function printToPDF(
   return browserContext.newPage().then(page => {
     page.setDefaultNavigationTimeout(0);
     const metadatas = new Map<string, string>();
-    return page
-      .goto(url.toString(), {waitUntil: 'networkidle2'})
-      .then(() => {
-        page.title().then(title => {
-          metadatas.set('title', title);
-        });
+    const fileDir = path.join(outputDir, toFilePath(url));
+    return fs
+      .ensureDir(fileDir)
+      .then((result: any) => {
+        result
+          ? logger().debug(`Directory ${result} created`)
+          : logger().debug(`Directory ${outputDir} already exists`);
       })
       .then(() => {
         return page
-          .$$eval('meta', metas =>
-            metas
-              .filter(meta => meta !== null)
-              .map(meta => {
-                const metaName = meta.getAttribute('name');
-                return metaName
-                  ? [metaName, meta.getAttribute('content')]
-                  : null;
-              })
-          )
-          .then(metas => {
-            metas.forEach(meta => {
-              if (meta) metadatas.set(meta[0]!, meta[1]!);
+          .goto(url.toString(), {waitUntil: 'networkidle2'})
+          .then(() => {
+            page.title().then(title => {
+              metadatas.set('title', title);
             });
-            return metadatas;
-          });
-      })
-      .then(metadatas => {
-        const filePath = path.join(
-          outputDir,
-          `${toFilename(metadatas.get('title')?.toString())}.pdf`
-        );
-        logger().debug(`Printing page "${filePath}" from url "${url}"`);
-        return page
-          .pdf({
-            timeout: 0,
-            path: filePath,
-            format: 'a4',
-            displayHeaderFooter: cliArgs.displayHeaderFooter,
-            headerTemplate: interpolate(pdfTemplate.header, metadatas),
-            footerTemplate: interpolate(pdfTemplate.footer, metadatas),
-            margin: {
-              top: cliArgs.marginTop,
-              bottom: cliArgs.marginBottom,
-              left: cliArgs.marginLeft,
-              right: cliArgs.marginRight,
-            },
-            printBackground: true,
           })
           .then(() => {
-            PrintResults.storeResult(url, filePath, STATUS_PRINTED);
-            return Promise.resolve();
+            return page
+              .$$eval('meta', metas =>
+                metas
+                  .filter(meta => meta !== null)
+                  .map(meta => {
+                    const metaName = meta.getAttribute('name');
+                    return metaName
+                      ? [metaName, meta.getAttribute('content')]
+                      : null;
+                  })
+              )
+              .then(metas => {
+                metas.forEach(meta => {
+                  if (meta) metadatas.set(meta[0]!, meta[1]!);
+                });
+                return metadatas;
+              });
           })
-          .catch((error: Error) => {
-            PrintResults.storeResult(url, filePath, STATUS_ERROR);
-            throw error;
+          .then(metadatas => {
+            const filePath = path.join(
+              fileDir,
+              `${toFilename(metadatas.get('title')?.toString())}.pdf`
+            );
+            logger().debug(`Printing page ${filePath} from url ${url}`);
+            return page
+              .pdf({
+                timeout: 0,
+                path: filePath,
+                format: 'a4',
+                displayHeaderFooter: cliArgs.displayHeaderFooter,
+                headerTemplate: interpolate(pdfTemplate.header, metadatas),
+                footerTemplate: interpolate(pdfTemplate.footer, metadatas),
+                margin: {
+                  top: cliArgs.marginTop,
+                  bottom: cliArgs.marginBottom,
+                  left: cliArgs.marginLeft,
+                  right: cliArgs.marginRight,
+                },
+                printBackground: true,
+              })
+              .then(() => {
+                PrintResults.storeResult(url, filePath, STATUS_PRINTED);
+                return Promise.resolve();
+              })
+              .catch((error: Error) => {
+                PrintResults.storeResult(url, filePath, STATUS_ERROR);
+                throw error;
+              });
+          })
+          .finally(() => {
+            return page.close();
           });
-      })
-      .finally(() => {
-        return page.close();
       });
   });
 }

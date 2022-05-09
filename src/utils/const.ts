@@ -18,11 +18,11 @@ export const DEFAULT_MARGIN_MAX = '50px';
 export const DEFAULT_MARGIN_MIN = '0px';
 export const DEFAULT_HEADER_FILE = 'header.html';
 export const DEFAULT_FOOTER_FILE = 'footer.html';
-export const DEFAULT_SITEMAP_LANG = 'default';
 export const DEFAULT_HOST = 'localhost';
 export const DEFAULT_PORT = '1313';
+export const DEFAULT_SITEMAP_NAME = 'sitemap.xml';
 export const DEFAULT_SITEMAP_HOST = `http://${DEFAULT_HOST}:${DEFAULT_PORT}`;
-export const DEFAULT_SITEMAP_URL = `${DEFAULT_SITEMAP_HOST}/sitemap.xml`;
+export const DEFAULT_SITEMAP_URL = `${DEFAULT_SITEMAP_HOST}/${DEFAULT_SITEMAP_NAME}`;
 export const fxpOptions = {
   ignoreAttributes: true,
   parseNodeValue: true,

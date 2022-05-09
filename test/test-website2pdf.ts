@@ -11,9 +11,8 @@ import {
   setChaiAsPromised,
 } from './testUtils/helpers';
 import {
-  DEFAULT_OUTPUT_DIR,
   DEFAULT_SITEMAP_HOST,
-  DEFAULT_SITEMAP_LANG,
+  DEFAULT_SITEMAP_NAME,
   DEFAULT_TEMPLATE_DIR,
 } from '../src/utils/const';
 import {
@@ -45,58 +44,58 @@ import {
   SITEMAP_FR_PAGE,
   SITEMAP_FR_RELURL,
   SITEMAP_STANDARD_PAGE,
-  SITEMAP_STANDARD_RELURL,
   testTemplatesPath,
   testTempPath,
   testTemplatesMetaPath,
   testTemplatesImagePath,
+  testOutputDir,
+  EN_HOMEPAGE_FILENAME,
+  EN_RELATIVE_FILENAME,
+  EN_ABSOLUTE_FILENAME,
+  FR_ABSOLUTE_FILENAME,
+  FR_HOMEPAGE_FILENAME,
+  FR_RELATIVE_FILENAME,
 } from './testUtils/const';
 
 const testRequests: TestRequest[] = [
   new TestRequest(
-    SITEMAP_STANDARD_RELURL,
+    `/${DEFAULT_SITEMAP_NAME}`,
     SITEMAP_STANDARD_PAGE,
     'application/xml'
   ),
   new TestRequest('/', EN_HOMEPAGE_PAGE),
-  new TestRequest(`/${ABSOLUTE_URL}`, EN_ABSOLUTE_PAGE),
-  new TestRequest(`/${RELATIVE_URL}`, EN_RELATIVE_PAGE),
+  new TestRequest(`/${ABSOLUTE_URL}/`, EN_ABSOLUTE_PAGE),
+  new TestRequest(`/${RELATIVE_URL}/`, EN_RELATIVE_PAGE),
   new TestRequest(
-    SITEMAP_EXTENDED_RELURL,
+    `/${SITEMAP_EXTENDED_RELURL}`,
     SITEMAP_EXTENDED_PAGE,
     'application/xml'
   ),
-  new TestRequest(SITEMAP_EN_RELURL, SITEMAP_EN_PAGE, 'application/xml'),
-  new TestRequest(SITEMAP_FR_RELURL, SITEMAP_FR_PAGE, 'application/xml'),
-  new TestRequest(SITEMAP_EMPTY_RELURL, SITEMAP_EMPTY_PAGE, 'application/xml'),
+  new TestRequest(`/${SITEMAP_EN_RELURL}`, SITEMAP_EN_PAGE, 'application/xml'),
+  new TestRequest(`/${SITEMAP_FR_RELURL}`, SITEMAP_FR_PAGE, 'application/xml'),
   new TestRequest(
-    SITEMAPINDEX_EMPTY_RELURL,
+    `/${SITEMAP_EMPTY_RELURL}`,
+    SITEMAP_EMPTY_PAGE,
+    'application/xml'
+  ),
+  new TestRequest(
+    `/${SITEMAPINDEX_EMPTY_RELURL}`,
     SITEMAPINDEX_EMPTY_PAGE,
     'application/xml'
   ),
   new TestRequest(
-    SITEMAPINDEX_EMPTY_URL_RELURL,
+    `/${SITEMAPINDEX_EMPTY_URL_RELURL}`,
     SITEMAPINDEX_EMPTY_URL_PAGE,
     'application/xml'
   ),
-  new TestRequest(EN_HOMEPAGE_URL, EN_HOMEPAGE_PAGE),
-  new TestRequest(EN_ABSOLUTE_URL, EN_ABSOLUTE_PAGE),
-  new TestRequest(EN_RELATIVE_URL, EN_RELATIVE_PAGE),
-  new TestRequest(FR_HOMEPAGE_URL, FR_HOMEPAGE_PAGE),
-  new TestRequest(FR_ABSOLUTE_URL, FR_ABSOLUTE_PAGE),
-  new TestRequest(FR_RELATIVE_URL, FR_RELATIVE_PAGE),
+  new TestRequest(`/${EN_HOMEPAGE_URL}/`, EN_HOMEPAGE_PAGE),
+  new TestRequest(`/${EN_ABSOLUTE_URL}/`, EN_ABSOLUTE_PAGE),
+  new TestRequest(`/${EN_RELATIVE_URL}/`, EN_RELATIVE_PAGE),
+  new TestRequest(`/${FR_HOMEPAGE_URL}/`, FR_HOMEPAGE_PAGE),
+  new TestRequest(`/${FR_ABSOLUTE_URL}/`, FR_ABSOLUTE_PAGE),
+  new TestRequest(`/${FR_RELATIVE_URL}/`, FR_RELATIVE_PAGE),
 ];
 const testServer = new TestServer(testRequests);
-const enFilesGenerated = [
-  'Absolute_URL.pdf',
-  'First_page.pdf',
-  'Relative_URL.pdf',
-];
-const frFilesGenerated = [
-  'Première_page.pdf',
-  'URL_absolue.pdf',
-  'URL_relative.pdf',
-];
 
 describe('Website2pdf tests', () => {
   const sinonMock = new SinonStubs({});
@@ -121,16 +120,11 @@ describe('Website2pdf tests', () => {
     setChaiAsPromised();
     mockArgs([
       '--sitemapUrl',
-      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EMPTY_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EMPTY_RELURL}`,
     ]);
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDir = path.join(
-        testTempPath,
-        DEFAULT_OUTPUT_DIR,
-        DEFAULT_SITEMAP_LANG
-      );
-      return fs.pathExists(tempDir).then(isDirExists => {
+      return fs.pathExists(testOutputDir).then(isDirExists => {
         expect(isDirExists).to.be.false;
       });
     });
@@ -139,16 +133,11 @@ describe('Website2pdf tests', () => {
     setChaiAsPromised();
     mockArgs([
       '--sitemapUrl',
-      `${DEFAULT_SITEMAP_HOST}${SITEMAPINDEX_EMPTY_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAPINDEX_EMPTY_RELURL}`,
     ]);
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDir = path.join(
-        testTempPath,
-        DEFAULT_OUTPUT_DIR,
-        DEFAULT_SITEMAP_LANG
-      );
-      return fs.pathExists(tempDir).then(isDirExists => {
+      return fs.pathExists(testOutputDir).then(isDirExists => {
         expect(isDirExists).to.be.false;
       });
     });
@@ -157,16 +146,11 @@ describe('Website2pdf tests', () => {
     setChaiAsPromised();
     mockArgs([
       '--sitemapUrl',
-      `${DEFAULT_SITEMAP_HOST}${SITEMAPINDEX_EMPTY_URL_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAPINDEX_EMPTY_URL_RELURL}`,
     ]);
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDir = path.join(
-        testTempPath,
-        DEFAULT_OUTPUT_DIR,
-        DEFAULT_SITEMAP_LANG
-      );
-      return fs.pathExists(tempDir).then(isDirExists => {
+      return fs.pathExists(testOutputDir).then(isDirExists => {
         expect(isDirExists).to.be.false;
       });
     });
@@ -174,57 +158,27 @@ describe('Website2pdf tests', () => {
   it('website2pdf should work', () => {
     setChaiAsPromised();
     mockArgs([]);
+    const expectedFiles = [
+      EN_HOMEPAGE_FILENAME,
+      path.join(ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(RELATIVE_URL, EN_RELATIVE_FILENAME),
+    ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDir = path.join(
-        testTempPath,
-        DEFAULT_OUTPUT_DIR,
-        DEFAULT_SITEMAP_LANG
-      );
-      return fs.pathExists(tempDir).then(isDirExists => {
-        expect(isDirExists).to.be.true;
-        return fs.readdir(tempDir).then(files => {
-          expect(files).to.have.length(3);
-          return Promise.all(
-            files.map(file => {
-              return fs
-                .pathExists(path.join(tempDir, file))
-                .then(isFileExists => {
-                  expect(isFileExists).to.be.true;
-                  expect(file).to.be.oneOf(enFilesGenerated);
-                });
-            })
-          );
-        });
-      });
+      assertExpectedFilesExists(expectedFiles);
     });
   });
   it('website2pdf should work when standard sitemap and displayHeaderFooter', () => {
     setChaiAsPromised();
     mockArgs(['--displayHeaderFooter']);
+    const expectedFiles = [
+      EN_HOMEPAGE_FILENAME,
+      path.join(ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(RELATIVE_URL, EN_RELATIVE_FILENAME),
+    ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDir = path.join(
-        testTempPath,
-        DEFAULT_OUTPUT_DIR,
-        DEFAULT_SITEMAP_LANG
-      );
-      return fs.pathExists(tempDir).then(isDirExists => {
-        expect(isDirExists).to.be.true;
-        return fs.readdir(tempDir).then(files => {
-          expect(files).to.have.length(3);
-          return Promise.all(
-            files.map(file => {
-              return fs
-                .pathExists(path.join(tempDir, file))
-                .then(isFileExists => {
-                  expect(isFileExists).to.be.true;
-                  expect(file).to.be.oneOf(enFilesGenerated);
-                });
-            })
-          );
-        });
-      });
+      assertExpectedFilesExists(expectedFiles);
     });
   });
   it('website2pdf should work when extended sitemap and displayHeaderFooter', () => {
@@ -232,36 +186,19 @@ describe('Website2pdf tests', () => {
     mockArgs([
       '--displayHeaderFooter',
       '--sitemapUrl',
-      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
     ]);
+    const expectedFiles = [
+      path.join(EN_HOMEPAGE_URL, EN_HOMEPAGE_FILENAME),
+      path.join(EN_ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(EN_RELATIVE_URL, EN_RELATIVE_FILENAME),
+      path.join(FR_HOMEPAGE_URL, FR_HOMEPAGE_FILENAME),
+      path.join(FR_ABSOLUTE_URL, FR_ABSOLUTE_FILENAME),
+      path.join(FR_RELATIVE_URL, FR_RELATIVE_FILENAME),
+    ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDirs = [
-        path.join(testTempPath, DEFAULT_OUTPUT_DIR, 'en'),
-        path.join(testTempPath, DEFAULT_OUTPUT_DIR, 'fr'),
-      ];
-      return Promise.all(
-        tempDirs.map(tempDir => {
-          return fs.pathExists(tempDir).then(isDirExists => {
-            expect(isDirExists).to.be.true;
-            return fs.readdir(tempDir).then(files => {
-              expect(files).to.have.length(3);
-              return Promise.all(
-                files.map(file => {
-                  return fs
-                    .pathExists(path.join(tempDir, file))
-                    .then(isFileExists => {
-                      expect(isFileExists).to.be.true;
-                      expect(file).to.be.oneOf(
-                        enFilesGenerated.concat(frFilesGenerated)
-                      );
-                    });
-                })
-              );
-            });
-          });
-        })
-      );
+      assertExpectedFilesExists(expectedFiles);
     });
   });
   it('website2pdf should work when standard sitemap, displayHeaderFooter and header/footer from default templateDir', () => {
@@ -271,29 +208,14 @@ describe('Website2pdf tests', () => {
       testTemplatesPath,
       path.join(testTempPath, DEFAULT_TEMPLATE_DIR)
     );
+    const expectedFiles = [
+      EN_HOMEPAGE_FILENAME,
+      path.join(ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(RELATIVE_URL, EN_RELATIVE_FILENAME),
+    ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDir = path.join(
-        testTempPath,
-        DEFAULT_OUTPUT_DIR,
-        DEFAULT_SITEMAP_LANG
-      );
-      return fs.pathExists(tempDir).then(isDirExists => {
-        expect(isDirExists).to.be.true;
-        return fs.readdir(tempDir).then(files => {
-          expect(files).to.have.length(3);
-          return Promise.all(
-            files.map(file => {
-              return fs
-                .pathExists(path.join(tempDir, file))
-                .then(isFileExists => {
-                  expect(isFileExists).to.be.true;
-                  expect(file).to.be.oneOf(enFilesGenerated);
-                });
-            })
-          );
-        });
-      });
+      assertExpectedFilesExists(expectedFiles);
     });
   });
   it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer from specific templateDir and specific outputDir', () => {
@@ -301,39 +223,22 @@ describe('Website2pdf tests', () => {
     mockArgs([
       '--displayHeaderFooter',
       '--sitemapUrl',
-      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
       '--templateDir',
       `${testTemplatesPath}`,
       '--outputDir',
       `${testTempPath}`,
     ]);
+    const expectedFiles = [
+      path.join(EN_HOMEPAGE_URL, EN_HOMEPAGE_FILENAME),
+      path.join(EN_ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(EN_RELATIVE_URL, EN_RELATIVE_FILENAME),
+      path.join(FR_HOMEPAGE_URL, FR_HOMEPAGE_FILENAME),
+      path.join(FR_ABSOLUTE_URL, FR_ABSOLUTE_FILENAME),
+      path.join(FR_RELATIVE_URL, FR_RELATIVE_FILENAME),
+    ];
     return Website2Pdf.main().then(() => {
-      const tempDirs = [
-        path.join(testTempPath, 'en'),
-        path.join(testTempPath, 'fr'),
-      ];
-      return Promise.all(
-        tempDirs.map(tempDir => {
-          return fs.pathExists(tempDir).then(isDirExists => {
-            expect(isDirExists).to.be.true;
-            return fs.readdir(tempDir).then(files => {
-              expect(files).to.have.length(3);
-              return Promise.all(
-                files.map(file => {
-                  return fs
-                    .pathExists(path.join(tempDir, file))
-                    .then(isFileExists => {
-                      expect(isFileExists).to.be.true;
-                      expect(file).to.be.oneOf(
-                        enFilesGenerated.concat(frFilesGenerated)
-                      );
-                    });
-                })
-              );
-            });
-          });
-        })
-      );
+      assertExpectedFilesExists(expectedFiles);
     });
   });
   it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer with metadatas from specific templateDir', () => {
@@ -341,39 +246,22 @@ describe('Website2pdf tests', () => {
     mockArgs([
       '--displayHeaderFooter',
       '--sitemapUrl',
-      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
       '--templateDir',
       `${testTemplatesMetaPath}`,
       '--outputDir',
       `${testTempPath}`,
     ]);
+    const expectedFiles = [
+      path.join(EN_HOMEPAGE_URL, EN_HOMEPAGE_FILENAME),
+      path.join(EN_ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(EN_RELATIVE_URL, EN_RELATIVE_FILENAME),
+      path.join(FR_HOMEPAGE_URL, FR_HOMEPAGE_FILENAME),
+      path.join(FR_ABSOLUTE_URL, FR_ABSOLUTE_FILENAME),
+      path.join(FR_RELATIVE_URL, FR_RELATIVE_FILENAME),
+    ];
     return Website2Pdf.main().then(() => {
-      const tempDirs = [
-        path.join(testTempPath, 'en'),
-        path.join(testTempPath, 'fr'),
-      ];
-      return Promise.all(
-        tempDirs.map(tempDir => {
-          return fs.pathExists(tempDir).then(isDirExists => {
-            expect(isDirExists).to.be.true;
-            return fs.readdir(tempDir).then(files => {
-              expect(files).to.have.length(3);
-              return Promise.all(
-                files.map(file => {
-                  return fs
-                    .pathExists(path.join(tempDir, file))
-                    .then(isFileExists => {
-                      expect(isFileExists).to.be.true;
-                      expect(file).to.be.oneOf(
-                        enFilesGenerated.concat(frFilesGenerated)
-                      );
-                    });
-                })
-              );
-            });
-          });
-        })
-      );
+      assertExpectedFilesExists(expectedFiles);
     });
   });
   it('website2pdf should work when extended sitemap, displayHeaderFooter, header/footer with image from specific templateDir', () => {
@@ -381,67 +269,50 @@ describe('Website2pdf tests', () => {
     mockArgs([
       '--displayHeaderFooter',
       '--sitemapUrl',
-      `${DEFAULT_SITEMAP_HOST}${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
       '--templateDir',
       `${testTemplatesImagePath}`,
       '--outputDir',
       `${testTempPath}`,
     ]);
+    const expectedFiles = [
+      path.join(EN_HOMEPAGE_URL, EN_HOMEPAGE_FILENAME),
+      path.join(EN_ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(EN_RELATIVE_URL, EN_RELATIVE_FILENAME),
+      path.join(FR_HOMEPAGE_URL, FR_HOMEPAGE_FILENAME),
+      path.join(FR_ABSOLUTE_URL, FR_ABSOLUTE_FILENAME),
+      path.join(FR_RELATIVE_URL, FR_RELATIVE_FILENAME),
+    ];
     return Website2Pdf.main().then(() => {
-      const tempDirs = [
-        path.join(testTempPath, 'en'),
-        path.join(testTempPath, 'fr'),
-      ];
-      return Promise.all(
-        tempDirs.map(tempDir => {
-          return fs.pathExists(tempDir).then(isDirExists => {
-            expect(isDirExists).to.be.true;
-            return fs.readdir(tempDir).then(files => {
-              expect(files).to.have.length(3);
-              return Promise.all(
-                files.map(file => {
-                  return fs
-                    .pathExists(path.join(tempDir, file))
-                    .then(isFileExists => {
-                      expect(isFileExists).to.be.true;
-                      expect(file).to.be.oneOf(
-                        enFilesGenerated.concat(frFilesGenerated)
-                      );
-                    });
-                })
-              );
-            });
-          });
-        })
-      );
+      assertExpectedFilesExists(expectedFiles);
     });
   });
   it('website2pdf should work when standard sitemap and chromiumFlags', () => {
     setChaiAsPromised();
     mockArgs(['--chromiumFlags="--disable-dev-shm-usage"']);
+    const expectedFiles = [
+      EN_HOMEPAGE_FILENAME,
+      path.join(ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
+      path.join(RELATIVE_URL, EN_RELATIVE_FILENAME),
+    ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      const tempDir = path.join(
-        testTempPath,
-        DEFAULT_OUTPUT_DIR,
-        DEFAULT_SITEMAP_LANG
-      );
-      return fs.pathExists(tempDir).then(isDirExists => {
-        expect(isDirExists).to.be.true;
-        return fs.readdir(tempDir).then(files => {
-          expect(files).to.have.length(3);
-          return Promise.all(
-            files.map(file => {
-              return fs
-                .pathExists(path.join(tempDir, file))
-                .then(isFileExists => {
-                  expect(isFileExists).to.be.true;
-                  expect(file).to.be.oneOf(enFilesGenerated);
-                });
-            })
-          );
-        });
-      });
+      assertExpectedFilesExists(expectedFiles);
     });
   });
 });
+
+function assertExpectedFilesExists(files: string[]) {
+  return fs.pathExists(testOutputDir).then(isDirExists => {
+    expect(isDirExists).to.be.true;
+    return Promise.all(
+      files.map(file => {
+        return fs
+          .pathExists(path.join(testOutputDir, file))
+          .then(isFileExists => {
+            expect(isFileExists).to.be.true;
+          });
+      })
+    );
+  });
+}

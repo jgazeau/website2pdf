@@ -4,13 +4,13 @@ import {XmlURL} from './xmlURL';
 import {XMLParser} from 'fast-xml-parser';
 import {XmlSitemap} from './xmlSitemap';
 import {WebsiteURL} from './websiteURL';
+import {fxpOptions} from '../utils/const';
 import {PdfTemplate} from './pdfTemplate';
 import {plainToClass} from 'class-transformer';
 import {WebsiteSitemap} from './websiteSitemap';
 import {XmlSitemapIndex} from './xmlSitemapIndex';
 import {ICliArguments} from '../cli/iArgumentsParser';
 import {validateClassObjectSync} from '../utils/helpers';
-import {DEFAULT_SITEMAP_LANG, fxpOptions} from '../utils/const';
 import {
   ERROR_PARSING_XML_SCHEMA,
   ERROR_UNKNOWN_XML_SCHEMA,
@@ -56,24 +56,19 @@ export class Website {
   }
 
   build(): Promise<Website> {
-    return this.populateSiteMap(this.websiteURL.sitemapURL.toString()).then(
-      () => {
-        return this;
-      }
-    );
+    return this.populateSiteMap(this.websiteURL.sitemapURL).then(() => {
+      return this;
+    });
   }
 
-  private populateSiteMap(
-    url: string,
-    lang: string = DEFAULT_SITEMAP_LANG
-  ): Promise<void> {
-    return axios.get(url).then((response: any) => {
+  private populateSiteMap(url: URL): Promise<void> {
+    return axios.get(url.toString()).then((response: any) => {
       return this.parseToXml(response.data)
         .then((xml: any) => {
           return this.map(xml);
         })
         .then((jsonObject: XmlSitemapIndex | XmlSitemap) => {
-          return this.populate(jsonObject, lang);
+          return this.populate(url, jsonObject);
         });
     });
   }
@@ -110,26 +105,23 @@ export class Website {
   }
 
   private populate(
-    json: XmlSitemapIndex | XmlSitemap,
-    lang: string
+    rootUrl: URL,
+    json: XmlSitemapIndex | XmlSitemap
   ): Promise<void> {
     if (json instanceof XmlSitemap) {
       json._urlset._url.length
         ? this._sitemaps.push(
             new WebsiteSitemap(
-              lang,
+              rootUrl,
               json._urlset._url.flatMap((xmlURL: XmlURL) => xmlURL._loc)
             )
           )
-        : this._sitemaps.push(new WebsiteSitemap(lang, []));
+        : this._sitemaps.push(new WebsiteSitemap(rootUrl, []));
       return Promise.resolve();
     } else {
       return Promise.all(
         json._sitemapindex._sitemap.map(xmlURL => {
-          return this.populateSiteMap(
-            xmlURL._loc.toString(),
-            xmlURL._loc.pathname.split('/')[1]
-          );
+          return this.populateSiteMap(xmlURL._loc);
         })
       ).then(() => {
         return Promise.resolve();

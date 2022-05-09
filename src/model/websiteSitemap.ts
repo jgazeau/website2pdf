@@ -1,13 +1,13 @@
 import {URL} from 'url';
 
 export class WebsiteSitemap {
-  private _lang: string;
+  private _rootUrl: URL;
   /* c8 ignore start */
-  public get lang(): string {
-    return this._lang;
+  public get rootUrl(): URL {
+    return this._rootUrl;
   }
-  public set lang(value: string) {
-    this._lang = value;
+  public set rootUrl(value: URL) {
+    this._rootUrl = value;
   }
   /* c8 ignore stop */
 
@@ -21,8 +21,8 @@ export class WebsiteSitemap {
   }
   /* c8 ignore stop */
 
-  constructor(lang: string, urls: Array<URL>) {
-    this.lang = lang;
+  constructor(rootUrl: URL, urls: Array<URL>) {
+    this.rootUrl = rootUrl;
     this.urls = urls;
   }
 }
