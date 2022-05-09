@@ -19,6 +19,8 @@ import {
   SITEMAP_STANDARD_PAGE,
   ABSOLUTE_URL,
   RELATIVE_URL,
+  EN_HOMEPAGE_URL,
+  FR_HOMEPAGE_URL,
 } from '../testUtils/const';
 import {
   AxiosMethodStub,
@@ -26,11 +28,7 @@ import {
   restoreSandbox,
   setAxiosStub,
 } from '../testUtils/sinonStubs';
-import {
-  DEFAULT_SITEMAP_LANG,
-  DEFAULT_SITEMAP_HOST,
-  DEFAULT_SITEMAP_URL,
-} from '../../src/utils/const';
+import {DEFAULT_SITEMAP_HOST, DEFAULT_SITEMAP_URL} from '../../src/utils/const';
 
 describe('Website model tests', () => {
   beforeEach(() => {
@@ -56,13 +54,19 @@ describe('Website model tests', () => {
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(2);
       website.sitemaps.forEach(sitemap => {
-        expect(sitemap.lang).to.be.oneOf(['en', 'fr']);
+        expect(sitemap.rootUrl.toString()).to.be.oneOf([
+          SITEMAP_EN_ABSURL,
+          SITEMAP_FR_ABSURL,
+        ]);
         expect(sitemap.urls).to.have.length(3);
         sitemap.urls.forEach(url => {
           expect(url.toString()).to.be.oneOf([
-            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/`,
-            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/${ABSOLUTE_URL}`,
-            `${DEFAULT_SITEMAP_HOST}/${sitemap.lang}/${RELATIVE_URL}`,
+            `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/`,
+            `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${ABSOLUTE_URL}/`,
+            `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${RELATIVE_URL}/`,
+            `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/`,
+            `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/${ABSOLUTE_URL}/`,
+            `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/${RELATIVE_URL}/`,
           ]);
         });
       });
@@ -77,13 +81,13 @@ describe('Website model tests', () => {
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
       website.sitemaps.forEach(sitemap => {
-        expect(sitemap.lang).to.be.equal(DEFAULT_SITEMAP_LANG);
+        expect(sitemap.rootUrl.toString()).to.be.equal(DEFAULT_SITEMAP_URL);
         expect(sitemap.urls).to.have.length(3);
         sitemap.urls.forEach(url => {
           expect(url.toString()).to.be.oneOf([
             `${DEFAULT_SITEMAP_HOST}/`,
-            `${DEFAULT_SITEMAP_HOST}/${ABSOLUTE_URL}`,
-            `${DEFAULT_SITEMAP_HOST}/${RELATIVE_URL}`,
+            `${DEFAULT_SITEMAP_HOST}/${ABSOLUTE_URL}/`,
+            `${DEFAULT_SITEMAP_HOST}/${RELATIVE_URL}/`,
           ]);
         });
       });

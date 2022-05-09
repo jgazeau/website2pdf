@@ -3,14 +3,17 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import {TLogLevelName} from 'tslog';
 import {
+  DEFAULT_OUTPUT_DIR,
   DEFAULT_SITEMAP_HOST,
+  DEFAULT_SITEMAP_NAME,
   DEFAULT_TEMPLATE_DIR,
 } from '../../src/utils/const';
 
 export const logTestLevel: TLogLevelName = 'debug';
 export const rootPath: string = path.join(process.cwd());
-export const testResourcesPath: string = path.join(rootPath, '/test/resources');
-export const testTempPath: string = path.join(rootPath, '/test/temp');
+export const testResourcesPath: string = path.join(rootPath, 'test/resources');
+export const testTempPath: string = path.join(rootPath, 'test/temp');
+export const testOutputDir = path.join(testTempPath, DEFAULT_OUTPUT_DIR);
 export const testTemplatesPath: string = path.join(
   testResourcesPath,
   DEFAULT_TEMPLATE_DIR
@@ -27,85 +30,90 @@ export const testTemplatesImagePath: string = path.join(
   testResourcesPath,
   `${DEFAULT_TEMPLATE_DIR}_image`
 );
-export const SPECIFIC_URL = 'https://example.com/sitemap.xml';
+export const SPECIFIC_URL = `https://example.com/${DEFAULT_SITEMAP_NAME}`;
 export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
 
-export const ABSOLUTE_URL = 'absolute/url/';
-export const RELATIVE_URL = 'relative/url/';
-export const SITEMAP_EN_RELURL = '/en/sitemap.xml';
-export const SITEMAP_EN_ABSURL = `${DEFAULT_SITEMAP_HOST}${SITEMAP_EN_RELURL}`;
-export const SITEMAP_EN_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/sitemap_en.xml'),
-  'utf8'
-);
-export const SITEMAP_FR_RELURL = '/fr/sitemap.xml';
-export const SITEMAP_FR_ABSURL = `${DEFAULT_SITEMAP_HOST}${SITEMAP_FR_RELURL}`;
-export const SITEMAP_FR_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/sitemap_fr.xml'),
-  'utf8'
-);
-export const SITEMAP_STANDARD_RELURL = '/sitemap.xml';
+export const ABSOLUTE_URL = 'absolute/url';
+export const RELATIVE_URL = 'relative/url';
 export const SITEMAP_STANDARD_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, SITEMAP_STANDARD_RELURL),
+  path.join(testResourcesPath, DEFAULT_SITEMAP_NAME),
   'utf8'
 );
-export const SITEMAP_EXTENDED_RELURL = '/sitemapindex.xml';
+export const SITEMAP_EXTENDED_RELURL = 'sitemapindex.xml';
 export const SITEMAP_EXTENDED_PAGE = fs.readFileSync(
   path.join(testResourcesPath, SITEMAP_EXTENDED_RELURL),
   'utf8'
 );
 export const SITEMAP_UNKNOWN_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/sitemap_unknown.xml'),
+  path.join(testResourcesPath, 'sitemap_unknown.xml'),
   'utf8'
 );
 export const SITEMAP_INVALID_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/sitemap_invalid.xml'),
+  path.join(testResourcesPath, 'sitemap_invalid.xml'),
   'utf8'
 );
-export const SITEMAP_EMPTY_RELURL = '/empty/sitemap.xml';
+export const SITEMAP_EMPTY_RELURL = `empty/${DEFAULT_SITEMAP_NAME}`;
 export const SITEMAP_EMPTY_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/sitemap_empty.xml'),
+  path.join(testResourcesPath, 'sitemap_empty.xml'),
   'utf8'
 );
-export const SITEMAPINDEX_EMPTY_RELURL = '/empty/sitemapindex.xml';
+export const SITEMAPINDEX_EMPTY_RELURL = `empty/${SITEMAP_EXTENDED_RELURL}`;
 export const SITEMAPINDEX_EMPTY_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/sitemapindex_empty.xml'),
+  path.join(testResourcesPath, 'sitemapindex_empty.xml'),
   'utf8'
 );
-export const SITEMAPINDEX_EMPTY_URL_RELURL = '/empty_url/sitemapindex.xml';
+export const SITEMAPINDEX_EMPTY_URL_RELURL = `empty_url/${SITEMAP_EXTENDED_RELURL}`;
 export const SITEMAPINDEX_EMPTY_URL_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/sitemapindex_empty_url.xml'),
+  path.join(testResourcesPath, 'sitemapindex_empty_url.xml'),
   'utf8'
 );
-export const EN_HOMEPAGE_URL = '/en/';
+export const EN_HOMEPAGE_URL = 'en';
+export const EN_ABSOLUTE_FILENAME = 'Absolute_URL.pdf';
+export const EN_HOMEPAGE_FILENAME = 'First_page.pdf';
+export const EN_RELATIVE_FILENAME = 'Relative_URL.pdf';
 export const EN_HOMEPAGE_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/html/en/homepage.html'),
+  path.join(testResourcesPath, `html/${EN_HOMEPAGE_URL}/homepage.html`),
   'utf8'
 );
-export const EN_ABSOLUTE_URL = `/en/${ABSOLUTE_URL}`;
+export const EN_ABSOLUTE_URL = `${EN_HOMEPAGE_URL}/${ABSOLUTE_URL}`;
 export const EN_ABSOLUTE_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/html/en/absolute.html'),
+  path.join(testResourcesPath, `html/${EN_HOMEPAGE_URL}/absolute.html`),
   'utf8'
 );
-export const EN_RELATIVE_URL = `/en/${RELATIVE_URL}`;
+export const EN_RELATIVE_URL = `${EN_HOMEPAGE_URL}/${RELATIVE_URL}`;
 export const EN_RELATIVE_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/html/en/relative.html'),
+  path.join(testResourcesPath, `html/${EN_HOMEPAGE_URL}/relative.html`),
   'utf8'
 );
-export const FR_HOMEPAGE_URL = '/fr/';
+export const FR_HOMEPAGE_URL = 'fr';
+export const FR_ABSOLUTE_FILENAME = 'URL_absolue.pdf';
+export const FR_HOMEPAGE_FILENAME = 'Première_page.pdf';
+export const FR_RELATIVE_FILENAME = 'URL_relative.pdf';
 export const FR_HOMEPAGE_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/html/fr/homepage.html'),
+  path.join(testResourcesPath, `html/${FR_HOMEPAGE_URL}/homepage.html`),
   'utf8'
 );
-export const FR_ABSOLUTE_URL = `/fr/${ABSOLUTE_URL}`;
+export const FR_ABSOLUTE_URL = `${FR_HOMEPAGE_URL}/${ABSOLUTE_URL}`;
 export const FR_ABSOLUTE_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/html/fr/absolute.html'),
+  path.join(testResourcesPath, `html/${FR_HOMEPAGE_URL}/absolute.html`),
   'utf8'
 );
-export const FR_RELATIVE_URL = `/fr/${RELATIVE_URL}`;
+export const FR_RELATIVE_URL = `${FR_HOMEPAGE_URL}/${RELATIVE_URL}`;
 export const FR_RELATIVE_PAGE = fs.readFileSync(
-  path.join(testResourcesPath, '/html/fr/relative.html'),
+  path.join(testResourcesPath, `html/${FR_HOMEPAGE_URL}/relative.html`),
+  'utf8'
+);
+export const SITEMAP_EN_RELURL = `${EN_HOMEPAGE_URL}/${DEFAULT_SITEMAP_NAME}`;
+export const SITEMAP_EN_ABSURL = `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EN_RELURL}`;
+export const SITEMAP_EN_PAGE = fs.readFileSync(
+  path.join(testResourcesPath, 'sitemap_en.xml'),
+  'utf8'
+);
+export const SITEMAP_FR_RELURL = `${FR_HOMEPAGE_URL}/${DEFAULT_SITEMAP_NAME}`;
+export const SITEMAP_FR_ABSURL = `${DEFAULT_SITEMAP_HOST}/${SITEMAP_FR_RELURL}`;
+export const SITEMAP_FR_PAGE = fs.readFileSync(
+  path.join(testResourcesPath, 'sitemap_fr.xml'),
   'utf8'
 );
 /* c8 ignore stop */

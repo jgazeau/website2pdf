@@ -41,6 +41,10 @@ export function toFilename(title: string | undefined): string {
     : randomUUID();
 }
 
+export function toFilePath(url: URL): string {
+  return url.pathname.substring(0, url.pathname.lastIndexOf('/'));
+}
+
 export function interpolate(
   str: string | undefined,
   variableMap: Map<string, string>

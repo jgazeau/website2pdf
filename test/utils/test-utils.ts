@@ -3,8 +3,8 @@ import {red} from 'kleur';
 import {expect} from 'chai';
 import {logger} from '../../src/utils/logger';
 import {SinonStubs} from '../testUtils/sinonStubs';
-import {MAX_TTY_LENGTH} from '../../src/utils/const';
 import {logTestLevel, testResourcesImagePath} from '../testUtils/const';
+import {DEFAULT_SITEMAP_HOST, MAX_TTY_LENGTH} from '../../src/utils/const';
 import {
   getOutputWidth,
   headerFactory,
@@ -12,6 +12,7 @@ import {
   interpolate,
   puppeteerBrowserLaunchArgs,
   toFilename,
+  toFilePath,
 } from '../../src/utils/helpers';
 
 describe('Utils tests', () => {
@@ -40,6 +41,23 @@ describe('Utils tests', () => {
     expect(toFilename(undefined)).to.match(
       /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
     );
+  });
+  it('toFilePath should return empty string when url contains only a host', () => {
+    expect(toFilePath(new URL(DEFAULT_SITEMAP_HOST))).to.be.empty;
+  });
+  it('toFilePath should return empty string when url contains only a filename', () => {
+    const url = `${DEFAULT_SITEMAP_HOST}/filename.ext`;
+    expect(toFilePath(new URL(url))).to.be.empty;
+  });
+  it('toFilePath should return a path when url ends with a filename', () => {
+    const expectedPath = '/this/is/a/url';
+    const url = `${DEFAULT_SITEMAP_HOST}${expectedPath}/filename.ext`;
+    expect(toFilePath(new URL(url))).to.be.equal(expectedPath);
+  });
+  it('toFilePath should return a path when url ends with a /', () => {
+    const expectedPath = '/this/is/a/url';
+    const url = `${DEFAULT_SITEMAP_HOST}${expectedPath}/`;
+    expect(toFilePath(new URL(url))).to.be.equal(expectedPath);
   });
   it('interpolate should replace placeholders with value from map of variable', () => {
     const variableMap = new Map<string, string>([
