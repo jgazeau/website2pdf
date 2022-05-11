@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 import axios from 'axios';
 import {XmlURL} from './xmlURL';
-import {XMLParser} from 'fast-xml-parser';
 import {XmlSitemap} from './xmlSitemap';
 import {WebsiteURL} from './websiteURL';
+import {XMLParser} from 'fast-xml-parser';
 import {fxpOptions} from '../utils/const';
 import {PdfTemplate} from './pdfTemplate';
 import {plainToClass} from 'class-transformer';
@@ -48,7 +48,18 @@ export class Website {
   }
   /* c8 ignore stop */
 
+  private _cliArgs: ICliArguments | undefined;
+  /* c8 ignore start */
+  public get cliArgs(): ICliArguments | undefined {
+    return this._cliArgs;
+  }
+  public set cliArgs(value: ICliArguments | undefined) {
+    this._cliArgs = value;
+  }
+  /* c8 ignore stop */
+
   constructor(cliArgs?: ICliArguments) {
+    this.cliArgs = cliArgs;
     this.pdfTemplate = new PdfTemplate(
       cliArgs?.displayHeaderFooter,
       cliArgs?.templateDir
@@ -113,7 +124,14 @@ export class Website {
         ? this._sitemaps.push(
             new WebsiteSitemap(
               rootUrl,
-              json._urlset._url.flatMap((xmlURL: XmlURL) => xmlURL._loc)
+              json._urlset._url
+                .flatMap((xmlURL: XmlURL) => xmlURL._loc)
+                .filter(
+                  url =>
+                    this.cliArgs?.excludeUrls === undefined ||
+                    new RegExp(this.cliArgs?.excludeUrls).exec(url.href) ===
+                      null
+                )
             )
           )
         : this._sitemaps.push(new WebsiteSitemap(rootUrl, []));

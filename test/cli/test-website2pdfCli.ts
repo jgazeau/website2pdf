@@ -6,6 +6,7 @@ import {Website2PdfCli} from '../../src/cli/website2pdfCli';
 import {
   SPECIFIC_CHROMIUM_FLAGS,
   SPECIFIC_DIR,
+  SPECIFIC_EXCLUDE_REGEX,
   SPECIFIC_URL,
 } from '../testUtils/const';
 import {mockArgs, setChaiAsPromised} from '../testUtils/helpers';
@@ -17,11 +18,13 @@ import {
   DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
   DISPLAY_HEADER_FOOTER_OPTION,
+  EXCLUDE_URLS_OPTION,
   MARGIN_BOTTOM_OPTION,
   MARGIN_LEFT_OPTION,
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
 } from '../../src/utils/const';
 
@@ -82,9 +85,9 @@ describe('Website2Pdf CLI tests', () => {
       );
     });
   });
-  it('parse with sitemapUrl option should have specific sitemap URL argument', () => {
+  it(`parse with ${SITEMAP_URL_OPTION} option should have specific sitemap URL argument`, () => {
     setChaiAsPromised();
-    mockArgs(['--sitemapUrl', `${SPECIFIC_URL}`]);
+    mockArgs([`--${SITEMAP_URL_OPTION}`, `${SPECIFIC_URL}`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.sitemapUrl).to.be.equal(SPECIFIC_URL);
@@ -158,6 +161,14 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.chromiumFlags).to.be.equal(SPECIFIC_CHROMIUM_FLAGS);
+    });
+  });
+  it(`parse with ${EXCLUDE_URLS_OPTION} option should have specific ${EXCLUDE_URLS_OPTION} argument`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${EXCLUDE_URLS_OPTION}=${SPECIFIC_EXCLUDE_REGEX}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.excludeUrls).to.be.equal(SPECIFIC_EXCLUDE_REGEX);
     });
   });
 });

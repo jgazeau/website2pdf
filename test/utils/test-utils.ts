@@ -4,7 +4,11 @@ import {expect} from 'chai';
 import {logger} from '../../src/utils/logger';
 import {SinonStubs} from '../testUtils/sinonStubs';
 import {logTestLevel, testResourcesImagePath} from '../testUtils/const';
-import {DEFAULT_SITEMAP_HOST, MAX_TTY_LENGTH} from '../../src/utils/const';
+import {
+  CHROMIUM_FLAGS_OPTION,
+  DEFAULT_SITEMAP_HOST,
+  MAX_TTY_LENGTH,
+} from '../../src/utils/const';
 import {
   getOutputWidth,
   headerFactory,
@@ -75,13 +79,13 @@ describe('Utils tests', () => {
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U9tCF8gAAAAAAAAAG41HX4AASRYHnsAAAAASUVORK5CYII='
     );
   });
-  it('puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when chromiumFlags', () => {
+  it(`puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when ${CHROMIUM_FLAGS_OPTION}`, () => {
     const chromiumFlags = '--no-sandbox --disable-dev-shm-usage';
     expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({
       args: ['--no-sandbox', '--disable-dev-shm-usage'],
     });
   });
-  it('puppeteerBrowserLaunchArgs should return empty PuppeteerNodeLaunchOptions when empty chromiumFlags', () => {
+  it(`puppeteerBrowserLaunchArgs should return empty PuppeteerNodeLaunchOptions when empty ${CHROMIUM_FLAGS_OPTION}`, () => {
     const chromiumFlags = '';
     expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({});
   });

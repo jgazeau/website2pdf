@@ -21,6 +21,7 @@ import {
   RELATIVE_URL,
   EN_HOMEPAGE_URL,
   FR_HOMEPAGE_URL,
+  DUMMY_CLIARGS,
 } from '../testUtils/const';
 import {
   AxiosMethodStub,
@@ -28,7 +29,11 @@ import {
   restoreSandbox,
   setAxiosStub,
 } from '../testUtils/sinonStubs';
-import {DEFAULT_SITEMAP_HOST, DEFAULT_SITEMAP_URL} from '../../src/utils/const';
+import {
+  DEFAULT_SITEMAP_HOST,
+  DEFAULT_SITEMAP_URL,
+  SITEMAP_URL_OPTION,
+} from '../../src/utils/const';
 
 describe('Website model tests', () => {
   beforeEach(() => {
@@ -37,7 +42,7 @@ describe('Website model tests', () => {
   afterEach(() => {
     restoreSandbox();
   });
-  it('Website model should use default sitemapUrl', () => {
+  it(`Website model should use default ${SITEMAP_URL_OPTION}`, () => {
     const website: Website = new Website();
     expect(website.websiteURL.sitemapURL.toString()).to.equal(
       DEFAULT_SITEMAP_URL
@@ -53,22 +58,27 @@ describe('Website model tests', () => {
     const website: Website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(2);
-      website.sitemaps.forEach(sitemap => {
-        expect(sitemap.rootUrl.toString()).to.be.oneOf([
-          SITEMAP_EN_ABSURL,
-          SITEMAP_FR_ABSURL,
+      expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
+        SITEMAP_EN_ABSURL
+      );
+      expect(website.sitemaps[0].urls).to.have.length(3);
+      website.sitemaps[0].urls.forEach(url => {
+        expect(url.toString()).to.be.oneOf([
+          `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/`,
+          `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${ABSOLUTE_URL}/`,
+          `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${RELATIVE_URL}/`,
         ]);
-        expect(sitemap.urls).to.have.length(3);
-        sitemap.urls.forEach(url => {
-          expect(url.toString()).to.be.oneOf([
-            `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/`,
-            `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${ABSOLUTE_URL}/`,
-            `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${RELATIVE_URL}/`,
-            `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/`,
-            `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/${ABSOLUTE_URL}/`,
-            `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/${RELATIVE_URL}/`,
-          ]);
-        });
+      });
+      expect(website.sitemaps[1].rootUrl.toString()).to.be.equal(
+        SITEMAP_FR_ABSURL
+      );
+      expect(website.sitemaps[1].urls).to.have.length(3);
+      website.sitemaps[1].urls.forEach(url => {
+        expect(url.toString()).to.be.oneOf([
+          `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/`,
+          `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/${ABSOLUTE_URL}/`,
+          `${DEFAULT_SITEMAP_HOST}/${FR_HOMEPAGE_URL}/${RELATIVE_URL}/`,
+        ]);
       });
     });
   });
@@ -80,16 +90,16 @@ describe('Website model tests', () => {
     const website: Website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
-      website.sitemaps.forEach(sitemap => {
-        expect(sitemap.rootUrl.toString()).to.be.equal(DEFAULT_SITEMAP_URL);
-        expect(sitemap.urls).to.have.length(3);
-        sitemap.urls.forEach(url => {
-          expect(url.toString()).to.be.oneOf([
-            `${DEFAULT_SITEMAP_HOST}/`,
-            `${DEFAULT_SITEMAP_HOST}/${ABSOLUTE_URL}/`,
-            `${DEFAULT_SITEMAP_HOST}/${RELATIVE_URL}/`,
-          ]);
-        });
+      expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
+        DEFAULT_SITEMAP_URL
+      );
+      expect(website.sitemaps[0].urls).to.have.length(3);
+      website.sitemaps[0].urls.forEach(url => {
+        expect(url.toString()).to.be.oneOf([
+          `${DEFAULT_SITEMAP_HOST}/`,
+          `${DEFAULT_SITEMAP_HOST}/${ABSOLUTE_URL}/`,
+          `${DEFAULT_SITEMAP_HOST}/${RELATIVE_URL}/`,
+        ]);
       });
     });
   });
@@ -133,6 +143,33 @@ describe('Website model tests', () => {
     const website: Website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
+    });
+  });
+  it('Website model should build and populate sitemaps when extended sitemap and excluded urls', () => {
+    setChaiAsPromised();
+    setAxiosStub('get', [
+      new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_EXTENDED_PAGE),
+      new AxiosMethodStub(SITEMAP_EN_ABSURL, SITEMAP_EN_PAGE),
+      new AxiosMethodStub(SITEMAP_FR_ABSURL, SITEMAP_FR_PAGE),
+    ]);
+    const website: Website = new Website(DUMMY_CLIARGS);
+    return website.build().then(() => {
+      expect(website.sitemaps).to.have.length(2);
+      expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
+        SITEMAP_EN_ABSURL
+      );
+      expect(website.sitemaps[0].urls).to.have.length(3);
+      website.sitemaps[0].urls.forEach(url => {
+        expect(url.toString()).to.be.oneOf([
+          `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/`,
+          `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${ABSOLUTE_URL}/`,
+          `${DEFAULT_SITEMAP_HOST}/${EN_HOMEPAGE_URL}/${RELATIVE_URL}/`,
+        ]);
+      });
+      expect(website.sitemaps[1].rootUrl.toString()).to.be.equal(
+        SITEMAP_FR_ABSURL
+      );
+      expect(website.sitemaps[1].urls).to.have.length(0);
     });
   });
 });
