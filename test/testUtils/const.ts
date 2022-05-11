@@ -3,11 +3,14 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import {TLogLevelName} from 'tslog';
 import {
+  DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_NAME,
+  DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
 } from '../../src/utils/const';
+import {ICliArguments} from '../../src/cli/iArgumentsParser';
 
 export const logTestLevel: TLogLevelName = 'debug';
 export const rootPath: string = path.join(process.cwd());
@@ -33,6 +36,22 @@ export const testTemplatesImagePath: string = path.join(
 export const SPECIFIC_URL = `https://example.com/${DEFAULT_SITEMAP_NAME}`;
 export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
+export const SPECIFIC_EXCLUDE_REGEX = '\\/fr\\/';
+export const DUMMY_CLIARGS: ICliArguments = {
+  _: [],
+  $0: '',
+  excludeUrls: SPECIFIC_EXCLUDE_REGEX,
+  debug: false,
+  sitemapUrl: DEFAULT_SITEMAP_URL,
+  displayHeaderFooter: false,
+  templateDir: DEFAULT_TEMPLATE_DIR,
+  outputDir: DEFAULT_OUTPUT_DIR,
+  marginLeft: DEFAULT_MARGIN_MIN,
+  marginRight: DEFAULT_MARGIN_MIN,
+  marginTop: DEFAULT_MARGIN_MIN,
+  marginBottom: DEFAULT_MARGIN_MIN,
+  chromiumFlags: '',
+};
 
 export const ABSOLUTE_URL = 'absolute/url';
 export const RELATIVE_URL = 'relative/url';

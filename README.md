@@ -54,6 +54,7 @@ Common options:
       --marginLeft           Margin left                                                       [string] [default: "0px"]
       --marginRight          Margin right                                                      [string] [default: "0px"]
       --chromiumFlags        Chromium flags set at Puppeteer launch                                             [string]
+      --excludeUrls          Exclude urls matching a regex from printing process                                [string]
 
 Other Options:
       --debug    Turn on debug logging                                                        [boolean] [default: false]
@@ -69,6 +70,7 @@ Examples:
   --marginRight "50px"
   website2pdf --chromiumFlags="--no-sandbox                     Use specific chromium options at Puppeteer launch
   --disable-dev-shm-usage"
+  website2pdf --excludeUrls="\/fr\/"                            Exclude urls of french language
 
 Additional information:
   GitHub: https://github.com/jgazeau/website2pdf.git

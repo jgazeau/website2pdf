@@ -3,6 +3,7 @@ import axios from 'axios';
 import {cyan} from 'kleur';
 
 export const MAX_TTY_LENGTH = 120;
+export const SITEMAP_URL_OPTION = 'sitemapUrl';
 export const DISPLAY_HEADER_FOOTER_OPTION = 'displayHeaderFooter';
 export const TEMPLATE_DIR_OPTION = 'templateDir';
 export const OUTPUT_DIR_OPTION = 'outputDir';
@@ -11,6 +12,7 @@ export const MARGIN_BOTTOM_OPTION = 'marginBottom';
 export const MARGIN_LEFT_OPTION = 'marginLeft';
 export const MARGIN_RIGHT_OPTION = 'marginRight';
 export const CHROMIUM_FLAGS_OPTION = 'chromiumFlags';
+export const EXCLUDE_URLS_OPTION = 'excludeUrls';
 
 export const DEFAULT_TEMPLATE_DIR = './w2pdf_template';
 export const DEFAULT_OUTPUT_DIR = './w2pdf_output';
@@ -51,9 +53,9 @@ NB1: Website2Pdf will search for ${cyan(DEFAULT_HEADER_FILE)} and ${cyan(
 )} and use them respectively as header and footer definition when printing PDFs.
 
 NB2: Margins have default values depending on the option used:
-===> when displayHeaderFooter=true
--      marginTop  = marginBottom = 50px
--      marginLeft = marginRight  = 0px
-===> when displayHeaderFooter=false
--      marginTop  = marginBottom = 0px
--      marginLeft = marginRight  = 0px`;
+===> when ${DISPLAY_HEADER_FOOTER_OPTION}=true
+-      ${MARGIN_TOP_OPTION}  = ${MARGIN_BOTTOM_OPTION} = 50px
+-      ${MARGIN_LEFT_OPTION} = ${MARGIN_RIGHT_OPTION}  = 0px
+===> when ${DISPLAY_HEADER_FOOTER_OPTION}=false
+-      ${MARGIN_TOP_OPTION}  = ${MARGIN_BOTTOM_OPTION} = 0px
+-      ${MARGIN_LEFT_OPTION} = ${MARGIN_RIGHT_OPTION}  = 0px`;

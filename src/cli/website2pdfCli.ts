@@ -15,6 +15,8 @@ import {
   DISPLAY_HEADER_FOOTER_OPTION,
   MARGIN_LEFT_OPTION,
   MARGIN_RIGHT_OPTION,
+  EXCLUDE_URLS_OPTION,
+  SITEMAP_URL_OPTION,
 } from '../utils/const';
 const yargs = require('yargs');
 
@@ -58,10 +60,13 @@ export class Website2PdfCli {
       .alias('h', 'help')
       .example([
         [
-          '$0 --sitemapUrl "http://localhost:80/sitemap.xml"',
+          `$0 --${SITEMAP_URL_OPTION} "http://localhost:80/sitemap.xml"`,
           'Use specific sitemap URL',
         ],
-        ['$0 --displayHeaderFooter', 'Print PDFs with header and footer'],
+        [
+          `$0 --${DISPLAY_HEADER_FOOTER_OPTION}`,
+          'Print PDFs with header and footer',
+        ],
         [
           `$0 --${TEMPLATE_DIR_OPTION} "./templates"`,
           'Use specific template directory',
@@ -77,6 +82,10 @@ export class Website2PdfCli {
         [
           `$0 --${CHROMIUM_FLAGS_OPTION}="--no-sandbox --disable-dev-shm-usage"`,
           'Use specific chromium options at Puppeteer launch',
+        ],
+        [
+          `$0 --${EXCLUDE_URLS_OPTION}="\\/fr\\/"`,
+          'Exclude urls of french language',
         ],
       ])
       .options({
@@ -137,6 +146,11 @@ export class Website2PdfCli {
         chromiumFlags: {
           type: 'string',
           description: 'Chromium flags set at Puppeteer launch',
+          group: this.GROUPS.COMMONS,
+        },
+        excludeUrls: {
+          type: 'string',
+          description: 'Exclude urls matching a regex from printing process',
           group: this.GROUPS.COMMONS,
         },
       })
