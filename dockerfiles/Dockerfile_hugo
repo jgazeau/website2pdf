@@ -1,8 +1,23 @@
 FROM alpine:edge
 
-WORKDIR /usr/app
+ARG HUGO_VERSION=""
+ARG HUGO_WORKDIR="/usr/app"
+ARG BUILD_WORKDIR="/build"
 
-RUN apk add --no-cache \
+ENV HUGO_NAME="hugo_extended_${HUGO_VERSION}_Linux-64bit"
+ENV HUGO_BASE_URL="https://github.com/gohugoio/hugo/releases/download"
+ENV HUGO_URL="${HUGO_BASE_URL}/v${HUGO_VERSION}/${HUGO_NAME}.tar.gz"
+ENV HUGO_CHECKSUM_URL="${HUGO_BASE_URL}/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_checksums.txt"
+# Skip chromium download during puppeteer
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+WORKDIR ${BUILD_WORKDIR}
+
+# Install all tools and dependencies required
+RUN apk update \
+    && apk add --no-cache \
+      libc6-compat \
       chromium \
       nss \
       freetype \
@@ -11,20 +26,22 @@ RUN apk add --no-cache \
       ttf-freefont \
       nodejs \
       npm \
-      yarn
+# Download and setup Hugo binaries
+    && wget --quiet "${HUGO_URL}" \
+    && wget --quiet "${HUGO_CHECKSUM_URL}" \
+    && grep "${HUGO_NAME}.tar.gz" "./hugo_${HUGO_VERSION}_checksums.txt" | sha256sum -c - \
+    && tar -zxvf "${HUGO_NAME}.tar.gz" \
+    && mv ./hugo /usr/bin/hugo \
+    && echo "BUILD_INFO | hugo version: $(hugo version)"
 
-# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+WORKDIR ${HUGO_WORKDIR}
 
-# Install website2pdf also containing puppeteer
-RUN npm i website2pdf
-
-# Add user so we don't need --no-sandbox.
-RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
-    && mkdir -p /home/pptruser/Downloads /app \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /app
-
-# Run everything after as non-privileged user.
-USER pptruser
+# Install website2pdf
+RUN npm i website2pdf \
+    && echo "BUILD_INFO | website2pdf version: $(npx website2pdf --version)" \
+# Right management
+    && chgrp -R 0 ${HUGO_WORKDIR} \
+    && chmod -R g+rw ${HUGO_WORKDIR} \
+# Cleanup
+    && npm cache clean --force \
+    && rm -rf ${BUILD_WORKDIR}

@@ -17,7 +17,7 @@ To achieve that, the website **must follow the [sitemap protocol](https://www.si
 
 ### Installation
 
-```sh
+```Shell
 npm install website2pdf
 ```
 
