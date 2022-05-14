@@ -1,6 +1,6 @@
 {
   "name": "website2pdf",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Tool to export a website in PDFs based on its sitemap",
   "engines": {
     "node": ">=14.14.0"
