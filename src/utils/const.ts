@@ -4,15 +4,15 @@ import {cyan} from 'kleur';
 
 export const MAX_TTY_LENGTH = 120;
 export const SITEMAP_URL_OPTION = 'sitemapUrl';
-export const DISPLAY_HEADER_FOOTER_OPTION = 'displayHeaderFooter';
-export const TEMPLATE_DIR_OPTION = 'templateDir';
-export const OUTPUT_DIR_OPTION = 'outputDir';
-export const MARGIN_TOP_OPTION = 'marginTop';
-export const MARGIN_BOTTOM_OPTION = 'marginBottom';
-export const MARGIN_LEFT_OPTION = 'marginLeft';
-export const MARGIN_RIGHT_OPTION = 'marginRight';
-export const CHROMIUM_FLAGS_OPTION = 'chromiumFlags';
-export const EXCLUDE_URLS_OPTION = 'excludeUrls';
+export const DISPLAY_HEADER_FOOTER_OPTION = 'display-header-footer';
+export const TEMPLATE_DIR_OPTION = 'template-dir';
+export const OUTPUT_DIR_OPTION = 'output-dir';
+export const MARGIN_TOP_OPTION = 'margin-top';
+export const MARGIN_BOTTOM_OPTION = 'margin-bottom';
+export const MARGIN_LEFT_OPTION = 'margin-left';
+export const MARGIN_RIGHT_OPTION = 'margin-right';
+export const CHROMIUM_FLAGS_OPTION = 'chromium-flags';
+export const EXCLUDE_URLS_OPTION = 'exclude-urls';
 
 export const DEFAULT_TEMPLATE_DIR = './w2pdf_template';
 export const DEFAULT_OUTPUT_DIR = './w2pdf_output';

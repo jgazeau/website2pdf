@@ -33,28 +33,29 @@ npm install website2pdf
 
 Usage: website2pdf [options]
 
-NB1: Website2Pdf will search for header.html and footer.html files from the templateDir and use them respectively as
+NB1: Website2Pdf will search for header.html and footer.html files from the template-dir and use them respectively as
 header and footer definition when printing PDFs.
 
 NB2: Margins have default values depending on the option used:
-===> when displayHeaderFooter=true
--      marginTop  = marginBottom = 50px
--      marginLeft = marginRight  = 0px
-===> when displayHeaderFooter=false
--      marginTop  = marginBottom = 0px
--      marginLeft = marginRight  = 0px
+===> when display-header-footer=true
+-      margin-top  = margin-bottom = 50px
+-      margin-left = margin-right  = 0px
+===> when display-header-footer=false
+-      margin-top  = margin-bottom = 0px
+-      margin-left = margin-right  = 0px
 
 Common options:
-  -s, --sitemapUrl           Sitemap URL                         [string] [default: "http://localhost:1313/sitemap.xml"]
-      --displayHeaderFooter  Turn on header and footer printing                               [boolean] [default: false]
-  -t, --templateDir          Relative path of the templates directory                      [default: "./w2pdf_template"]
-  -o, --outputDir            Relative path of the output directory                           [default: "./w2pdf_output"]
-      --marginTop            Margin top (50px or 0px)                                                           [string]
-      --marginBottom         Margin bottom (50px or 0px)                                                        [string]
-      --marginLeft           Margin left                                                       [string] [default: "0px"]
-      --marginRight          Margin right                                                      [string] [default: "0px"]
-      --chromiumFlags        Chromium flags set at Puppeteer launch                                             [string]
-      --excludeUrls          Exclude urls matching a regex from printing process                                [string]
+  -s, --sitemapUrl, --sitemap-url                     Sitemap URL[string] [default: "http://localhost:1313/sitemap.xml"]
+      --displayHeaderFooter, --display-header-footer  Turn on header and footer printing      [boolean] [default: false]
+  -t, --templateDir, --template-dir                   Relative path of the templates directory
+                                                                                           [default: "./w2pdf_template"]
+  -o, --outputDir, --output-dir                       Relative path of the output directory  [default: "./w2pdf_output"]
+      --marginTop, --margin-top                       Margin top (50px or 0px)                                  [string]
+      --marginBottom, --margin-bottom                 Margin bottom (50px or 0px)                               [string]
+      --marginLeft, --margin-left                     Margin left                              [string] [default: "0px"]
+      --marginRight, --margin-right                   Margin right                             [string] [default: "0px"]
+      --chromiumFlags, --chromium-flags               Chromium flags set at Puppeteer launch                    [string]
+      --excludeUrls, --exclude-urls                   Exclude urls matching a regex from printing process       [string]
 
 Other Options:
       --debug    Turn on debug logging                                                        [boolean] [default: false]
@@ -63,14 +64,14 @@ Other Options:
 
 Examples:
   website2pdf --sitemapUrl "http://localhost:80/sitemap.xml"    Use specific sitemap URL
-  website2pdf --displayHeaderFooter                             Print PDFs with header and footer
-  website2pdf --templateDir "./templates"                       Use specific template directory
-  website2pdf --outputDir "./output"                            Use specific output directory
-  website2pdf --displayHeaderFooter --marginLeft "50px"         Use header and footer and set specific margins
-  --marginRight "50px"
-  website2pdf --chromiumFlags="--no-sandbox                     Use specific chromium options at Puppeteer launch
+  website2pdf --display-header-footer                           Print PDFs with header and footer
+  website2pdf --template-dir "./templates"                      Use specific template directory
+  website2pdf --output-dir "./output"                           Use specific output directory
+  website2pdf --display-header-footer --margin-left "50px"      Use header and footer and set specific margins
+  --margin-right "50px"
+  website2pdf --chromium-flags="--no-sandbox                    Use specific chromium options at Puppeteer launch
   --disable-dev-shm-usage"
-  website2pdf --excludeUrls="\/fr\/"                            Exclude urls of french language
+  website2pdf --exclude-urls="\/fr\/"                           Exclude urls of french language
 
 Additional information:
   GitHub: https://github.com/jgazeau/website2pdf.git
