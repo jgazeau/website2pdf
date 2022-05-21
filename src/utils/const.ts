@@ -3,7 +3,7 @@ import axios from 'axios';
 import {cyan} from 'kleur';
 
 export const MAX_TTY_LENGTH = 120;
-export const SITEMAP_URL_OPTION = 'sitemapUrl';
+export const SITEMAP_URL_OPTION = 'sitemap-url';
 export const DISPLAY_HEADER_FOOTER_OPTION = 'display-header-footer';
 export const TEMPLATE_DIR_OPTION = 'template-dir';
 export const OUTPUT_DIR_OPTION = 'output-dir';

@@ -100,6 +100,7 @@ export class Website2PdfCli {
           default: DEFAULT_SITEMAP_URL,
           description: 'Sitemap URL',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         displayHeaderFooter: {
           alias: ['display-header-footer'],
@@ -114,6 +115,7 @@ export class Website2PdfCli {
           default: DEFAULT_TEMPLATE_DIR,
           description: 'Relative path of the templates directory',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         outputDir: {
           alias: ['o', 'output-dir'],
@@ -121,18 +123,21 @@ export class Website2PdfCli {
           default: DEFAULT_OUTPUT_DIR,
           description: 'Relative path of the output directory',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         marginTop: {
           alias: ['margin-top'],
           type: 'string',
           description: 'Margin top (50px or 0px)',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         marginBottom: {
           alias: ['margin-bottom'],
           type: 'string',
           description: 'Margin bottom (50px or 0px)',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         marginLeft: {
           alias: ['margin-left'],
@@ -140,6 +145,7 @@ export class Website2PdfCli {
           default: DEFAULT_MARGIN_MIN,
           description: 'Margin left',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         marginRight: {
           alias: ['margin-right'],
@@ -147,18 +153,21 @@ export class Website2PdfCli {
           default: DEFAULT_MARGIN_MIN,
           description: 'Margin right',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         chromiumFlags: {
           alias: ['chromium-flags'],
           type: 'string',
           description: 'Chromium flags set at Puppeteer launch',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         excludeUrls: {
           alias: ['exclude-urls'],
           type: 'string',
           description: 'Exclude urls matching a regex from printing process',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
       })
       .wrap(getOutputWidth())
