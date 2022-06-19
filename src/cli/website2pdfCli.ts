@@ -17,6 +17,8 @@ import {
   MARGIN_RIGHT_OPTION,
   EXCLUDE_URLS_OPTION,
   SITEMAP_URL_OPTION,
+  MARGIN_TOP_OPTION,
+  MARGIN_BOTTOM_OPTION,
 } from '../utils/const';
 const yargs = require('yargs');
 
@@ -95,7 +97,7 @@ export class Website2PdfCli {
           description: 'Turn on debug logging',
         },
         sitemapUrl: {
-          alias: ['s', 'sitemap-url'],
+          alias: ['s', `${SITEMAP_URL_OPTION}`],
           type: 'string',
           default: DEFAULT_SITEMAP_URL,
           description: 'Sitemap URL',
@@ -103,14 +105,14 @@ export class Website2PdfCli {
           nargs: 1,
         },
         displayHeaderFooter: {
-          alias: ['display-header-footer'],
+          alias: [`${DISPLAY_HEADER_FOOTER_OPTION}`],
           type: 'boolean',
           default: false,
           description: 'Turn on header and footer printing',
           group: this.GROUPS.COMMONS,
         },
         templateDir: {
-          alias: ['t', 'template-dir'],
+          alias: ['t', `${TEMPLATE_DIR_OPTION}`],
           type: 'PathLike',
           default: DEFAULT_TEMPLATE_DIR,
           description: 'Relative path of the templates directory',
@@ -118,7 +120,7 @@ export class Website2PdfCli {
           nargs: 1,
         },
         outputDir: {
-          alias: ['o', 'output-dir'],
+          alias: ['o', `${OUTPUT_DIR_OPTION}`],
           type: 'PathLike',
           default: DEFAULT_OUTPUT_DIR,
           description: 'Relative path of the output directory',
@@ -126,21 +128,21 @@ export class Website2PdfCli {
           nargs: 1,
         },
         marginTop: {
-          alias: ['margin-top'],
+          alias: [`${MARGIN_TOP_OPTION}`],
           type: 'string',
           description: 'Margin top (50px or 0px)',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
         marginBottom: {
-          alias: ['margin-bottom'],
+          alias: [`${MARGIN_BOTTOM_OPTION}`],
           type: 'string',
           description: 'Margin bottom (50px or 0px)',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
         marginLeft: {
-          alias: ['margin-left'],
+          alias: [`${MARGIN_LEFT_OPTION}`],
           type: 'string',
           default: DEFAULT_MARGIN_MIN,
           description: 'Margin left',
@@ -148,7 +150,7 @@ export class Website2PdfCli {
           nargs: 1,
         },
         marginRight: {
-          alias: ['margin-right'],
+          alias: [`${MARGIN_RIGHT_OPTION}`],
           type: 'string',
           default: DEFAULT_MARGIN_MIN,
           description: 'Margin right',
@@ -156,14 +158,14 @@ export class Website2PdfCli {
           nargs: 1,
         },
         chromiumFlags: {
-          alias: ['chromium-flags'],
+          alias: [`${CHROMIUM_FLAGS_OPTION}`],
           type: 'string',
           description: 'Chromium flags set at Puppeteer launch',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
         excludeUrls: {
-          alias: ['exclude-urls'],
+          alias: [`${EXCLUDE_URLS_OPTION}`],
           type: 'string',
           description: 'Exclude urls matching a regex from printing process',
           group: this.GROUPS.COMMONS,
