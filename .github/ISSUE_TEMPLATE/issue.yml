@@ -1,0 +1,38 @@
+name: Bug Report
+description: Create a bug report
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # What is the issue?
+        ---
+        *Please provide as much information as you can in this bug report!*
+        *Also remember to provide a reproducer if possible, it will make it easier and quicker to help you 😉*
+  - type: textarea
+    id: issue-steps
+    attributes:
+      label: Steps that lead to the issue
+      description: Please provide all the steps and relevant information that lead to your issue (logs, screenshots, versions, ...).
+    validations:
+      required: true
+  - type: textarea
+    id: issue-expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: issue-reproducer
+    attributes:
+      label: Reproducer
+      description: Provide a reproducer so we can easily and quickly help you.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution?
+      description: Got a solution, or an idea to solve the issue? Feel free to provide it!

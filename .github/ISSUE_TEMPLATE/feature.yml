@@ -1,0 +1,17 @@
+name: Feature
+description: Request a new feature
+title: "[feature_request]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: request
+    attributes:
+      label: What is missing in the project?
+      description: Please provide what is missing in the project and why it should be added?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution?
+      description: Got a solution, or an idea to implement the feature? Feel free to provide it!
