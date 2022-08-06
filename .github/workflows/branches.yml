@@ -7,7 +7,6 @@ on:
       - '**'
     paths:
       - '**'
-      - '!CHANGELOG.md'
 env:
   NPM_CACHE_NAME: "npm-cache"
   NPM_CACHE_PATH: "~/.npm"
