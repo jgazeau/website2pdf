@@ -14,13 +14,12 @@ jobs:
           ref: 'main'
           submodules: recursive
           fetch-depth: 1
+          token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'npm'
       - name: Publish release on Npm
-        env:
-          GREN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export TAG_NAME=${GITHUB_REF##*/}
           printf "%70s\n" | tr ' ' '-'
