@@ -19,7 +19,7 @@ import {
   toFilePath,
 } from '../../src/utils/helpers';
 
-describe('Utils tests', () => {
+describe('Helpers tests', () => {
   const sinonMock = new SinonStubs({});
   afterEach(() => {
     sinonMock.sinonRestoreStubs();
@@ -39,7 +39,9 @@ describe('Utils tests', () => {
     expect(logger()[logTestLevel]).to.be.calledOnce;
   });
   it('toFilename should return filename with title', () => {
-    expect(toFilename('file_title_éè%$@')).to.equal('file_title_éè');
+    expect(toFilename('file_title_éè%$@ with spaces')).to.equal(
+      'file_title_éè%$@ with spaces'
+    );
   });
   it('toFilename should return filename with UUID', () => {
     expect(toFilename(undefined)).to.match(
