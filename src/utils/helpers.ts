@@ -32,13 +32,7 @@ export function getOutputWidth(): number {
 }
 
 export function toFilename(title: string | undefined): string {
-  return title
-    ? title
-        .replace(/[^a-z0-9\u00C0-\u024F\u1E00-\u1EFF]/gi, ' ')
-        .trim()
-        .replace(/ /g, '_')
-        .replace(/([_])\1+/g, '_')
-    : randomUUID();
+  return title ? title : randomUUID();
 }
 
 export function toFilePath(url: URL): string {
