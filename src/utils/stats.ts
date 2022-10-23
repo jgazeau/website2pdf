@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
-import {URL} from 'url';
-import {logger} from './logger';
 import {bold, Color, green, red, white} from 'kleur';
 import {getBorderCharacters, table, TableUserConfig} from 'table';
+import {URL} from 'url';
+import {logger} from './logger';
 
 export class PrintEntry {
   constructor(

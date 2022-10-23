@@ -1,25 +1,25 @@
 import kleur = require('kleur');
 import {hideBin} from 'yargs/helpers';
-import {getOutputWidth} from '../utils/helpers';
-import {IArgumentsParser, ICliArguments} from './iArgumentsParser';
 import {
+  CHROMIUM_FLAGS_OPTION,
   CLI_USAGE,
-  DEFAULT_OUTPUT_DIR,
-  DEFAULT_TEMPLATE_DIR,
-  DEFAULT_SITEMAP_URL,
-  TEMPLATE_DIR_OPTION,
-  OUTPUT_DIR_OPTION,
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
-  CHROMIUM_FLAGS_OPTION,
+  DEFAULT_OUTPUT_DIR,
+  DEFAULT_SITEMAP_URL,
+  DEFAULT_TEMPLATE_DIR,
   DISPLAY_HEADER_FOOTER_OPTION,
+  EXCLUDE_URLS_OPTION,
+  MARGIN_BOTTOM_OPTION,
   MARGIN_LEFT_OPTION,
   MARGIN_RIGHT_OPTION,
-  EXCLUDE_URLS_OPTION,
-  SITEMAP_URL_OPTION,
   MARGIN_TOP_OPTION,
-  MARGIN_BOTTOM_OPTION,
+  OUTPUT_DIR_OPTION,
+  SITEMAP_URL_OPTION,
+  TEMPLATE_DIR_OPTION,
 } from '../utils/const';
+import {getOutputWidth} from '../utils/helpers';
+import {IArgumentsParser, ICliArguments} from './iArgumentsParser';
 const yargs = require('yargs');
 
 export class Website2PdfCli {

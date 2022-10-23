@@ -1,8 +1,8 @@
 /* c8 ignore start */
+import axios, {AxiosStatic} from 'axios';
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
-import axios, {AxiosStatic} from 'axios';
 import {logger} from '../../src/utils/logger';
 
 export class SinonStubs {

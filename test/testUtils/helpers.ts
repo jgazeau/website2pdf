@@ -1,8 +1,8 @@
 /* c8 ignore start */
 import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
 import * as fs from 'fs-extra';
 import {testTempPath} from './const';
-import * as chaiAsPromised from 'chai-as-promised';
 
 export function setChaiAsPromised(): void {
   chai.should();

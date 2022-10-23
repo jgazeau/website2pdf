@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 import axios from 'axios';
-import {XmlURL} from './xmlURL';
-import {XmlSitemap} from './xmlSitemap';
-import {WebsiteURL} from './websiteURL';
-import {XMLParser} from 'fast-xml-parser';
-import {fxpOptions} from '../utils/const';
-import {PdfTemplate} from './pdfTemplate';
 import {plainToClass} from 'class-transformer';
-import {WebsiteSitemap} from './websiteSitemap';
-import {XmlSitemapIndex} from './xmlSitemapIndex';
+import {XMLParser} from 'fast-xml-parser';
 import {ICliArguments} from '../cli/iArgumentsParser';
+import {fxpOptions} from '../utils/const';
 import {validateClassObjectSync} from '../utils/helpers';
+import {PdfTemplate} from './pdfTemplate';
 import {
   ERROR_PARSING_XML_SCHEMA,
   ERROR_UNKNOWN_XML_SCHEMA,
   Website2PdfError,
 } from './website2pdfError';
+import {WebsiteSitemap} from './websiteSitemap';
+import {WebsiteURL} from './websiteURL';
+import {XmlSitemap} from './xmlSitemap';
+import {XmlSitemapIndex} from './xmlSitemapIndex';
+import {XmlURL} from './xmlURL';
 
 export class Website {
   private _websiteURL: WebsiteURL = new WebsiteURL();

@@ -1,15 +1,6 @@
-import * as path from 'path';
-import * as fs from 'fs-extra';
 import {expect} from 'chai';
-import {Website2Pdf} from '../src/website2pdf';
-import {PrintResults} from '../src/utils/stats';
-import {SinonStubs} from './testUtils/sinonStubs';
-import {TestRequest, TestServer} from './testUtils/httpTestServer';
-import {
-  cleanTestTempDirectory,
-  mockArgs,
-  setChaiAsPromised,
-} from './testUtils/helpers';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import {
   CHROMIUM_FLAGS_OPTION,
   DEFAULT_SITEMAP_HOST,
@@ -21,26 +12,34 @@ import {
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
 } from '../src/utils/const';
+import {PrintResults} from '../src/utils/stats';
+import {Website2Pdf} from '../src/website2pdf';
 import {
   ABSOLUTE_URL,
+  EN_ABSOLUTE_FILENAME,
   EN_ABSOLUTE_PAGE,
   EN_ABSOLUTE_URL,
+  EN_HOMEPAGE_FILENAME,
   EN_HOMEPAGE_PAGE,
   EN_HOMEPAGE_URL,
+  EN_RELATIVE_FILENAME,
   EN_RELATIVE_PAGE,
   EN_RELATIVE_URL,
+  FR_ABSOLUTE_FILENAME,
   FR_ABSOLUTE_PAGE,
   FR_ABSOLUTE_URL,
+  FR_HOMEPAGE_FILENAME,
   FR_HOMEPAGE_PAGE,
   FR_HOMEPAGE_URL,
+  FR_RELATIVE_FILENAME,
   FR_RELATIVE_PAGE,
   FR_RELATIVE_URL,
   RELATIVE_URL,
   rootPath,
-  SITEMAPINDEX_EMPTY_URL_PAGE,
-  SITEMAPINDEX_EMPTY_URL_RELURL,
   SITEMAPINDEX_EMPTY_PAGE,
   SITEMAPINDEX_EMPTY_RELURL,
+  SITEMAPINDEX_EMPTY_URL_PAGE,
+  SITEMAPINDEX_EMPTY_URL_RELURL,
   SITEMAP_EMPTY_PAGE,
   SITEMAP_EMPTY_RELURL,
   SITEMAP_EN_PAGE,
@@ -50,19 +49,20 @@ import {
   SITEMAP_FR_PAGE,
   SITEMAP_FR_RELURL,
   SITEMAP_STANDARD_PAGE,
+  SPECIFIC_EXCLUDE_REGEX,
+  testOutputDir,
+  testTemplatesImagePath,
+  testTemplatesMetaPath,
   testTemplatesPath,
   testTempPath,
-  testTemplatesMetaPath,
-  testTemplatesImagePath,
-  testOutputDir,
-  EN_HOMEPAGE_FILENAME,
-  EN_RELATIVE_FILENAME,
-  EN_ABSOLUTE_FILENAME,
-  FR_ABSOLUTE_FILENAME,
-  FR_HOMEPAGE_FILENAME,
-  FR_RELATIVE_FILENAME,
-  SPECIFIC_EXCLUDE_REGEX,
 } from './testUtils/const';
+import {
+  cleanTestTempDirectory,
+  mockArgs,
+  setChaiAsPromised,
+} from './testUtils/helpers';
+import {TestRequest, TestServer} from './testUtils/httpTestServer';
+import {SinonStubs} from './testUtils/sinonStubs';
 
 const testRequests: TestRequest[] = [
   new TestRequest(

@@ -1,6 +1,6 @@
 import {URL} from 'url';
-import {DEFAULT_SITEMAP_URL} from '../utils/const';
 import {Website2PdfCli} from '../cli/website2pdfCli';
+import {DEFAULT_SITEMAP_URL} from '../utils/const';
 
 export class WebsiteURL {
   private _sitemapURL: URL = new URL(

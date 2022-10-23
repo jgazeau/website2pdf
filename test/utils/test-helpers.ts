@@ -1,9 +1,6 @@
-import * as path from 'path';
-import {red} from 'kleur';
 import {expect} from 'chai';
-import {logger} from '../../src/utils/logger';
-import {SinonStubs} from '../testUtils/sinonStubs';
-import {logTestLevel, testResourcesImagePath} from '../testUtils/const';
+import {red} from 'kleur';
+import * as path from 'path';
 import {
   CHROMIUM_FLAGS_OPTION,
   DEFAULT_SITEMAP_HOST,
@@ -18,6 +15,9 @@ import {
   toFilename,
   toFilePath,
 } from '../../src/utils/helpers';
+import {logger} from '../../src/utils/logger';
+import {logTestLevel, testResourcesImagePath} from '../testUtils/const';
+import {SinonStubs} from '../testUtils/sinonStubs';
 
 describe('Helpers tests', () => {
   const sinonMock = new SinonStubs({});

@@ -1,39 +1,39 @@
-import 'reflect-metadata';
 import {expect} from 'chai';
+import 'reflect-metadata';
 import {Website} from '../../src/model/website';
-import {setChaiAsPromised} from '../testUtils/helpers';
 import {
   ERROR_UNKNOWN_XML_SCHEMA,
   Website2PdfError,
 } from '../../src/model/website2pdfError';
 import {
-  SITEMAP_EN_ABSURL,
-  SITEMAP_FR_ABSURL,
-  SITEMAP_EXTENDED_PAGE,
-  SITEMAP_EN_PAGE,
-  SITEMAP_FR_PAGE,
-  SITEMAP_UNKNOWN_PAGE,
-  SITEMAP_INVALID_PAGE,
-  SITEMAP_EMPTY_PAGE,
-  SITEMAPINDEX_EMPTY_PAGE,
-  SITEMAP_STANDARD_PAGE,
+  DEFAULT_SITEMAP_HOST,
+  DEFAULT_SITEMAP_URL,
+  SITEMAP_URL_OPTION,
+} from '../../src/utils/const';
+import {
   ABSOLUTE_URL,
-  RELATIVE_URL,
+  DUMMY_CLIARGS,
   EN_HOMEPAGE_URL,
   FR_HOMEPAGE_URL,
-  DUMMY_CLIARGS,
+  RELATIVE_URL,
+  SITEMAPINDEX_EMPTY_PAGE,
+  SITEMAP_EMPTY_PAGE,
+  SITEMAP_EN_ABSURL,
+  SITEMAP_EN_PAGE,
+  SITEMAP_EXTENDED_PAGE,
+  SITEMAP_FR_ABSURL,
+  SITEMAP_FR_PAGE,
+  SITEMAP_INVALID_PAGE,
+  SITEMAP_STANDARD_PAGE,
+  SITEMAP_UNKNOWN_PAGE,
 } from '../testUtils/const';
+import {setChaiAsPromised} from '../testUtils/helpers';
 import {
   AxiosMethodStub,
   createSandbox,
   restoreSandbox,
   setAxiosStub,
 } from '../testUtils/sinonStubs';
-import {
-  DEFAULT_SITEMAP_HOST,
-  DEFAULT_SITEMAP_URL,
-  SITEMAP_URL_OPTION,
-} from '../../src/utils/const';
 
 describe('Website model tests', () => {
   beforeEach(() => {

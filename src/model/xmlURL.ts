@@ -1,7 +1,7 @@
+import {Transform, Type} from 'class-transformer';
+import {IsDefined} from 'class-validator';
 import {URL} from 'url';
 import {WebsiteURL} from './websiteURL';
-import {IsDefined} from 'class-validator';
-import {Transform, Type} from 'class-transformer';
 
 export class XmlURL {
   @IsDefined()

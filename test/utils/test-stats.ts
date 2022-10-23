@@ -1,15 +1,15 @@
-import {URL} from 'url';
 import {expect} from 'chai';
-import {logger} from '../../src/utils/logger';
-import {SinonStubs} from '../testUtils/sinonStubs';
+import {URL} from 'url';
 import {DEFAULT_OUTPUT_DIR} from '../../src/utils/const';
+import {logger} from '../../src/utils/logger';
 import {
-  ResultEntry,
-  PrintResults,
   PrintEntry,
-  STATUS_PRINTED,
+  PrintResults,
+  ResultEntry,
   STATUS_ERROR,
+  STATUS_PRINTED,
 } from '../../src/utils/stats';
+import {SinonStubs} from '../testUtils/sinonStubs';
 
 function mockResultEntry(
   url: URL,

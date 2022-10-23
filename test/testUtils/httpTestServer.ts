@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 /* c8 ignore start */
-import {DEFAULT_PORT} from '../../src/utils/const';
 import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
+import {DEFAULT_PORT} from '../../src/utils/const';
 
 export class TestRequest {
   private _url: string;

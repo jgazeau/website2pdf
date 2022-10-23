@@ -1,5 +1,5 @@
-import * as http from 'http';
 import axios from 'axios';
+import * as http from 'http';
 import {cyan} from 'kleur';
 
 export const MAX_TTY_LENGTH = 120;

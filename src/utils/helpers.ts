@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
-import * as fs from 'fs-extra';
-import {logger} from './logger';
-import {randomUUID} from 'crypto';
-import {Color, white} from 'kleur';
-import {TLogLevelName} from 'tslog';
-import {PuppeteerNodeLaunchOptions} from 'puppeteer';
-import {WEBSITE2PDF_HEADER, MAX_TTY_LENGTH} from './const';
 import {validateSync, ValidationError} from 'class-validator';
+import {randomUUID} from 'crypto';
+import * as fs from 'fs-extra';
+import {Color, white} from 'kleur';
+import {PuppeteerNodeLaunchOptions} from 'puppeteer';
+import {TLogLevelName} from 'tslog';
+import {MAX_TTY_LENGTH, WEBSITE2PDF_HEADER} from './const';
+import {logger} from './logger';
 
 export function validateClassObjectSync(object: Object): void {
   const objectTypeMessage = typeof object;

@@ -1,15 +1,7 @@
-import 'reflect-metadata';
 import {expect} from 'chai';
-import {Website} from '../../src/model/website';
-import {SinonStubs} from '../testUtils/sinonStubs';
+import 'reflect-metadata';
 import {Website2PdfCli} from '../../src/cli/website2pdfCli';
-import {
-  SPECIFIC_CHROMIUM_FLAGS,
-  SPECIFIC_DIR,
-  SPECIFIC_EXCLUDE_REGEX,
-  SPECIFIC_URL,
-} from '../testUtils/const';
-import {mockArgs, setChaiAsPromised} from '../testUtils/helpers';
+import {Website} from '../../src/model/website';
 import {
   CHROMIUM_FLAGS_OPTION,
   DEFAULT_MARGIN_MAX,
@@ -27,6 +19,14 @@ import {
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
 } from '../../src/utils/const';
+import {
+  SPECIFIC_CHROMIUM_FLAGS,
+  SPECIFIC_DIR,
+  SPECIFIC_EXCLUDE_REGEX,
+  SPECIFIC_URL,
+} from '../testUtils/const';
+import {mockArgs, setChaiAsPromised} from '../testUtils/helpers';
+import {SinonStubs} from '../testUtils/sinonStubs';
 
 describe('Website2Pdf CLI tests', () => {
   const sinonMock = new SinonStubs({});

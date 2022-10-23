@@ -1,6 +1,6 @@
 import {PathLike} from 'fs';
-import * as path from 'path';
 import * as fs from 'fs-extra';
+import * as path from 'path';
 import {
   DEFAULT_FOOTER_FILE,
   DEFAULT_HEADER_FILE,

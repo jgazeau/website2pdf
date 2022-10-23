@@ -1,6 +1,6 @@
-import {XmlURL} from './xmlURL';
 import {Transform, Type} from 'class-transformer';
 import {IsArray, IsDefined, IsOptional, ValidateNested} from 'class-validator';
+import {XmlURL} from './xmlURL';
 
 export class SitemapIndex {
   @IsOptional()

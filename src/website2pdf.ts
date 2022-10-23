@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 /* eslint-disable @typescript-eslint/no-explicit-any*/
-import 'reflect-metadata';
-import * as path from 'path';
 import * as fs from 'fs-extra';
-import * as puppeteer from 'puppeteer';
-import {URL} from 'url';
 import {red} from 'kleur';
-import {logger} from './utils/logger';
-import {Website} from './model/website';
-import {PdfTemplate} from './model/pdfTemplate';
-import {Website2PdfCli} from './cli/website2pdfCli';
+import * as path from 'path';
+import * as puppeteer from 'puppeteer';
+import 'reflect-metadata';
+import {URL} from 'url';
 import {ICliArguments} from './cli/iArgumentsParser';
+import {Website2PdfCli} from './cli/website2pdfCli';
+import {PdfTemplate} from './model/pdfTemplate';
+import {Website} from './model/website';
 import {WebsiteSitemap} from './model/websiteSitemap';
-import {PrintResults, STATUS_PRINTED, STATUS_ERROR} from './utils/stats';
 import {
   headerFactory,
   interpolate,
@@ -20,6 +18,8 @@ import {
   toFilename,
   toFilePath,
 } from './utils/helpers';
+import {logger} from './utils/logger';
+import {PrintResults, STATUS_ERROR, STATUS_PRINTED} from './utils/stats';
 
 export class Website2Pdf {
   static main(): Promise<void> {

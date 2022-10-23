@@ -1,5 +1,11 @@
 {
   "mochaExplorer.require": "ts-node/register",
   "mochaExplorer.files": "test/**/test-*.ts",
-  "mochaExplorer.esmLoader": false
+  "mochaExplorer.esmLoader": false,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }
