@@ -49,7 +49,7 @@
     "fast-xml-parser": "^4.0.9",
     "fs-extra": "^10.1.0",
     "kleur": "^4.1.5",
-    "puppeteer": "^19.0.0",
+    "puppeteer": "^19.1.0",
     "reflect-metadata": "^0.1.13",
     "table": "^6.8.0",
     "tslog": "^3.3.3",
