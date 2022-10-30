@@ -56,6 +56,8 @@ Common options:
       --marginRight, --margin-right                   Margin right                             [string] [default: "0px"]
       --chromiumFlags, --chromium-flags               Chromium flags set at Puppeteer launch                    [string]
       --excludeUrls, --exclude-urls                   Exclude urls matching a regex from printing process       [string]
+      --safeTitle, --safe-title                       Safely generate file title by replacing special chars
+                                                                                              [boolean] [default: false]
 
 Other Options:
       --debug    Turn on debug logging                                                        [boolean] [default: false]
@@ -63,7 +65,7 @@ Other Options:
   -h, --help     Show help                                                                                     [boolean]
 
 Examples:
-  website2pdf --sitemapUrl "http://localhost:80/sitemap.xml"    Use specific sitemap URL
+  website2pdf --sitemap-url "http://localhost:80/sitemap.xml"   Use specific sitemap URL
   website2pdf --display-header-footer                           Print PDFs with header and footer
   website2pdf --template-dir "./templates"                      Use specific template directory
   website2pdf --output-dir "./output"                           Use specific output directory

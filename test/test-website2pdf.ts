@@ -9,6 +9,7 @@ import {
   DISPLAY_HEADER_FOOTER_OPTION,
   EXCLUDE_URLS_OPTION,
   OUTPUT_DIR_OPTION,
+  SAFE_TITLE_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
 } from '../src/utils/const';
@@ -18,12 +19,15 @@ import {
   ABSOLUTE_URL,
   EN_ABSOLUTE_FILENAME,
   EN_ABSOLUTE_PAGE,
+  EN_ABSOLUTE_SAFE_FILENAME,
   EN_ABSOLUTE_URL,
   EN_HOMEPAGE_FILENAME,
   EN_HOMEPAGE_PAGE,
+  EN_HOMEPAGE_SAFE_FILENAME,
   EN_HOMEPAGE_URL,
   EN_RELATIVE_FILENAME,
   EN_RELATIVE_PAGE,
+  EN_RELATIVE_SAFE_FILENAME,
   EN_RELATIVE_URL,
   FR_ABSOLUTE_FILENAME,
   FR_ABSOLUTE_PAGE,
@@ -117,7 +121,7 @@ describe('Website2pdf tests', () => {
     cleanTestTempDirectory();
     process.chdir(rootPath);
     sinonMock.logger = true;
-    sinonMock.consoleLog = true;
+    sinonMock.consoleLog = false;
     sinonMock.sinonSetStubs();
   });
   afterEach(() => {
@@ -172,7 +176,7 @@ describe('Website2pdf tests', () => {
     ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles);
     });
   });
   it(`website2pdf should work when standard sitemap and ${DISPLAY_HEADER_FOOTER_OPTION}`, () => {
@@ -185,7 +189,7 @@ describe('Website2pdf tests', () => {
     ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles);
     });
   });
   it(`website2pdf should work when extended sitemap and ${DISPLAY_HEADER_FOOTER_OPTION}`, () => {
@@ -205,7 +209,7 @@ describe('Website2pdf tests', () => {
     ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles);
     });
   });
   it(`website2pdf should work when standard sitemap, ${DISPLAY_HEADER_FOOTER_OPTION} and header/footer from default ${TEMPLATE_DIR_OPTION}`, () => {
@@ -222,7 +226,7 @@ describe('Website2pdf tests', () => {
     ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles);
     });
   });
   it(`website2pdf should work when extended sitemap, ${DISPLAY_HEADER_FOOTER_OPTION}, header/footer from specific ${TEMPLATE_DIR_OPTION} and specific ${OUTPUT_DIR_OPTION}`, () => {
@@ -245,7 +249,7 @@ describe('Website2pdf tests', () => {
       path.join(FR_RELATIVE_URL, FR_RELATIVE_FILENAME),
     ];
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles, testTempPath);
     });
   });
   it(`website2pdf should work when extended sitemap, ${DISPLAY_HEADER_FOOTER_OPTION}, header/footer with metadatas from specific ${TEMPLATE_DIR_OPTION}`, () => {
@@ -268,7 +272,7 @@ describe('Website2pdf tests', () => {
       path.join(FR_RELATIVE_URL, FR_RELATIVE_FILENAME),
     ];
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles, testTempPath);
     });
   });
   it(`website2pdf should work when extended sitemap, ${DISPLAY_HEADER_FOOTER_OPTION}, header/footer with image from specific ${TEMPLATE_DIR_OPTION}`, () => {
@@ -291,7 +295,7 @@ describe('Website2pdf tests', () => {
       path.join(FR_RELATIVE_URL, FR_RELATIVE_FILENAME),
     ];
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles, testTempPath);
     });
   });
   it(`website2pdf should work when standard sitemap and ${CHROMIUM_FLAGS_OPTION}`, () => {
@@ -304,7 +308,7 @@ describe('Website2pdf tests', () => {
     ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
+      return assertExpectedFilesExists(expectedFiles);
     });
   });
   it(`website2pdf should work when extended sitemap and ${EXCLUDE_URLS_OPTION}`, () => {
@@ -327,38 +331,58 @@ describe('Website2pdf tests', () => {
     ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
-      assertExpectedFilesExists(expectedFiles);
-      assertExpectedFilesDoesntExists(nonExpectedFiles);
+      return assertExpectedFilesExists(expectedFiles).then(() => {
+        return assertExpectedFilesDoesntExists(nonExpectedFiles);
+      });
+    });
+  });
+  it(`website2pdf should work when ${SAFE_TITLE_OPTION}`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${SAFE_TITLE_OPTION}`]);
+    const expectedFiles = [
+      EN_HOMEPAGE_SAFE_FILENAME,
+      path.join(ABSOLUTE_URL, EN_ABSOLUTE_SAFE_FILENAME),
+      path.join(RELATIVE_URL, EN_RELATIVE_SAFE_FILENAME),
+    ];
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      return assertExpectedFilesExists(expectedFiles);
     });
   });
 });
 
-function assertExpectedFilesExists(files: string[]) {
-  return fs.pathExists(testOutputDir).then(isDirExists => {
+function assertExpectedFilesExists(
+  files: string[],
+  outputDir: string = testOutputDir
+) {
+  return fs.pathExists(outputDir).then(isDirExists => {
     expect(isDirExists).to.be.true;
     return Promise.all(
       files.map(file => {
-        return fs
-          .pathExists(path.join(testOutputDir, file))
-          .then(isFileExists => {
-            expect(isFileExists).to.be.true;
-          });
+        return fs.pathExists(path.join(outputDir, file));
       })
-    );
+    ).then((values: boolean[]) => {
+      values.forEach(value => {
+        expect(value).to.be.true;
+      });
+    });
   });
 }
 
-function assertExpectedFilesDoesntExists(files: string[]) {
-  return fs.pathExists(testOutputDir).then(isDirExists => {
+function assertExpectedFilesDoesntExists(
+  files: string[],
+  outputDir: string = testOutputDir
+) {
+  return fs.pathExists(outputDir).then(isDirExists => {
     expect(isDirExists).to.be.true;
     return Promise.all(
       files.map(file => {
-        return fs
-          .pathExists(path.join(testOutputDir, file))
-          .then(isFileExists => {
-            expect(isFileExists).to.be.false;
-          });
+        return fs.pathExists(path.join(outputDir, file));
       })
-    );
+    ).then((values: boolean[]) => {
+      values.forEach(value => {
+        expect(value).to.be.false;
+      });
+    });
   });
 }

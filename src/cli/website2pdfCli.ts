@@ -15,6 +15,7 @@ import {
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  SAFE_TITLE_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
 } from '../utils/const';
@@ -170,6 +171,13 @@ export class Website2PdfCli {
           description: 'Exclude urls matching a regex from printing process',
           group: this.GROUPS.COMMONS,
           nargs: 1,
+        },
+        safeTitle: {
+          alias: [`${SAFE_TITLE_OPTION}`],
+          type: 'boolean',
+          default: false,
+          description: 'Safely generate file title by replacing special chars',
+          group: this.GROUPS.COMMONS,
         },
       })
       .wrap(getOutputWidth())
