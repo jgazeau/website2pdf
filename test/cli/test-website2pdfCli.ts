@@ -7,6 +7,7 @@ import {
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
+  DEFAULT_SAFE_TITLE,
   DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
   DISPLAY_HEADER_FOOTER_OPTION,
@@ -16,6 +17,7 @@ import {
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  SAFE_TITLE_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
 } from '../../src/utils/const';
@@ -79,6 +81,7 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.marginBottom).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginLeft).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginRight).to.be.equal(DEFAULT_MARGIN_MIN);
+      expect(argv.safeTitle).to.be.equal(DEFAULT_SAFE_TITLE);
       const website: Website = new Website();
       expect(website.websiteURL.sitemapURL.toString()).to.equal(
         DEFAULT_SITEMAP_URL
@@ -265,6 +268,14 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.excludeUrls).to.be.equal(SPECIFIC_EXCLUDE_REGEX);
+    });
+  });
+  it(`parse should have specific ${SAFE_TITLE_OPTION} argument when ${SAFE_TITLE_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${SAFE_TITLE_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.safeTitle).to.be.equal(true);
     });
   });
   it(`parse should display error and exit when ${EXCLUDE_URLS_OPTION} option is empty`, () => {

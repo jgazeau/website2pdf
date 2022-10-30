@@ -13,6 +13,7 @@ export const MARGIN_LEFT_OPTION = 'margin-left';
 export const MARGIN_RIGHT_OPTION = 'margin-right';
 export const CHROMIUM_FLAGS_OPTION = 'chromium-flags';
 export const EXCLUDE_URLS_OPTION = 'exclude-urls';
+export const SAFE_TITLE_OPTION = 'safe-title';
 
 export const DEFAULT_TEMPLATE_DIR = './w2pdf_template';
 export const DEFAULT_OUTPUT_DIR = './w2pdf_output';
@@ -25,6 +26,7 @@ export const DEFAULT_PORT = '1313';
 export const DEFAULT_SITEMAP_NAME = 'sitemap.xml';
 export const DEFAULT_SITEMAP_HOST = `http://${DEFAULT_HOST}:${DEFAULT_PORT}`;
 export const DEFAULT_SITEMAP_URL = `${DEFAULT_SITEMAP_HOST}/${DEFAULT_SITEMAP_NAME}`;
+export const DEFAULT_SAFE_TITLE = false;
 export const fxpOptions = {
   ignoreAttributes: true,
   parseNodeValue: true,

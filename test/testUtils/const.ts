@@ -51,6 +51,7 @@ export const DUMMY_CLIARGS: ICliArguments = {
   marginTop: DEFAULT_MARGIN_MIN,
   marginBottom: DEFAULT_MARGIN_MIN,
   chromiumFlags: '',
+  safeTitle: false,
 };
 
 export const ABSOLUTE_URL = 'absolute/url';
@@ -88,9 +89,12 @@ export const SITEMAPINDEX_EMPTY_URL_PAGE = fs.readFileSync(
   'utf8'
 );
 export const EN_HOMEPAGE_URL = 'en';
-export const EN_ABSOLUTE_FILENAME = 'Absolute_URL.pdf';
-export const EN_HOMEPAGE_FILENAME = 'First_page.pdf';
-export const EN_RELATIVE_FILENAME = 'Relative_URL.pdf';
+export const EN_ABSOLUTE_FILENAME = 'Absolute URL.pdf';
+export const EN_HOMEPAGE_FILENAME = 'First page.pdf';
+export const EN_RELATIVE_FILENAME = 'Relative URL.pdf';
+export const EN_ABSOLUTE_SAFE_FILENAME = 'Absolute_URL.pdf';
+export const EN_HOMEPAGE_SAFE_FILENAME = 'First_page.pdf';
+export const EN_RELATIVE_SAFE_FILENAME = 'Relative_URL.pdf';
 export const EN_HOMEPAGE_PAGE = fs.readFileSync(
   path.join(testResourcesPath, `html/${EN_HOMEPAGE_URL}/homepage.html`),
   'utf8'
@@ -106,9 +110,12 @@ export const EN_RELATIVE_PAGE = fs.readFileSync(
   'utf8'
 );
 export const FR_HOMEPAGE_URL = 'fr';
-export const FR_ABSOLUTE_FILENAME = 'URL_absolue.pdf';
-export const FR_HOMEPAGE_FILENAME = 'Première_page.pdf';
-export const FR_RELATIVE_FILENAME = 'URL_relative.pdf';
+export const FR_ABSOLUTE_FILENAME = 'URL absolue.pdf';
+export const FR_HOMEPAGE_FILENAME = 'Première page.pdf';
+export const FR_RELATIVE_FILENAME = 'URL relative.pdf';
+export const FR_ABSOLUTE_SAFE_FILENAME = 'URL_absolue.pdf';
+export const FR_HOMEPAGE_SAFE_FILENAME = 'Première_page.pdf';
+export const FR_RELATIVE_SAFE_FILENAME = 'URL_relative.pdf';
 export const FR_HOMEPAGE_PAGE = fs.readFileSync(
   path.join(testResourcesPath, `html/${FR_HOMEPAGE_URL}/homepage.html`),
   'utf8'

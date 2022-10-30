@@ -170,7 +170,10 @@ function printToPDF(
           .then(metadatas => {
             const filePath = path.join(
               fileDir,
-              `${toFilename(metadatas.get('title')?.toString())}.pdf`
+              `${toFilename(
+                metadatas.get('title')?.toString(),
+                cliArgs.safeTitle
+              )}.pdf`
             );
             logger().debug(`Printing page ${filePath} from url ${url}`);
             return page

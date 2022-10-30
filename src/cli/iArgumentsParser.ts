@@ -17,4 +17,5 @@ export interface ICliArguments extends Arguments {
   marginRight: string;
   chromiumFlags: string;
   excludeUrls: string;
+  safeTitle: boolean;
 }

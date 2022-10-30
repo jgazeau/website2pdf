@@ -38,6 +38,11 @@ describe('Helpers tests', () => {
     headerFactory(red, logTestLevel);
     expect(logger()[logTestLevel]).to.be.calledOnce;
   });
+  it('toFilename should return filename with title without specific chars', () => {
+    expect(toFilename('file_title_éè%$@ with spaces', true)).to.equal(
+      'file_title_éè_with_spaces'
+    );
+  });
   it('toFilename should return filename with title', () => {
     expect(toFilename('file_title_éè%$@ with spaces')).to.equal(
       'file_title_éè%$@ with spaces'
