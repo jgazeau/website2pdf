@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable @typescript-eslint/no-explicit-any*/
+import {PromisePool} from '@supercharge/promise-pool';
 import * as fs from 'fs-extra';
 import {red} from 'kleur';
 import * as path from 'path';
@@ -22,18 +23,17 @@ import {logger} from './utils/logger';
 import {PrintResults, STATUS_ERROR, STATUS_PRINTED} from './utils/stats';
 
 export class Website2Pdf {
-  static main(): Promise<void> {
-    return new Website2PdfCli().parse().then(cliArgs => {
+  static async main(): Promise<void> {
+    return new Website2PdfCli().parse().then(async cliArgs => {
       headerFactory();
       const website = new Website(cliArgs);
-      return website.build().then((website: Website) => {
+      await website.build().then(async (website: Website) => {
         if (website.sitemaps.length !== 0) {
-          return processSitemaps(cliArgs, website);
+          await processSitemaps(cliArgs, website);
         } else {
           logger().warn(
             `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`
           );
-          return Promise.resolve();
         }
       });
     });
@@ -45,103 +45,116 @@ Website2Pdf.main().catch((error: Error) => {
   logger().debug(error);
 });
 
-function processSitemaps(
+async function processSitemaps(
   cliArgs: ICliArguments,
   website: Website
 ): Promise<void> {
-  return puppeteer
+  await puppeteer
     .launch(puppeteerBrowserLaunchArgs(cliArgs.chromiumFlags))
-    .then(browser => {
-      browser.version().then(version => {
-        logger().debug(`Starting browser instance: ${version}`);
-      });
-      return browser
-        .createIncognitoBrowserContext()
-        .then(browserContext => {
-          logger().debug(
-            `Creating incognito browser context: ${browserContext.isIncognito()}`
-          );
-          return Promise.all(
-            website.sitemaps.map(sitemap => {
-              if (sitemap.urls.length !== 0) {
-                const outputDir = path.normalize(cliArgs.outputDir.toString());
-                return processSitemap(
-                  browserContext,
-                  cliArgs,
-                  outputDir,
-                  sitemap,
-                  website.pdfTemplate
-                );
-              } else {
-                logger().warn(
-                  `No URLs found for sitemap ${sitemap.rootUrl.toString()}. Please check ${website.websiteURL.sitemapURL.toString()}`
-                );
-                return Promise.resolve();
-              }
-            })
-          ).then(() => {
-            return Promise.resolve();
-          });
+    .then(async browser => {
+      await browser
+        .version()
+        .then(version => {
+          logger().debug(`Starting browser instance: ${version}`);
         })
-        .finally(() => {
+        .then(async () => {
+          await browser
+            .createIncognitoBrowserContext()
+            .then(async browserContext => {
+              logger().debug(
+                `Creating incognito browser context: ${browserContext.isIncognito()}`
+              );
+              await PromisePool.for(website.sitemaps)
+                .withConcurrency(1)
+                .process(async (sitemap, index) => {
+                  logger().debug(
+                    `Processing pool for sitemap ${sitemap.rootUrl.href} (${index}/${website.sitemaps.length}))`
+                  );
+                  await processSitemap(
+                    cliArgs,
+                    website,
+                    sitemap,
+                    browserContext
+                  );
+                });
+            });
+        })
+        .finally(async () => {
           PrintResults.printResults();
-          return browser.close();
+          await browser.close();
         });
     });
 }
 
-function processSitemap(
+async function processSitemap(
+  cliArgs: ICliArguments,
+  website: Website,
+  sitemap: WebsiteSitemap,
+  browserContext: puppeteer.BrowserContext
+) {
+  if (sitemap.urls.length !== 0) {
+    const outputDir = path.normalize(cliArgs.outputDir.toString());
+    await sitemapToPDF(
+      browserContext,
+      cliArgs,
+      outputDir,
+      sitemap,
+      website.pdfTemplate
+    );
+  } else {
+    logger().warn(
+      `No URLs found for sitemap ${sitemap.rootUrl.toString()}. Please check ${website.websiteURL.sitemapURL.toString()}`
+    );
+  }
+}
+
+async function sitemapToPDF(
   browserContext: puppeteer.BrowserContext,
   cliArgs: ICliArguments,
   outputDir: string,
   sitemap: WebsiteSitemap,
   pdfTemplate: PdfTemplate
 ): Promise<void> {
-  return fs
+  await fs
     .ensureDir(outputDir)
     .then((result: any) => {
       result
         ? logger().debug(`Directory ${result} created`)
         : logger().debug(`Directory ${outputDir} already exists`);
     })
-    .then(() => {
+    .then(async () => {
       logger().info(`Printing ${sitemap.urls.length} PDF(s) to ${outputDir}`);
-      return Promise.all(
-        sitemap.urls.map(url => {
-          return printToPDF(
-            browserContext,
-            cliArgs,
-            outputDir,
-            url,
-            pdfTemplate
+      await PromisePool.for(sitemap.urls)
+        .withConcurrency(cliArgs.processPool)
+        .process(async (url, index) => {
+          logger().debug(
+            `Processing pool for url ${url.href} (${index}/${sitemap.urls.length}))`
           );
-        })
-      ).then(() => {
-        return Promise.resolve();
-      });
+          await pageToPDF(browserContext, cliArgs, outputDir, url, pdfTemplate);
+        });
     });
 }
 
-function printToPDF(
+async function pageToPDF(
   browserContext: puppeteer.BrowserContext,
   cliArgs: ICliArguments,
   outputDir: string,
   url: URL,
   pdfTemplate: PdfTemplate
 ): Promise<void> {
-  return browserContext.newPage().then(page => {
+  await browserContext.newPage().then(async page => {
     page.setDefaultNavigationTimeout(0);
     const metadatas = new Map<string, string>();
     const fileDir = path.join(outputDir, toFilePath(url));
-    return fs
+    await fs
       .ensureDir(fileDir)
       .then((result: any) => {
         result
           ? logger().debug(`Directory ${result} created`)
           : logger().debug(`Directory ${outputDir} already exists`);
       })
-      .then(() => {
-        return page
+      .then(async () => {
+        await page
           .goto(url.toString(), {waitUntil: 'networkidle2'})
           .then(() => {
             page.title().then(title => {
@@ -167,7 +180,7 @@ function printToPDF(
                 return metadatas;
               });
           })
-          .then(metadatas => {
+          .then(async metadatas => {
             const filePath = path.join(
               fileDir,
               `${toFilename(
@@ -176,7 +189,7 @@ function printToPDF(
               )}.pdf`
             );
             logger().debug(`Printing page ${filePath} from url ${url}`);
-            return page
+            await page
               .pdf({
                 timeout: 0,
                 path: filePath,
@@ -194,15 +207,14 @@ function printToPDF(
               })
               .then(() => {
                 PrintResults.storeResult(url, filePath, STATUS_PRINTED);
-                return Promise.resolve();
               })
               .catch((error: Error) => {
                 PrintResults.storeResult(url, filePath, STATUS_ERROR);
                 throw error;
               });
           })
-          .finally(() => {
-            return page.close();
+          .finally(async () => {
+            await page.close();
           });
       });
   });

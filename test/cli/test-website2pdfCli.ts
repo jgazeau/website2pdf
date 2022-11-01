@@ -7,6 +7,7 @@ import {
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
+  DEFAULT_PROCESS_POOL,
   DEFAULT_SAFE_TITLE,
   DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
@@ -17,6 +18,7 @@ import {
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
@@ -25,6 +27,7 @@ import {
   SPECIFIC_CHROMIUM_FLAGS,
   SPECIFIC_DIR,
   SPECIFIC_EXCLUDE_REGEX,
+  SPECIFIC_PROCESS_POOL,
   SPECIFIC_URL,
 } from '../testUtils/const';
 import {mockArgs, setChaiAsPromised} from '../testUtils/helpers';
@@ -82,6 +85,7 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.marginLeft).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginRight).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.safeTitle).to.be.equal(DEFAULT_SAFE_TITLE);
+      expect(argv.processPool).to.be.equal(DEFAULT_PROCESS_POOL);
       const website: Website = new Website();
       expect(website.websiteURL.sitemapURL.toString()).to.equal(
         DEFAULT_SITEMAP_URL
@@ -270,6 +274,18 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.excludeUrls).to.be.equal(SPECIFIC_EXCLUDE_REGEX);
     });
   });
+  it(`parse should display error and exit when ${EXCLUDE_URLS_OPTION} option is empty`, () => {
+    setChaiAsPromised();
+    sinonMock.consoleError = true;
+    sinonMock.processExit = true;
+    sinonMock.sinonSetStubs();
+    mockArgs([`--${EXCLUDE_URLS_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(() => {
+      expect(console.error).to.be.called;
+      expect(process.exit).to.be.called;
+    });
+  });
   it(`parse should have specific ${SAFE_TITLE_OPTION} argument when ${SAFE_TITLE_OPTION} option`, () => {
     setChaiAsPromised();
     mockArgs([`--${SAFE_TITLE_OPTION}`]);
@@ -278,12 +294,20 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.safeTitle).to.be.equal(true);
     });
   });
-  it(`parse should display error and exit when ${EXCLUDE_URLS_OPTION} option is empty`, () => {
+  it(`parse should have specific ${PROCESS_POOL_OPTION} argument when ${PROCESS_POOL_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${PROCESS_POOL_OPTION}=${SPECIFIC_PROCESS_POOL}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.processPool).to.be.equal(SPECIFIC_PROCESS_POOL);
+    });
+  });
+  it(`parse should display error and exit when ${PROCESS_POOL_OPTION} option is empty`, () => {
     setChaiAsPromised();
     sinonMock.consoleError = true;
     sinonMock.processExit = true;
     sinonMock.sinonSetStubs();
-    mockArgs([`--${EXCLUDE_URLS_OPTION}`]);
+    mockArgs([`--${PROCESS_POOL_OPTION}`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(() => {
       expect(console.error).to.be.called;

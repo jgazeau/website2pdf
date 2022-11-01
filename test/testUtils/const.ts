@@ -6,6 +6,7 @@ import {ICliArguments} from '../../src/cli/iArgumentsParser';
 import {
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
+  DEFAULT_PROCESS_POOL,
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_NAME,
   DEFAULT_SITEMAP_URL,
@@ -37,6 +38,7 @@ export const SPECIFIC_URL = `https://example.com/${DEFAULT_SITEMAP_NAME}`;
 export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
 export const SPECIFIC_EXCLUDE_REGEX = '\\/fr\\/';
+export const SPECIFIC_PROCESS_POOL = 20;
 export const DUMMY_CLIARGS: ICliArguments = {
   _: [],
   $0: '',
@@ -52,6 +54,7 @@ export const DUMMY_CLIARGS: ICliArguments = {
   marginBottom: DEFAULT_MARGIN_MIN,
   chromiumFlags: '',
   safeTitle: false,
+  processPool: DEFAULT_PROCESS_POOL,
 };
 
 export const ABSOLUTE_URL = 'absolute/url';
