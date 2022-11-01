@@ -58,6 +58,7 @@ Common options:
       --excludeUrls, --exclude-urls                   Exclude urls matching a regex from printing process       [string]
       --safeTitle, --safe-title                       Safely generate file title by replacing special chars
                                                                                               [boolean] [default: false]
+      --processPool, --process-pool                   Pool of parallelized process                [number] [default: 10]
 
 Other Options:
       --debug    Turn on debug logging                                                        [boolean] [default: false]
@@ -74,6 +75,8 @@ Examples:
   website2pdf --chromium-flags="--no-sandbox                    Use specific chromium options at Puppeteer launch
   --disable-dev-shm-usage"
   website2pdf --exclude-urls="\/fr\/"                           Exclude urls of french language
+  website2pdf --safe-title                                      Safely generate file title by replacing special chars
+  website2pdf --process-pool                                    Use specific count of parallelized process
 
 Additional information:
   GitHub: https://github.com/jgazeau/website2pdf.git

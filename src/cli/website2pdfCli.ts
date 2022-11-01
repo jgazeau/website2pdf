@@ -15,6 +15,7 @@ import {
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
@@ -89,6 +90,14 @@ export class Website2PdfCli {
         [
           `$0 --${EXCLUDE_URLS_OPTION}="\\/fr\\/"`,
           'Exclude urls of french language',
+        ],
+        [
+          `$0 --${SAFE_TITLE_OPTION}`,
+          'Safely generate file title by replacing special chars',
+        ],
+        [
+          `$0 --${PROCESS_POOL_OPTION}`,
+          'Use specific count of parallelized process',
         ],
       ])
       .options({
@@ -178,6 +187,14 @@ export class Website2PdfCli {
           default: false,
           description: 'Safely generate file title by replacing special chars',
           group: this.GROUPS.COMMONS,
+        },
+        processPool: {
+          alias: [`${PROCESS_POOL_OPTION}`],
+          type: 'number',
+          default: 10,
+          description: 'Pool of parallelized process',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
       })
       .wrap(getOutputWidth())
