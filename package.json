@@ -54,7 +54,7 @@
     "reflect-metadata": "^0.1.13",
     "table": "^6.8.0",
     "tslog": "^3.3.3",
-    "yargs": "^17.6.0"
+    "yargs": "^17.6.2"
   },
   "devDependencies": {
     "@sinonjs/fake-timers": "^9.1.2",
