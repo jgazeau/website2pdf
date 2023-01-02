@@ -1,33 +1,33 @@
-import {Logger, TLogLevelName} from 'tslog';
+import {Logger} from 'tslog';
+import {ILogObj} from 'tslog/dist/types/interfaces';
 import {Website2PdfCli} from '../cli/website2pdfCli';
 
 export class LoggerFactory {
-  private static _logger: Logger;
-  public static get logger(): Logger {
+  private static _logger: Logger<ILogObj>;
+  public static get logger(): Logger<ILogObj> {
     return LoggerFactory._logger;
   }
-  public static set logger(value: Logger) {
+  public static set logger(value: Logger<ILogObj>) {
     LoggerFactory._logger = value;
   }
 
-  public static getInstance(): Logger {
+  public static getInstance(): Logger<ILogObj> {
     if (!this.logger) {
-      const loggerLevel: TLogLevelName =
+      const loggerLevel: number =
         Website2PdfCli.cliArgs !== undefined
           ? Website2PdfCli.cliArgs.debug
-            ? 'debug'
-            : 'info'
-          : 'info';
+            ? 2
+            : 3
+          : 3;
       this.logger = new Logger({
         type: 'pretty',
         minLevel: loggerLevel,
-        displayFunctionName: false,
       });
     }
     return this.logger;
   }
 }
 
-export function logger(): Logger {
+export function logger(): Logger<ILogObj> {
   return LoggerFactory.getInstance();
 }
