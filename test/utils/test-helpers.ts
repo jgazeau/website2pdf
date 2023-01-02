@@ -16,7 +16,7 @@ import {
   toFilePath,
 } from '../../src/utils/helpers';
 import {logger} from '../../src/utils/logger';
-import {logTestLevel, testResourcesImagePath} from '../testUtils/const';
+import {testResourcesImagePath} from '../testUtils/const';
 import {SinonStubs} from '../testUtils/sinonStubs';
 
 describe('Helpers tests', () => {
@@ -35,8 +35,8 @@ describe('Helpers tests', () => {
   it('headerFactory should log', () => {
     sinonMock.logger = true;
     sinonMock.sinonSetStubs();
-    headerFactory(red, logTestLevel);
-    expect(logger()[logTestLevel]).to.be.calledOnce;
+    headerFactory(red);
+    expect(logger().info).to.be.calledOnce;
   });
   it('toFilename should return filename with title without specific chars', () => {
     expect(toFilename('file_title_éè%$@ with spaces', true)).to.equal(

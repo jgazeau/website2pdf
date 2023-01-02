@@ -1,7 +1,6 @@
 /* c8 ignore start */
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import {TLogLevelName} from 'tslog';
 import {ICliArguments} from '../../src/cli/iArgumentsParser';
 import {
   DEFAULT_MARGIN_MIN,
@@ -13,7 +12,6 @@ import {
   DEFAULT_TEMPLATE_DIR,
 } from '../../src/utils/const';
 
-export const logTestLevel: TLogLevelName = 'debug';
 export const rootPath: string = path.join(process.cwd());
 export const testResourcesPath: string = path.join(rootPath, 'test/resources');
 export const testTempPath: string = path.join(rootPath, 'test/temp');

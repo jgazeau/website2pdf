@@ -4,7 +4,6 @@ import {randomUUID} from 'crypto';
 import * as fs from 'fs-extra';
 import {Color, white} from 'kleur';
 import {PuppeteerNodeLaunchOptions} from 'puppeteer';
-import {TLogLevelName} from 'tslog';
 import {MAX_TTY_LENGTH, WEBSITE2PDF_HEADER} from './const';
 import {logger} from './logger';
 
@@ -18,11 +17,8 @@ export function validateClassObjectSync(object: Object): void {
   }
 }
 
-export function headerFactory(
-  color: Color = white,
-  logLevel: TLogLevelName = 'info'
-): void {
-  logger()[logLevel](color(`${WEBSITE2PDF_HEADER}`));
+export function headerFactory(color: Color = white): void {
+  logger().info(color(`${WEBSITE2PDF_HEADER}`));
 }
 
 export function getOutputWidth(): number {
