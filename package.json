@@ -46,7 +46,7 @@
     "@supercharge/promise-pool": "^2.3.2",
     "axios": "^0.27.2",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
+    "class-validator": "^0.14.0",
     "fast-xml-parser": "^4.0.9",
     "fs-extra": "^10.1.0",
     "kleur": "^4.1.5",
