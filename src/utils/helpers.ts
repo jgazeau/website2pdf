@@ -2,9 +2,11 @@
 import {validateSync, ValidationError} from 'class-validator';
 import {randomUUID} from 'crypto';
 import * as fs from 'fs-extra';
+import {PathLike} from 'fs-extra';
 import {Color, white} from 'kleur';
 import {PuppeteerNodeLaunchOptions} from 'puppeteer';
 import {ICliArguments} from '../cli/iArgumentsParser';
+import {Website2PdfError} from '../model/website2pdfError';
 import {MAX_TTY_LENGTH, WEBSITE2PDF_HEADER} from './const';
 import {logger} from './logger';
 
@@ -20,6 +22,14 @@ export function validateClassObjectSync(object: Object): void {
 
 export function headerFactory(color: Color = white): void {
   logger().info(color(`${WEBSITE2PDF_HEADER}`));
+}
+
+export function checkFilePath(filePath: PathLike): Promise<PathLike> {
+  if (fs.existsSync(filePath)) {
+    return Promise.resolve(filePath);
+  } else {
+    return Promise.reject(new Website2PdfError(`File not found (${filePath})`));
+  }
 }
 
 export function getOutputWidth(): number {

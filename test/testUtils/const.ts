@@ -60,6 +60,8 @@ export const DUMMY_CLIARGS: ICliArguments = {
 
 export const ABSOLUTE_URL = 'absolute/url';
 export const RELATIVE_URL = 'relative/url';
+export const ABSOLUTE_URL_TITLE = 'absolute_url_title';
+export const RELATIVE_URL_TITLE = 'relative_url_title';
 export const SITEMAP_STANDARD_PAGE = fs.readFileSync(
   path.join(testResourcesPath, DEFAULT_SITEMAP_NAME),
   'utf8'
@@ -77,6 +79,11 @@ export const SITEMAP_INVALID_PAGE = fs.readFileSync(
   path.join(testResourcesPath, 'sitemap_invalid.xml'),
   'utf8'
 );
+export const SITEMAP_URL_TITLE_OPTION_RELURL = 'sitemap_url_title_option.xml';
+export const SITEMAP_URL_TITLE_OPTION_PAGE = fs.readFileSync(
+  path.join(testResourcesPath, SITEMAP_URL_TITLE_OPTION_RELURL),
+  'utf8'
+);
 export const SITEMAP_EMPTY_RELURL = `empty/${DEFAULT_SITEMAP_NAME}`;
 export const SITEMAP_EMPTY_PAGE = fs.readFileSync(
   path.join(testResourcesPath, 'sitemap_empty.xml'),
@@ -92,6 +99,12 @@ export const SITEMAPINDEX_EMPTY_URL_PAGE = fs.readFileSync(
   path.join(testResourcesPath, 'sitemapindex_empty_url.xml'),
   'utf8'
 );
+export const DUMMY_PAGE = fs.readFileSync(
+  path.join(testResourcesPath, 'html/dummy.html'),
+  'utf8'
+);
+export const ABSOLUTE_URL_TITLE_FILENAME = 'absolute_url_title.pdf';
+export const RELATIVE_URL_TITLE_FILENAME = 'relative_url_title.pdf';
 export const EN_HOMEPAGE_URL = 'en';
 export const EN_ABSOLUTE_FILENAME = 'Absolute URL.pdf';
 export const EN_HOMEPAGE_FILENAME = 'First page.pdf';

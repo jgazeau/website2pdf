@@ -12,11 +12,15 @@ import {
   SAFE_TITLE_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
+  URL_TITLE_OPTION,
 } from '../src/utils/const';
 import {PrintResults} from '../src/utils/stats';
 import {Website2Pdf} from '../src/website2pdf';
 import {
   ABSOLUTE_URL,
+  ABSOLUTE_URL_TITLE,
+  ABSOLUTE_URL_TITLE_FILENAME,
+  DUMMY_PAGE,
   EN_ABSOLUTE_FILENAME,
   EN_ABSOLUTE_PAGE,
   EN_ABSOLUTE_SAFE_FILENAME,
@@ -39,6 +43,8 @@ import {
   FR_RELATIVE_PAGE,
   FR_RELATIVE_URL,
   RELATIVE_URL,
+  RELATIVE_URL_TITLE,
+  RELATIVE_URL_TITLE_FILENAME,
   rootPath,
   SITEMAPINDEX_EMPTY_PAGE,
   SITEMAPINDEX_EMPTY_RELURL,
@@ -53,6 +59,8 @@ import {
   SITEMAP_FR_PAGE,
   SITEMAP_FR_RELURL,
   SITEMAP_STANDARD_PAGE,
+  SITEMAP_URL_TITLE_OPTION_PAGE,
+  SITEMAP_URL_TITLE_OPTION_RELURL,
   SPECIFIC_EXCLUDE_REGEX,
   testOutputDir,
   testTemplatesImagePath,
@@ -105,6 +113,13 @@ const testRequests: TestRequest[] = [
   new TestRequest(`/${FR_HOMEPAGE_URL}/`, FR_HOMEPAGE_PAGE),
   new TestRequest(`/${FR_ABSOLUTE_URL}/`, FR_ABSOLUTE_PAGE),
   new TestRequest(`/${FR_RELATIVE_URL}/`, FR_RELATIVE_PAGE),
+  new TestRequest(
+    `/${SITEMAP_URL_TITLE_OPTION_RELURL}`,
+    SITEMAP_URL_TITLE_OPTION_PAGE,
+    'application/xml'
+  ),
+  new TestRequest(`/${ABSOLUTE_URL_TITLE}`, DUMMY_PAGE),
+  new TestRequest(`/${RELATIVE_URL_TITLE}`, DUMMY_PAGE),
 ];
 const testServer = new TestServer(testRequests);
 
@@ -343,6 +358,22 @@ describe('Website2pdf tests', () => {
       EN_HOMEPAGE_SAFE_FILENAME,
       path.join(ABSOLUTE_URL, EN_ABSOLUTE_SAFE_FILENAME),
       path.join(RELATIVE_URL, EN_RELATIVE_SAFE_FILENAME),
+    ];
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      return assertExpectedFilesExists(expectedFiles);
+    });
+  });
+  it(`website2pdf should work when ${URL_TITLE_OPTION}`, () => {
+    setChaiAsPromised();
+    mockArgs([
+      `--${URL_TITLE_OPTION}`,
+      `--${SITEMAP_URL_OPTION}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_URL_TITLE_OPTION_RELURL}`,
+    ]);
+    const expectedFiles = [
+      ABSOLUTE_URL_TITLE_FILENAME,
+      RELATIVE_URL_TITLE_FILENAME,
     ];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {

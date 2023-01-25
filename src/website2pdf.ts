@@ -27,15 +27,22 @@ export class Website2Pdf {
     return new Website2PdfCli().parse().then(async cliArgs => {
       headerFactory();
       const website = new Website(cliArgs);
-      await website.build().then(async (website: Website) => {
-        if (website.sitemaps.length !== 0) {
-          await processSitemaps(cliArgs, website);
-        } else {
-          logger().warn(
-            `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`
-          );
-        }
-      });
+      await website
+        .preActions()
+        .then(() => {
+          return website.build().then(async (website: Website) => {
+            if (website.sitemaps.length !== 0) {
+              await processSitemaps(cliArgs, website);
+            } else {
+              logger().warn(
+                `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`
+              );
+            }
+          });
+        })
+        .finally(() => {
+          return website.postActions();
+        });
     });
   }
 }

@@ -213,7 +213,6 @@ export class Website2PdfCli {
         serveSitemap: {
           alias: [`${SERVE_SITEMAP_OPTION}`],
           type: 'string',
-          default: 'sitemap.xml',
           description: 'Serve local sitemap',
           group: this.GROUPS.COMMONS,
           nargs: 1,
