@@ -18,5 +18,7 @@ export interface ICliArguments extends Arguments {
   chromiumFlags: string;
   excludeUrls: string;
   safeTitle: boolean;
+  urlTitle: boolean;
   processPool: number;
+  serveSitemap: string;
 }

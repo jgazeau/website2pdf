@@ -33,6 +33,7 @@ export const testTemplatesImagePath: string = path.join(
   `${DEFAULT_TEMPLATE_DIR}_image`
 );
 export const SPECIFIC_URL = `https://example.com/${DEFAULT_SITEMAP_NAME}`;
+export const SPECIFIC_SERVED_SITEMAP = 'anotherSitemap.xml';
 export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
 export const SPECIFIC_EXCLUDE_REGEX = '\\/fr\\/';
@@ -52,7 +53,9 @@ export const DUMMY_CLIARGS: ICliArguments = {
   marginBottom: DEFAULT_MARGIN_MIN,
   chromiumFlags: '',
   safeTitle: false,
+  urlTitle: false,
   processPool: DEFAULT_PROCESS_POOL,
+  serveSitemap: DEFAULT_SITEMAP_NAME,
 };
 
 export const ABSOLUTE_URL = 'absolute/url';

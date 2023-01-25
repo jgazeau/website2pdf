@@ -14,9 +14,11 @@ import {
   puppeteerBrowserLaunchArgs,
   toFilename,
   toFilePath,
+  toSafeLastSegment,
+  toSafeString,
 } from '../../src/utils/helpers';
 import {logger} from '../../src/utils/logger';
-import {testResourcesImagePath} from '../testUtils/const';
+import {DUMMY_CLIARGS, testResourcesImagePath} from '../testUtils/const';
 import {SinonStubs} from '../testUtils/sinonStubs';
 
 describe('Helpers tests', () => {
@@ -38,18 +40,58 @@ describe('Helpers tests', () => {
     headerFactory(red);
     expect(logger().info).to.be.calledOnce;
   });
-  it('toFilename should return filename with title without specific chars', () => {
-    expect(toFilename('file_title_éè%$@ with spaces', true)).to.equal(
-      'file_title_éè_with_spaces'
+  it('toSafeString should return string without specific chars', () => {
+    expect(toSafeString('string_éè%$@ with spaces')).to.equal(
+      'string_éè_with_spaces'
     );
   });
-  it('toFilename should return filename with title', () => {
-    expect(toFilename('file_title_éè%$@ with spaces')).to.equal(
-      'file_title_éè%$@ with spaces'
+  it('toSafeLastSegment should return last segment of URL when exist', () => {
+    const urlPath = 'http://test.com/dir/subdir/anotherSubdir';
+    expect(toSafeLastSegment(new URL(urlPath))).to.equal('anotherSubdir');
+  });
+  it('toSafeLastSegment should return UUID when last segment does not exist', () => {
+    const urlPath = 'http://test.com/';
+    expect(toSafeLastSegment(new URL(urlPath))).to.match(
+      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
     );
   });
-  it('toFilename should return filename with UUID', () => {
-    expect(toFilename(undefined)).to.match(
+  it('toFilename should return title without specific chars when safeTitle', () => {
+    const urlPath = 'http://test.com/dir/subdir/anotherSubdir';
+    const cliArgs = Object.assign({}, DUMMY_CLIARGS);
+    cliArgs.safeTitle = true;
+    expect(
+      toFilename('file_title_éè%$@ with spaces', new URL(urlPath), cliArgs)
+    ).to.equal('file_title_éè_with_spaces');
+  });
+  it('toFilename should return title', () => {
+    const urlPath = 'http://test.com/dir/subdir/anotherSubdir';
+    expect(
+      toFilename(
+        'file_title_éè%$@ with spaces',
+        new URL(urlPath),
+        DUMMY_CLIARGS
+      )
+    ).to.equal('file_title_éè%$@ with spaces');
+  });
+  it('toFilename should return last segment when urlTitle', () => {
+    const urlPath = 'http://test.com/dir/subdir/anotherSubdir';
+    const cliArgs = Object.assign({}, DUMMY_CLIARGS);
+    cliArgs.urlTitle = true;
+    expect(toFilename(undefined, new URL(urlPath), cliArgs)).to.equal(
+      'anotherSubdir'
+    );
+  });
+  it('toFilename should return UUID when urlTitle and last segment does not exist', () => {
+    const urlPath = 'http://test.com/';
+    const cliArgs = Object.assign({}, DUMMY_CLIARGS);
+    cliArgs.urlTitle = true;
+    expect(toFilename(undefined, new URL(urlPath), cliArgs)).to.match(
+      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+    );
+  });
+  it('toFilename should return UUID', () => {
+    const urlPath = 'http://test.com/dir/subdir/anotherSubdir';
+    expect(toFilename(undefined, new URL(urlPath), DUMMY_CLIARGS)).to.match(
       /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
     );
   });

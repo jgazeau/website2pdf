@@ -4,6 +4,7 @@ import {randomUUID} from 'crypto';
 import * as fs from 'fs-extra';
 import {Color, white} from 'kleur';
 import {PuppeteerNodeLaunchOptions} from 'puppeteer';
+import {ICliArguments} from '../cli/iArgumentsParser';
 import {MAX_TTY_LENGTH, WEBSITE2PDF_HEADER} from './const';
 import {logger} from './logger';
 
@@ -29,17 +30,32 @@ export function getOutputWidth(): number {
 
 export function toFilename(
   title: string | undefined,
-  safeTitle = false
+  url: URL,
+  cliArgs: ICliArguments
 ): string {
   return title
-    ? safeTitle
-      ? title
-          .replace(/[^a-z0-9\u00C0-\u024F\u1E00-\u1EFF]/gi, ' ')
-          .trim()
-          .replace(/ /g, '_')
-          .replace(/([_])\1+/g, '_')
+    ? cliArgs.safeTitle
+      ? toSafeString(title)
+      : cliArgs.urlTitle
+      ? toSafeLastSegment(url)
       : title
+    : cliArgs.urlTitle
+    ? toSafeLastSegment(url)
     : randomUUID();
+}
+
+export function toSafeString(str: string) {
+  return str
+    .replace(/[^a-z0-9\u00C0-\u024F\u1E00-\u1EFF]/gi, ' ')
+    .trim()
+    .replace(/ /g, '_')
+    .replace(/([_])\1+/g, '_');
+}
+
+export function toSafeLastSegment(url: URL) {
+  return (
+    url.pathname.substring(url.pathname.lastIndexOf('/') + 1) || randomUUID()
+  );
 }
 
 export function toFilePath(url: URL): string {

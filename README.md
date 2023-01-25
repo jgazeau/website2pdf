@@ -12,6 +12,7 @@ To achieve that, the website **must follow the [sitemap protocol](https://www.si
 * Website2pdf will crawl the website based on the **sitemapUrl** option to retrieve all URLs that have to be printed
 * Website2pdf will add header/footer in each file based on the **displayHeaderFooter** option, and use **header.html** and **footer.html** if found in the directory based on the **templateDir** option.
 * Website2pdf will save all PDF file in the directory based on the **outputDir** option.
+* Generated PDFs are named using the `<title>` html tag by default (unless specific option is used)
 
 ## How to use it?
 

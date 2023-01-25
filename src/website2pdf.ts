@@ -185,7 +185,8 @@ async function pageToPDF(
               fileDir,
               `${toFilename(
                 metadatas.get('title')?.toString(),
-                cliArgs.safeTitle
+                url,
+                cliArgs
               )}.pdf`
             );
             logger().debug(`Printing page ${filePath} from url ${url}`);
