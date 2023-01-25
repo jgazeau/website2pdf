@@ -11,6 +11,7 @@ import {
   DEFAULT_SAFE_TITLE,
   DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
+  DEFAULT_URL_TITLE,
   DISPLAY_HEADER_FOOTER_OPTION,
   EXCLUDE_URLS_OPTION,
   MARGIN_BOTTOM_OPTION,
@@ -20,14 +21,17 @@ import {
   OUTPUT_DIR_OPTION,
   PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
+  SERVE_SITEMAP_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
+  URL_TITLE_OPTION,
 } from '../../src/utils/const';
 import {
   SPECIFIC_CHROMIUM_FLAGS,
   SPECIFIC_DIR,
   SPECIFIC_EXCLUDE_REGEX,
   SPECIFIC_PROCESS_POOL,
+  SPECIFIC_SERVED_SITEMAP,
   SPECIFIC_URL,
 } from '../testUtils/const';
 import {mockArgs, setChaiAsPromised} from '../testUtils/helpers';
@@ -85,7 +89,9 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.marginLeft).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginRight).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.safeTitle).to.be.equal(DEFAULT_SAFE_TITLE);
+      expect(argv.urlTitle).to.be.equal(DEFAULT_URL_TITLE);
       expect(argv.processPool).to.be.equal(DEFAULT_PROCESS_POOL);
+      expect(argv.serveSitemap).to.be.undefined;
       const website: Website = new Website();
       expect(website.websiteURL.sitemapURL.toString()).to.equal(
         DEFAULT_SITEMAP_URL
@@ -114,6 +120,26 @@ describe('Website2Pdf CLI tests', () => {
       expect(process.exit).to.be.called;
     });
   });
+  it(`parse should have specific served sitemap argument when ${SERVE_SITEMAP_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${SERVE_SITEMAP_OPTION}`, `${SPECIFIC_SERVED_SITEMAP}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.serveSitemap).to.be.equal(SPECIFIC_SERVED_SITEMAP);
+    });
+  });
+  it(`parse should display error and exit when ${SERVE_SITEMAP_OPTION} option is empty`, () => {
+    setChaiAsPromised();
+    sinonMock.consoleError = true;
+    sinonMock.processExit = true;
+    sinonMock.sinonSetStubs();
+    mockArgs([`--${SERVE_SITEMAP_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(() => {
+      expect(console.error).to.be.called;
+      expect(process.exit).to.be.called;
+    });
+  });
   it(`parse should have display header and footer argument and default margin arguments when ${DISPLAY_HEADER_FOOTER_OPTION} option`, () => {
     setChaiAsPromised();
     mockArgs([`--${DISPLAY_HEADER_FOOTER_OPTION}`]);
@@ -124,6 +150,28 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.marginBottom).to.be.equal(DEFAULT_MARGIN_MAX);
       expect(argv.marginLeft).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginRight).to.be.equal(DEFAULT_MARGIN_MIN);
+    });
+  });
+  it(`parse should have display header and footer argument and specific margin arguments when ${DISPLAY_HEADER_FOOTER_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([
+      `--${DISPLAY_HEADER_FOOTER_OPTION}`,
+      `--${MARGIN_TOP_OPTION}`,
+      `${testMargin}`,
+      `--${MARGIN_BOTTOM_OPTION}`,
+      `${testMargin}`,
+      `--${MARGIN_LEFT_OPTION}`,
+      `${testMargin}`,
+      `--${MARGIN_RIGHT_OPTION}`,
+      `${testMargin}`,
+    ]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.displayHeaderFooter).to.be.equal(true);
+      expect(argv.marginTop).to.be.equal(testMargin);
+      expect(argv.marginBottom).to.be.equal(testMargin);
+      expect(argv.marginLeft).to.be.equal(testMargin);
+      expect(argv.marginRight).to.be.equal(testMargin);
     });
   });
   it(`parse should have specific template directory argument when ${TEMPLATE_DIR_OPTION} option`, () => {
@@ -292,6 +340,14 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.safeTitle).to.be.equal(true);
+    });
+  });
+  it(`parse should have specific ${URL_TITLE_OPTION} argument when ${URL_TITLE_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${URL_TITLE_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.urlTitle).to.be.equal(true);
     });
   });
   it(`parse should have specific ${PROCESS_POOL_OPTION} argument when ${PROCESS_POOL_OPTION} option`, () => {

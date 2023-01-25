@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios from 'axios';
 import {expect} from 'chai';
+import * as path from 'path';
 import 'reflect-metadata';
 import {Website} from '../../src/model/website';
 import {
@@ -7,7 +10,9 @@ import {
 } from '../../src/model/website2pdfError';
 import {
   DEFAULT_SITEMAP_HOST,
+  DEFAULT_SITEMAP_NAME,
   DEFAULT_SITEMAP_URL,
+  SERVE_SITEMAP_OPTION,
   SITEMAP_URL_OPTION,
 } from '../../src/utils/const';
 import {
@@ -26,6 +31,7 @@ import {
   SITEMAP_INVALID_PAGE,
   SITEMAP_STANDARD_PAGE,
   SITEMAP_UNKNOWN_PAGE,
+  testResourcesPath,
 } from '../testUtils/const';
 import {setChaiAsPromised} from '../testUtils/helpers';
 import {
@@ -36,14 +42,16 @@ import {
 } from '../testUtils/sinonStubs';
 
 describe('Website model tests', () => {
+  let website: Website;
   beforeEach(() => {
     createSandbox();
   });
-  afterEach(() => {
+  afterEach(done => {
     restoreSandbox();
+    website ? website.postActions().then(done) : done();
   });
   it(`Website model should use default ${SITEMAP_URL_OPTION}`, () => {
-    const website: Website = new Website();
+    website = new Website();
     expect(website.websiteURL.sitemapURL.toString()).to.equal(
       DEFAULT_SITEMAP_URL
     );
@@ -55,7 +63,7 @@ describe('Website model tests', () => {
       new AxiosMethodStub(SITEMAP_EN_ABSURL, SITEMAP_EN_PAGE),
       new AxiosMethodStub(SITEMAP_FR_ABSURL, SITEMAP_FR_PAGE),
     ]);
-    const website: Website = new Website();
+    website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(2);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
@@ -87,7 +95,7 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_STANDARD_PAGE),
     ]);
-    const website: Website = new Website();
+    website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
@@ -108,7 +116,7 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_UNKNOWN_PAGE),
     ]);
-    const website: Website = new Website();
+    website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
       Website2PdfError,
       ERROR_UNKNOWN_XML_SCHEMA
@@ -119,7 +127,7 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_INVALID_PAGE),
     ]);
-    const website: Website = new Website();
+    website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
       Website2PdfError,
       ERROR_UNKNOWN_XML_SCHEMA
@@ -130,7 +138,7 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAPINDEX_EMPTY_PAGE),
     ]);
-    const website: Website = new Website();
+    website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(0);
     });
@@ -140,7 +148,7 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(DEFAULT_SITEMAP_URL, SITEMAP_EMPTY_PAGE),
     ]);
-    const website: Website = new Website();
+    website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
     });
@@ -152,7 +160,7 @@ describe('Website model tests', () => {
       new AxiosMethodStub(SITEMAP_EN_ABSURL, SITEMAP_EN_PAGE),
       new AxiosMethodStub(SITEMAP_FR_ABSURL, SITEMAP_FR_PAGE),
     ]);
-    const website: Website = new Website(DUMMY_CLIARGS);
+    website = new Website(DUMMY_CLIARGS);
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(2);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
@@ -170,6 +178,55 @@ describe('Website model tests', () => {
         SITEMAP_FR_ABSURL
       );
       expect(website.sitemaps[1].urls).to.have.length(0);
+    });
+  });
+  it(`Website model should do nothing when preActions without ${SERVE_SITEMAP_OPTION} option`, () => {
+    setChaiAsPromised();
+    website = new Website();
+    return website.preActions().then(output => {
+      expect(output).to.be.undefined;
+    });
+  });
+  it(`Website model should serve local sitemap when preActions with ${SERVE_SITEMAP_OPTION} option`, () => {
+    setChaiAsPromised();
+    const cliArgs = Object.assign({}, DUMMY_CLIARGS);
+    cliArgs.serveSitemap = path.join(testResourcesPath, DEFAULT_SITEMAP_NAME);
+    website = new Website(cliArgs);
+    return website
+      .preActions()
+      .then(output => {
+        expect(output).to.be.undefined;
+      })
+      .then(() => {
+        return axios.get(DEFAULT_SITEMAP_URL).then((response: any) => {
+          expect(response.status).to.equal(200);
+          expect(response.data).to.not.be.empty;
+        });
+      });
+  });
+  it(`Website model should do nothing when postActions without ${SERVE_SITEMAP_OPTION} option`, () => {
+    setChaiAsPromised();
+    website = new Website();
+    return website.postActions().then(output => {
+      expect(output).to.be.undefined;
+    });
+  });
+  it(`Website model should close local server when postActions with ${SERVE_SITEMAP_OPTION} option`, () => {
+    setChaiAsPromised();
+    const cliArgs = Object.assign({}, DUMMY_CLIARGS);
+    cliArgs.serveSitemap = path.join(testResourcesPath, DEFAULT_SITEMAP_NAME);
+    website = new Website(cliArgs);
+    return website.preActions().then(() => {
+      return website
+        .postActions()
+        .then(output => {
+          expect(output).to.be.undefined;
+        })
+        .then(() => {
+          return expect(
+            axios.get(DEFAULT_SITEMAP_URL)
+          ).to.eventually.be.rejectedWith(Error, 'ECONNREFUSED');
+        });
     });
   });
 });

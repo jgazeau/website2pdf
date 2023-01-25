@@ -8,7 +8,9 @@
     "sourceMap": true,
     "outDir": "build",
     "rootDir": ".",
-    "lib": ["dom"],
+    "lib": [
+      "dom"
+    ],
   },
   "include": [
     "src/**/*.ts",

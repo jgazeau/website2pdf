@@ -17,8 +17,10 @@ import {
   OUTPUT_DIR_OPTION,
   PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
+  SERVE_SITEMAP_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
+  URL_TITLE_OPTION,
 } from '../utils/const';
 import {getOutputWidth} from '../utils/helpers';
 import {IArgumentsParser, ICliArguments} from './iArgumentsParser';
@@ -96,9 +98,14 @@ export class Website2PdfCli {
           'Safely generate file title by replacing special chars',
         ],
         [
+          `$0 --${URL_TITLE_OPTION}`,
+          'Generate file title using last URL fragment',
+        ],
+        [
           `$0 --${PROCESS_POOL_OPTION}`,
           'Use specific count of parallelized process',
         ],
+        [`$0 --${SERVE_SITEMAP_OPTION}="sitemap.xml"`, 'Serve a local sitemap'],
       ])
       .options({
         debug: {
@@ -188,11 +195,25 @@ export class Website2PdfCli {
           description: 'Safely generate file title by replacing special chars',
           group: this.GROUPS.COMMONS,
         },
+        urlTitle: {
+          alias: [`${URL_TITLE_OPTION}`],
+          type: 'boolean',
+          default: false,
+          description: 'Generate file title using last URL fragment',
+          group: this.GROUPS.COMMONS,
+        },
         processPool: {
           alias: [`${PROCESS_POOL_OPTION}`],
           type: 'number',
           default: 10,
           description: 'Pool of parallelized process',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
+        },
+        serveSitemap: {
+          alias: [`${SERVE_SITEMAP_OPTION}`],
+          type: 'string',
+          description: 'Serve local sitemap',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },

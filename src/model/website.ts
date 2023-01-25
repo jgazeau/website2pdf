@@ -2,9 +2,11 @@
 import axios from 'axios';
 import {plainToClass} from 'class-transformer';
 import {XMLParser} from 'fast-xml-parser';
+import * as fs from 'fs-extra';
 import {ICliArguments} from '../cli/iArgumentsParser';
-import {fxpOptions} from '../utils/const';
-import {validateClassObjectSync} from '../utils/helpers';
+import {DEFAULT_SITEMAP_NAME, fxpOptions} from '../utils/const';
+import {checkFilePath, validateClassObjectSync} from '../utils/helpers';
+import {LocalServer} from '../utils/localServer';
 import {PdfTemplate} from './pdfTemplate';
 import {
   ERROR_PARSING_XML_SCHEMA,
@@ -58,12 +60,37 @@ export class Website {
   }
   /* c8 ignore stop */
 
+  private localServer: LocalServer;
+
   constructor(cliArgs?: ICliArguments) {
     this.cliArgs = cliArgs;
     this.pdfTemplate = new PdfTemplate(
       cliArgs?.displayHeaderFooter,
       cliArgs?.templateDir
     );
+  }
+
+  preActions(): Promise<void> {
+    return this.cliArgs?.serveSitemap
+      ? this.serveSitemap(this.cliArgs.serveSitemap)
+      : Promise.resolve();
+  }
+
+  postActions(): Promise<void> {
+    return this.localServer?.isStarted
+      ? this.localServer.close()
+      : Promise.resolve();
+  }
+
+  private serveSitemap(localSitemapPath: string): Promise<void> {
+    return checkFilePath(localSitemapPath)
+      .then(sitemapPath => {
+        const fileContent = fs.readFileSync(sitemapPath, 'utf8');
+        this.localServer = new LocalServer(DEFAULT_SITEMAP_NAME, fileContent);
+      })
+      .then(() => {
+        return this.localServer.start();
+      });
   }
 
   build(): Promise<Website> {
