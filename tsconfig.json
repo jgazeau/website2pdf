@@ -8,15 +8,8 @@
     "sourceMap": true,
     "outDir": "build",
     "rootDir": ".",
-    "lib": [
-      "dom"
-    ],
+    "lib": ["dom"]
   },
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts",
-  ],
-  "exclude": [
-    "test/resources/**/*",
-  ]
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": ["test/resources/**/*"]
 }
