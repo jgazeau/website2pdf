@@ -53,7 +53,7 @@
     "puppeteer": "^19.7.1",
     "reflect-metadata": "^0.1.13",
     "table": "^6.8.1",
-    "tslog": "^4.7.1",
+    "tslog": "^4.7.5",
     "yargs": "^17.6.2"
   },
   "devDependencies": {
