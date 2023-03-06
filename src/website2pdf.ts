@@ -1,26 +1,26 @@
 #!/usr/bin/env node
 /* eslint-disable @typescript-eslint/no-explicit-any*/
-import {PromisePool} from '@supercharge/promise-pool';
+import { PromisePool } from '@supercharge/promise-pool';
 import * as fs from 'fs-extra';
-import {red} from 'kleur';
+import { red } from 'kleur';
 import * as path from 'path';
 import * as puppeteer from 'puppeteer';
 import 'reflect-metadata';
-import {URL} from 'url';
-import {ICliArguments} from './cli/iArgumentsParser';
-import {Website2PdfCli} from './cli/website2pdfCli';
-import {PdfTemplate} from './model/pdfTemplate';
-import {Website} from './model/website';
-import {WebsiteSitemap} from './model/websiteSitemap';
+import { URL } from 'url';
+import { ICliArguments } from './cli/iArgumentsParser';
+import { Website2PdfCli } from './cli/website2pdfCli';
+import { PdfTemplate } from './model/pdfTemplate';
+import { Website } from './model/website';
+import { WebsiteSitemap } from './model/websiteSitemap';
 import {
   headerFactory,
   interpolate,
   puppeteerBrowserLaunchArgs,
   toFilename,
-  toFilePath,
+  toFilePath
 } from './utils/helpers';
-import {logger} from './utils/logger';
-import {PrintResults, STATUS_ERROR, STATUS_PRINTED} from './utils/stats';
+import { logger } from './utils/logger';
+import { PrintResults, STATUS_ERROR, STATUS_PRINTED } from './utils/stats';
 
 export class Website2Pdf {
   static async main(): Promise<void> {
@@ -201,7 +201,7 @@ async function pageToPDF(
               .pdf({
                 timeout: 0,
                 path: filePath,
-                format: 'a4',
+                format: cliArgs.pageSize,
                 displayHeaderFooter: cliArgs.displayHeaderFooter,
                 headerTemplate: interpolate(pdfTemplate.header, metadatas),
                 footerTemplate: interpolate(pdfTemplate.footer, metadatas),

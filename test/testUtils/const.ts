@@ -1,15 +1,16 @@
 /* c8 ignore start */
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import {ICliArguments} from '../../src/cli/iArgumentsParser';
+import { ICliArguments } from '../../src/cli/iArgumentsParser';
 import {
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
+  DEFAULT_PAGE_SIZE,
   DEFAULT_PROCESS_POOL,
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_NAME,
   DEFAULT_SITEMAP_URL,
-  DEFAULT_TEMPLATE_DIR,
+  DEFAULT_TEMPLATE_DIR
 } from '../../src/utils/const';
 
 export const rootPath: string = path.join(process.cwd());
@@ -56,6 +57,7 @@ export const DUMMY_CLIARGS: ICliArguments = {
   urlTitle: false,
   processPool: DEFAULT_PROCESS_POOL,
   serveSitemap: DEFAULT_SITEMAP_NAME,
+  pageSize: DEFAULT_PAGE_SIZE,
 };
 
 export const ABSOLUTE_URL = 'absolute/url';

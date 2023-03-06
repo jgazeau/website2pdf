@@ -1,5 +1,5 @@
 import kleur = require('kleur');
-import {hideBin} from 'yargs/helpers';
+import { hideBin } from 'yargs/helpers';
 import {
   CHROMIUM_FLAGS_OPTION,
   CLI_USAGE,
@@ -15,15 +15,16 @@ import {
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  PAGE_SIZE_OPTION,
   PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
   SERVE_SITEMAP_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
-  URL_TITLE_OPTION,
+  URL_TITLE_OPTION
 } from '../utils/const';
-import {getOutputWidth} from '../utils/helpers';
-import {IArgumentsParser, ICliArguments} from './iArgumentsParser';
+import { getOutputWidth } from '../utils/helpers';
+import { IArgumentsParser, ICliArguments } from './iArgumentsParser';
 const yargs = require('yargs');
 
 export class Website2PdfCli {
@@ -81,6 +82,7 @@ export class Website2PdfCli {
           `$0 --${OUTPUT_DIR_OPTION} "./output"`,
           'Use specific output directory',
         ],
+        [`$0 --${PAGE_SIZE_OPTION}="a4"`, 'Set PaperFormat type'],
         [
           `$0 --${DISPLAY_HEADER_FOOTER_OPTION} --${MARGIN_LEFT_OPTION} "50px" --${MARGIN_RIGHT_OPTION} "50px"`,
           'Use header and footer and set specific margins',
@@ -200,6 +202,13 @@ export class Website2PdfCli {
           type: 'boolean',
           default: false,
           description: 'Generate file title using last URL fragment',
+          group: this.GROUPS.COMMONS,
+        },
+        pageSize: {
+          alias: [`${PAGE_SIZE_OPTION}`],
+          type: 'string',
+          default: 'a4',
+          description: 'Choose PaperFormat size',
           group: this.GROUPS.COMMONS,
         },
         processPool: {

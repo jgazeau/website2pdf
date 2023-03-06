@@ -2,10 +2,10 @@
 
 ## Context
 
-This tool aim to **print pages from a website into PDF files**.  
+This tool aims to **print pages from a website into PDF files**.  
 To achieve that, the website **must follow the [sitemap protocol](https://www.sitemaps.org/protocol.html)**.
 
-*NB: this tool has been created originally to be able to print pages from a Hugo website, that's why the default value of the sitemap URL to check is **http://localhost:1313**.*
+*NB: this tool was originally created to print pages from a Hugo website, that's why the default value of the sitemap URL to check is **http://localhost:1313**.*
 
 ## How it works?
 
@@ -51,6 +51,7 @@ Common options:
   -t, --templateDir, --template-dir                   Relative path of the templates directory
                                                                                            [default: "./w2pdf_template"]
   -o, --outputDir, --output-dir                       Relative path of the output directory  [default: "./w2pdf_output"]
+      --pageSize, --page-size                         Page size / PaperFormat                   [string] [default: "a4"]
       --marginTop, --margin-top                       Margin top (50px or 0px)                                  [string]
       --marginBottom, --margin-bottom                 Margin bottom (50px or 0px)                               [string]
       --marginLeft, --margin-left                     Margin left                              [string] [default: "0px"]
@@ -124,8 +125,12 @@ $ npx website2pdf
 
 ## How to use Header and Footer?
 
-To include specific header and footer in PDF pages, two HTML files must be provided, named respectively **header.html** and **footer.html** (in **./w2pdf_template** by default).  
+You can choose the page dimension / page size with the `--pageSize` option. The default size is `A4` but can be any [PaperFormat](https://pptr.dev/api/puppeteer.paperformat).
+
+To include specific header and footer in PDF pages, two HTML files must be provided, named respectively **header.html** and **footer.html** (in **./w2pdf_template** by default).
+
 Because of a [limitation in puppeteer](https://github.com/puppeteer/puppeteer/issues/1853), a default margin must be set (at least for top and bottom) to display headers and footers.  
+
 By default website2pdf is setting the following margins depending on the `displayHeaderFooter` option (these default values can be override using the `marginX` options of website2pdf):
 * `displayHeaderFooter=false`
     ```
@@ -159,7 +164,7 @@ By default website2pdf is setting the following margins depending on the `displa
 The following types of configurations are available to expand header and footer:
 * standard options of [headerTemplate and footerTemplate from Puppeteer](https://devdocs.io/puppeteer/index#pagepdfoptions)
 * expanded variables from meta tags of HTML page:
-    * Given the following HTML meta tag (using a ${META_KEY} as a placeholder):
+    * Given the following HTML meta tag (using a `${META_KEY}` as a placeholder):
         ```
         <meta name="specificKey" content="A specific value">
         ```
@@ -175,8 +180,8 @@ The following types of configurations are available to expand header and footer:
         <span>A specific value</span>
         ...
         ```
-* images encoded as base64 from local files (:warning: only available for png files):
-    * Given the following header and/or footer template (using a ${image:PATH} as a placeholder):
+* images encoded as _base64_ from local files (:warning: only available for png files):
+    * Given the following header and/or footer template (using a `${image:PATH}` as a placeholder):
         ```
         ...
         <image src="${image:./local_image_path/image.png}">
