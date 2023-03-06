@@ -33,31 +33,31 @@ export const testTemplatesImagePath: string = path.join(
   testResourcesPath,
   `${DEFAULT_TEMPLATE_DIR}_image`
 );
-export const SPECIFIC_URL = `https://example.com/${DEFAULT_SITEMAP_NAME}`;
-export const SPECIFIC_SERVED_SITEMAP = 'anotherSitemap.xml';
-export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
+export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_EXCLUDE_REGEX = '\\/fr\\/';
 export const SPECIFIC_PROCESS_POOL = 20;
+export const SPECIFIC_SERVED_SITEMAP = 'anotherSitemap.xml';
+export const SPECIFIC_URL = `https://example.com/${DEFAULT_SITEMAP_NAME}`;
 export const DUMMY_CLIARGS: ICliArguments = {
   _: [],
   $0: '',
-  excludeUrls: SPECIFIC_EXCLUDE_REGEX,
+  chromiumFlags: '',
   debug: false,
-  sitemapUrl: DEFAULT_SITEMAP_URL,
   displayHeaderFooter: false,
-  templateDir: DEFAULT_TEMPLATE_DIR,
-  outputDir: DEFAULT_OUTPUT_DIR,
+  excludeUrls: SPECIFIC_EXCLUDE_REGEX,
+  marginBottom: DEFAULT_MARGIN_MIN,
   marginLeft: DEFAULT_MARGIN_MIN,
   marginRight: DEFAULT_MARGIN_MIN,
   marginTop: DEFAULT_MARGIN_MIN,
-  marginBottom: DEFAULT_MARGIN_MIN,
-  chromiumFlags: '',
-  safeTitle: false,
-  urlTitle: false,
-  processPool: DEFAULT_PROCESS_POOL,
-  serveSitemap: DEFAULT_SITEMAP_NAME,
+  outputDir: DEFAULT_OUTPUT_DIR,
   pageSize: DEFAULT_PAGE_SIZE,
+  processPool: DEFAULT_PROCESS_POOL,
+  safeTitle: false,
+  serveSitemap: DEFAULT_SITEMAP_NAME,
+  sitemapUrl: DEFAULT_SITEMAP_URL,
+  templateDir: DEFAULT_TEMPLATE_DIR,
+  urlTitle: false,
 };
 
 export const ABSOLUTE_URL = 'absolute/url';

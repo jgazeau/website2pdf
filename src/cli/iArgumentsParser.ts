@@ -7,20 +7,20 @@ export interface IArgumentsParser extends Argv {
 }
 
 export interface ICliArguments extends Arguments {
+  chromiumFlags: string;
   debug: boolean;
   displayHeaderFooter: boolean;
-  sitemapUrl: string;
-  templateDir: PathLike;
-  outputDir: PathLike;
-  marginTop: string;
+  excludeUrls: string;
   marginBottom: string;
   marginLeft: string;
   marginRight: string;
-  chromiumFlags: string;
-  excludeUrls: string;
-  safeTitle: boolean;
-  urlTitle: boolean;
-  processPool: number;
-  serveSitemap: string;
+  marginTop: string;
+  outputDir: PathLike;
   pageSize: PaperFormat;
+  processPool: number;
+  safeTitle: boolean;
+  serveSitemap: string;
+  sitemapUrl: string;
+  templateDir: PathLike;
+  urlTitle: boolean;
 }
