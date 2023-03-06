@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as http from 'http';
-import {cyan} from 'kleur';
+import { cyan } from 'kleur';
 
 export const MAX_TTY_LENGTH = 120;
 export const SITEMAP_URL_OPTION = 'sitemap-url';
@@ -17,6 +17,7 @@ export const SAFE_TITLE_OPTION = 'safe-title';
 export const URL_TITLE_OPTION = 'url-title';
 export const PROCESS_POOL_OPTION = 'process-pool';
 export const SERVE_SITEMAP_OPTION = 'serve-sitemap';
+export const PAGE_SIZE_OPTION = 'page-size';
 
 export const DEFAULT_TEMPLATE_DIR = './w2pdf_template';
 export const DEFAULT_OUTPUT_DIR = './w2pdf_output';
@@ -25,6 +26,7 @@ export const DEFAULT_MARGIN_MIN = '0px';
 export const DEFAULT_HEADER_FILE = 'header.html';
 export const DEFAULT_FOOTER_FILE = 'footer.html';
 export const DEFAULT_HOST = 'localhost';
+export const DEFAULT_PAGE_SIZE = 'a4';
 export const DEFAULT_PORT = '1313';
 export const DEFAULT_SITEMAP_NAME = 'sitemap.xml';
 export const DEFAULT_SITEMAP_HOST = `http://${DEFAULT_HOST}:${DEFAULT_PORT}`;

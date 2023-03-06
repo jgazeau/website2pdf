@@ -1,5 +1,6 @@
-import {PathLike} from 'fs-extra';
-import {Arguments, Argv} from 'yargs';
+import { PathLike } from 'fs-extra';
+import { PaperFormat } from 'puppeteer';
+import { Arguments, Argv } from 'yargs';
 
 export interface IArgumentsParser extends Argv {
   argv: ICliArguments;
@@ -21,4 +22,5 @@ export interface ICliArguments extends Arguments {
   urlTitle: boolean;
   processPool: number;
   serveSitemap: string;
+  pageSize: PaperFormat;
 }
