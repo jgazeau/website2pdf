@@ -1,30 +1,35 @@
 import kleur = require('kleur');
-import { hideBin } from 'yargs/helpers';
+import {hideBin} from 'yargs/helpers';
 import {
   CHROMIUM_FLAGS_OPTION,
   CLI_USAGE,
+  DEFAULT_FORMAT,
+  DEFAULT_HEADER_FOOTER,
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
+  DEFAULT_PROCESS_POOL,
+  DEFAULT_SAFE_TITLE,
   DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
+  DEFAULT_URL_TITLE,
   DISPLAY_HEADER_FOOTER_OPTION,
   EXCLUDE_URLS_OPTION,
+  FORMAT_OPTION,
   MARGIN_BOTTOM_OPTION,
   MARGIN_LEFT_OPTION,
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
-  PAGE_SIZE_OPTION,
   PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
   SERVE_SITEMAP_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
-  URL_TITLE_OPTION
+  URL_TITLE_OPTION,
 } from '../utils/const';
-import { getOutputWidth } from '../utils/helpers';
-import { IArgumentsParser, ICliArguments } from './iArgumentsParser';
+import {getOutputWidth} from '../utils/helpers';
+import {IArgumentsParser, ICliArguments} from './iArgumentsParser';
 const yargs = require('yargs');
 
 export class Website2PdfCli {
@@ -67,7 +72,7 @@ export class Website2PdfCli {
       .alias('h', 'help')
       .example([
         [
-          `$0 --${SITEMAP_URL_OPTION} "http://localhost:80/sitemap.xml"`,
+          `$0 --${SITEMAP_URL_OPTION}="http://localhost:80/sitemap.xml"`,
           'Use specific sitemap URL',
         ],
         [
@@ -75,16 +80,16 @@ export class Website2PdfCli {
           'Print PDFs with header and footer',
         ],
         [
-          `$0 --${TEMPLATE_DIR_OPTION} "./templates"`,
+          `$0 --${TEMPLATE_DIR_OPTION}="./templates"`,
           'Use specific template directory',
         ],
         [
-          `$0 --${OUTPUT_DIR_OPTION} "./output"`,
+          `$0 --${OUTPUT_DIR_OPTION}="./output"`,
           'Use specific output directory',
         ],
-        [`$0 --${PAGE_SIZE_OPTION}="a4"`, 'Set PaperFormat type'],
+        [`$0 --${FORMAT_OPTION}="a3"`, 'Set PaperFormat type'],
         [
-          `$0 --${DISPLAY_HEADER_FOOTER_OPTION} --${MARGIN_LEFT_OPTION} "50px" --${MARGIN_RIGHT_OPTION} "50px"`,
+          `$0 --${DISPLAY_HEADER_FOOTER_OPTION} --${MARGIN_LEFT_OPTION}="50px" --${MARGIN_RIGHT_OPTION}="50px"`,
           'Use header and footer and set specific margins',
         ],
         [
@@ -104,7 +109,7 @@ export class Website2PdfCli {
           'Generate file title using last URL fragment',
         ],
         [
-          `$0 --${PROCESS_POOL_OPTION}`,
+          `$0 --${PROCESS_POOL_OPTION}=20`,
           'Use specific count of parallelized process',
         ],
         [`$0 --${SERVE_SITEMAP_OPTION}="sitemap.xml"`, 'Serve a local sitemap'],
@@ -126,7 +131,7 @@ export class Website2PdfCli {
         displayHeaderFooter: {
           alias: [`${DISPLAY_HEADER_FOOTER_OPTION}`],
           type: 'boolean',
-          default: false,
+          default: DEFAULT_HEADER_FOOTER,
           description: 'Turn on header and footer printing',
           group: this.GROUPS.COMMONS,
         },
@@ -193,28 +198,29 @@ export class Website2PdfCli {
         safeTitle: {
           alias: [`${SAFE_TITLE_OPTION}`],
           type: 'boolean',
-          default: false,
+          default: DEFAULT_SAFE_TITLE,
           description: 'Safely generate file title by replacing special chars',
           group: this.GROUPS.COMMONS,
         },
         urlTitle: {
           alias: [`${URL_TITLE_OPTION}`],
           type: 'boolean',
-          default: false,
+          default: DEFAULT_URL_TITLE,
           description: 'Generate file title using last URL fragment',
           group: this.GROUPS.COMMONS,
         },
-        pageSize: {
-          alias: [`${PAGE_SIZE_OPTION}`],
+        format: {
+          alias: [`${FORMAT_OPTION}`],
           type: 'string',
-          default: 'a4',
-          description: 'Choose PaperFormat size',
+          default: DEFAULT_FORMAT,
+          description: 'Set PaperFormat of generated PDF',
           group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
         processPool: {
           alias: [`${PROCESS_POOL_OPTION}`],
           type: 'number',
-          default: 10,
+          default: DEFAULT_PROCESS_POOL,
           description: 'Pool of parallelized process',
           group: this.GROUPS.COMMONS,
           nargs: 1,

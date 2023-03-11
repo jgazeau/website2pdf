@@ -4,6 +4,7 @@ import {Website2PdfCli} from '../../src/cli/website2pdfCli';
 import {Website} from '../../src/model/website';
 import {
   CHROMIUM_FLAGS_OPTION,
+  DEFAULT_FORMAT,
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
@@ -14,6 +15,7 @@ import {
   DEFAULT_URL_TITLE,
   DISPLAY_HEADER_FOOTER_OPTION,
   EXCLUDE_URLS_OPTION,
+  FORMAT_OPTION,
   MARGIN_BOTTOM_OPTION,
   MARGIN_LEFT_OPTION,
   MARGIN_RIGHT_OPTION,
@@ -30,6 +32,7 @@ import {
   SPECIFIC_CHROMIUM_FLAGS,
   SPECIFIC_DIR,
   SPECIFIC_EXCLUDE_REGEX,
+  SPECIFIC_FORMAT,
   SPECIFIC_PROCESS_POOL,
   SPECIFIC_SERVED_SITEMAP,
   SPECIFIC_URL,
@@ -81,17 +84,18 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.displayHeaderFooter).to.be.equal(false);
-      expect(argv.sitemapUrl).to.be.equal(DEFAULT_SITEMAP_URL);
-      expect(argv.templateDir).to.be.equal(DEFAULT_TEMPLATE_DIR);
-      expect(argv.outputDir).to.be.equal(DEFAULT_OUTPUT_DIR);
+      expect(argv.format).to.be.equal(DEFAULT_FORMAT);
       expect(argv.marginTop).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginBottom).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginLeft).to.be.equal(DEFAULT_MARGIN_MIN);
       expect(argv.marginRight).to.be.equal(DEFAULT_MARGIN_MIN);
-      expect(argv.safeTitle).to.be.equal(DEFAULT_SAFE_TITLE);
-      expect(argv.urlTitle).to.be.equal(DEFAULT_URL_TITLE);
+      expect(argv.outputDir).to.be.equal(DEFAULT_OUTPUT_DIR);
       expect(argv.processPool).to.be.equal(DEFAULT_PROCESS_POOL);
+      expect(argv.safeTitle).to.be.equal(DEFAULT_SAFE_TITLE);
       expect(argv.serveSitemap).to.be.undefined;
+      expect(argv.sitemapUrl).to.be.equal(DEFAULT_SITEMAP_URL);
+      expect(argv.templateDir).to.be.equal(DEFAULT_TEMPLATE_DIR);
+      expect(argv.urlTitle).to.be.equal(DEFAULT_URL_TITLE);
       const website: Website = new Website();
       expect(website.websiteURL.sitemapURL.toString()).to.equal(
         DEFAULT_SITEMAP_URL
@@ -364,6 +368,26 @@ describe('Website2Pdf CLI tests', () => {
     sinonMock.processExit = true;
     sinonMock.sinonSetStubs();
     mockArgs([`--${PROCESS_POOL_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(() => {
+      expect(console.error).to.be.called;
+      expect(process.exit).to.be.called;
+    });
+  });
+  it(`parse should have specific ${FORMAT_OPTION} argument when ${FORMAT_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${FORMAT_OPTION}=${SPECIFIC_FORMAT}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.format).to.be.equal(SPECIFIC_FORMAT);
+    });
+  });
+  it(`parse should display error and exit when ${FORMAT_OPTION} option is empty`, () => {
+    setChaiAsPromised();
+    sinonMock.consoleError = true;
+    sinonMock.processExit = true;
+    sinonMock.sinonSetStubs();
+    mockArgs([`--${FORMAT_OPTION}`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(() => {
       expect(console.error).to.be.called;

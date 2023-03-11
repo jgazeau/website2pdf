@@ -1,26 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
-import { expect } from 'chai';
+import {expect} from 'chai';
 import * as path from 'path';
 import 'reflect-metadata';
-import { Website } from '../../src/model/website';
+import {Website} from '../../src/model/website';
 import {
   ERROR_UNKNOWN_XML_SCHEMA,
-  Website2PdfError
+  Website2PdfError,
 } from '../../src/model/website2pdfError';
 import {
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_NAME,
   DEFAULT_SITEMAP_URL,
   SERVE_SITEMAP_OPTION,
-  SITEMAP_URL_OPTION
+  SITEMAP_URL_OPTION,
 } from '../../src/utils/const';
 import {
   ABSOLUTE_URL,
   DUMMY_CLIARGS,
   EN_HOMEPAGE_URL,
   FR_HOMEPAGE_URL,
-  RELATIVE_URL, SITEMAPINDEX_EMPTY_PAGE, SITEMAP_EMPTY_PAGE,
+  RELATIVE_URL,
+  SITEMAPINDEX_EMPTY_PAGE,
+  SITEMAP_EMPTY_PAGE,
   SITEMAP_EN_ABSURL,
   SITEMAP_EN_PAGE,
   SITEMAP_EXTENDED_PAGE,
@@ -28,14 +30,15 @@ import {
   SITEMAP_FR_PAGE,
   SITEMAP_INVALID_PAGE,
   SITEMAP_STANDARD_PAGE,
-  SITEMAP_UNKNOWN_PAGE, testResourcesPath
+  SITEMAP_UNKNOWN_PAGE,
+  testResourcesPath,
 } from '../testUtils/const';
-import { setChaiAsPromised } from '../testUtils/helpers';
+import {setChaiAsPromised} from '../testUtils/helpers';
 import {
   AxiosMethodStub,
   createSandbox,
   restoreSandbox,
-  setAxiosStub
+  setAxiosStub,
 } from '../testUtils/sinonStubs';
 
 describe('Website model tests', () => {

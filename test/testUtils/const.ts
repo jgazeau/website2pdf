@@ -1,16 +1,16 @@
 /* c8 ignore start */
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { ICliArguments } from '../../src/cli/iArgumentsParser';
+import {ICliArguments} from '../../src/cli/iArgumentsParser';
 import {
+  DEFAULT_FORMAT,
   DEFAULT_MARGIN_MIN,
   DEFAULT_OUTPUT_DIR,
-  DEFAULT_PAGE_SIZE,
   DEFAULT_PROCESS_POOL,
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_NAME,
   DEFAULT_SITEMAP_URL,
-  DEFAULT_TEMPLATE_DIR
+  DEFAULT_TEMPLATE_DIR,
 } from '../../src/utils/const';
 
 export const rootPath: string = path.join(process.cwd());
@@ -36,6 +36,7 @@ export const testTemplatesImagePath: string = path.join(
 export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
 export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_EXCLUDE_REGEX = '\\/fr\\/';
+export const SPECIFIC_FORMAT = 'a3';
 export const SPECIFIC_PROCESS_POOL = 20;
 export const SPECIFIC_SERVED_SITEMAP = 'anotherSitemap.xml';
 export const SPECIFIC_URL = `https://example.com/${DEFAULT_SITEMAP_NAME}`;
@@ -46,12 +47,12 @@ export const DUMMY_CLIARGS: ICliArguments = {
   debug: false,
   displayHeaderFooter: false,
   excludeUrls: SPECIFIC_EXCLUDE_REGEX,
+  format: DEFAULT_FORMAT,
   marginBottom: DEFAULT_MARGIN_MIN,
   marginLeft: DEFAULT_MARGIN_MIN,
   marginRight: DEFAULT_MARGIN_MIN,
   marginTop: DEFAULT_MARGIN_MIN,
   outputDir: DEFAULT_OUTPUT_DIR,
-  pageSize: DEFAULT_PAGE_SIZE,
   processPool: DEFAULT_PROCESS_POOL,
   safeTitle: false,
   serveSitemap: DEFAULT_SITEMAP_NAME,
