@@ -65,7 +65,7 @@
     "@types/node": "^18.11.18",
     "@types/sinon": "^10.0.13",
     "@types/sinon-chai": "^3.2.8",
-    "@types/validator": "^13.7.10",
+    "@types/validator": "^13.7.14",
     "@types/yargs": "^17.0.22",
     "c8": "^7.12.0",
     "chai": "^4.3.7",
