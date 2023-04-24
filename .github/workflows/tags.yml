@@ -37,6 +37,6 @@ jobs:
           git push
           git push -f origin ${TAG_NAME}
       - name: Publish on Npm
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
