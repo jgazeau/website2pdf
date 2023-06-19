@@ -57,7 +57,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@sinonjs/fake-timers": "^9.1.2",
+    "@sinonjs/fake-timers": "^11.0.0",
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/fs-extra": "^11.0.1",
