@@ -44,7 +44,7 @@
   "homepage": "https://github.com/jgazeau/website2pdf#readme",
   "dependencies": {
     "@supercharge/promise-pool": "^2.3.2",
-    "axios": "^0.27.2",
+    "axios": "^1.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "fast-xml-parser": "^4.2.4",
