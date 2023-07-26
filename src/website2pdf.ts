@@ -146,6 +146,12 @@ async function sitemapToPDF(
           );
           await pageToPDF(browserContext, cliArgs, outputDir, url, pdfTemplate);
           if (cliArgs.outputFileNameUrlMap) {
+            if (cliArgs.debug) {
+              logger().debug(
+                `Adding url ${url.toString()} to urlToFileNameMap.json`
+              );
+            }
+
             const filename = path.join(
               outputDir,
               `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`
