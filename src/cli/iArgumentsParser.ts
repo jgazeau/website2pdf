@@ -24,4 +24,5 @@ export interface ICliArguments extends Arguments {
   sitemapUrl: string;
   templateDir: PathLike;
   urlTitle: boolean;
+  outputFileNameUrlMap: boolean;
 }
