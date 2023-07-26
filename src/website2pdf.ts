@@ -152,20 +152,29 @@ async function sitemapToPDF(
               );
             }
 
-            const filename = path.join(
-              outputDir,
-              `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`
-            );
-            urlToFileNameMap[url.toString()] = filename;
-
-            await fs.writeJson(
-              path.join(outputDir, 'urlToFileNameMap.json'),
-              urlToFileNameMap,
-              {spaces: 2}
-            );
+            await saveToUrlMapFile(outputDir, url, cliArgs, urlToFileNameMap);
           }
         });
     });
+}
+
+async function saveToUrlMapFile(
+  outputDir: string,
+  url: URL,
+  cliArgs: ICliArguments,
+  urlToFileNameMap: {[key: string]: string}
+) {
+  const filename = path.join(
+    outputDir,
+    `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`
+  );
+  urlToFileNameMap[url.toString()] = filename;
+
+  await fs.writeJson(
+    path.join(outputDir, 'urlToFileNameMap.json'),
+    urlToFileNameMap,
+    {spaces: 2}
+  );
 }
 
 async function pageToPDF(
