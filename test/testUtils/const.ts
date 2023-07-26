@@ -61,6 +61,7 @@ export const DUMMY_CLIARGS: ICliArguments = {
   sitemapUrl: DEFAULT_SITEMAP_URL,
   templateDir: DEFAULT_TEMPLATE_DIR,
   urlTitle: false,
+  outputFileNameUrlMap: false,
 };
 
 export const ABSOLUTE_URL = 'absolute/url';

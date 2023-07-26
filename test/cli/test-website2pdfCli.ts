@@ -23,6 +23,7 @@ import {
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  OUTPUT_FILE_NAME_URL_MAP_OPTION,
   PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
   SERVE_SITEMAP_OPTION,
@@ -404,6 +405,15 @@ describe('Website2Pdf CLI tests', () => {
     return cli.parse().then(() => {
       expect(console.error).to.be.called;
       expect(process.exit).to.be.called;
+    });
+  });
+  // Write test for outputFileNameUrlMap
+  it(`parse should have specific ${OUTPUT_FILE_NAME_URL_MAP_OPTION} argument when ${OUTPUT_FILE_NAME_URL_MAP_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${OUTPUT_FILE_NAME_URL_MAP_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.outputFileNameUrlMap).to.be.equal(true);
     });
   });
 });
