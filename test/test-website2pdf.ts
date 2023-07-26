@@ -9,6 +9,7 @@ import {
   DISPLAY_HEADER_FOOTER_OPTION,
   EXCLUDE_URLS_OPTION,
   OUTPUT_DIR_OPTION,
+  OUTPUT_FILE_NAME_URL_MAP_OPTION,
   SAFE_TITLE_OPTION,
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
@@ -45,7 +46,6 @@ import {
   RELATIVE_URL,
   RELATIVE_URL_TITLE,
   RELATIVE_URL_TITLE_FILENAME,
-  rootPath,
   SITEMAPINDEX_EMPTY_PAGE,
   SITEMAPINDEX_EMPTY_RELURL,
   SITEMAPINDEX_EMPTY_URL_PAGE,
@@ -62,11 +62,12 @@ import {
   SITEMAP_URL_TITLE_OPTION_PAGE,
   SITEMAP_URL_TITLE_OPTION_RELURL,
   SPECIFIC_EXCLUDE_REGEX,
+  rootPath,
   testOutputDir,
+  testTempPath,
   testTemplatesImagePath,
   testTemplatesMetaPath,
   testTemplatesPath,
-  testTempPath,
 } from './testUtils/const';
 import {
   cleanTestTempDirectory,
@@ -375,6 +376,19 @@ describe('Website2pdf tests', () => {
       ABSOLUTE_URL_TITLE_FILENAME,
       RELATIVE_URL_TITLE_FILENAME,
     ];
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      return assertExpectedFilesExists(expectedFiles);
+    });
+  });
+  it(`website2pdf should out URL to filename map when ${OUTPUT_FILE_NAME_URL_MAP_OPTION}`, () => {
+    setChaiAsPromised();
+    mockArgs([
+      `--${OUTPUT_FILE_NAME_URL_MAP_OPTION}`,
+      `--${SITEMAP_URL_OPTION}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_URL_TITLE_OPTION_RELURL}`,
+    ]);
+    const expectedFiles = ['urlToFileNameMap.json'];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
       return assertExpectedFilesExists(expectedFiles);
