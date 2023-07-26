@@ -164,10 +164,8 @@ async function saveToUrlMapFile(
   cliArgs: ICliArguments,
   urlToFileNameMap: {[key: string]: string}
 ) {
-  const filename = path.join(
-    outputDir,
-    `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`
-  );
+  const filename = `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`;
+
   urlToFileNameMap[url.toString()] = filename;
 
   await fs.writeJson(
