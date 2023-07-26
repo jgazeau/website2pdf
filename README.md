@@ -66,6 +66,8 @@ Common options:
       --format, --format                              Set PaperFormat of generated PDF          [string] [default: "a4"]
       --processPool, --process-pool                   Pool of parallelized process                [number] [default: 10]
       --serveSitemap, --serve-sitemap                 Serve local sitemap                                       [string]
+      --output-file-name-url-map                      Saves a mapping of url to filenames called 'urlToFileNameMap.json'
+                                                                                              [boolean] [default: false]
 
 Other Options:
       --debug    Turn on debug logging                                                        [boolean] [default: false]
