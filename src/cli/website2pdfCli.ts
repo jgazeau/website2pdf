@@ -251,6 +251,12 @@ export class Website2PdfCli {
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
+        outputFileNameUrlMap: {
+          alias: [`${OUTPUT_FILE_NAME_URL_MAP_OPTION}`],
+          type: 'boolean',
+          description: 'Output file name to URL map in JSON format',
+          group: this.GROUPS.COMMONS,
+        },
       })
       .wrap(getOutputWidth())
       .epilog(
