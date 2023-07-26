@@ -23,6 +23,7 @@ import {
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
   OUTPUT_DIR_OPTION,
+  OUTPUT_FILE_NAME_URL_MAP_OPTION,
   PROCESS_POOL_OPTION,
   SAFE_TITLE_OPTION,
   SERVE_SITEMAP_OPTION,
@@ -119,6 +120,10 @@ export class Website2PdfCli {
           'Use specific count of parallelized process',
         ],
         [`$0 --${SERVE_SITEMAP_OPTION}="sitemap.xml"`, 'Serve a local sitemap'],
+        [
+          `$0 --${OUTPUT_FILE_NAME_URL_MAP_OPTION}`,
+          'Output file name to URL map in JSON format',
+        ],
       ])
       .options({
         debug: {

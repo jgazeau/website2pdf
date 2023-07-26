@@ -136,6 +136,8 @@ async function sitemapToPDF(
     })
     .then(async () => {
       logger().info(`Printing ${sitemap.urls.length} PDF(s) to ${outputDir}`);
+      const urlToFileNameMap: {[key: string]: string} = {};
+
       await PromisePool.for(sitemap.urls)
         .withConcurrency(cliArgs.processPool)
         .process(async (url, index) => {
@@ -143,6 +145,27 @@ async function sitemapToPDF(
             `Processing pool for url ${url.href} (${index}/${sitemap.urls.length}))`
           );
           await pageToPDF(browserContext, cliArgs, outputDir, url, pdfTemplate);
+          if (cliArgs.outputFileNameUrlMap) {
+            PrintResults.storeResult(
+              url,
+              path.join(
+                outputDir,
+                `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`
+              ),
+              STATUS_PRINTED
+            );
+            const filename = path.join(
+              outputDir,
+              `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`
+            );
+            urlToFileNameMap[url.toString()] = filename;
+
+            await fs.writeJson(
+              path.join(outputDir, 'urlToFileNameMap.json'),
+              urlToFileNameMap,
+              {spaces: 2}
+            );
+          }
         });
     });
 }

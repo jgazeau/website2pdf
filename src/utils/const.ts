@@ -20,6 +20,7 @@ export const SERVE_SITEMAP_OPTION = 'serve-sitemap';
 export const SITEMAP_URL_OPTION = 'sitemap-url';
 export const TEMPLATE_DIR_OPTION = 'template-dir';
 export const URL_TITLE_OPTION = 'url-title';
+export const OUTPUT_FILE_NAME_URL_MAP_OPTION = 'output-file-name-url-map';
 
 export const DEFAULT_CHROMIUM_HEADLESS = 'true';
 export const DEFAULT_FOOTER_FILE = 'footer.html';
