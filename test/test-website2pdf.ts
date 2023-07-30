@@ -3,6 +3,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import {
   CHROMIUM_FLAGS_OPTION,
+  DEFAULT_OUTPUT_URL_TO_FILENAME_MAP,
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_NAME,
   DEFAULT_TEMPLATE_DIR,
@@ -381,14 +382,14 @@ describe('Website2pdf tests', () => {
       return assertExpectedFilesExists(expectedFiles);
     });
   });
-  it(`website2pdf should out URL to filename map when ${OUTPUT_FILE_NAME_URL_MAP_OPTION}`, () => {
+  it(`website2pdf should create ${DEFAULT_OUTPUT_URL_TO_FILENAME_MAP} file when ${OUTPUT_FILE_NAME_URL_MAP_OPTION}`, () => {
     setChaiAsPromised();
     mockArgs([
       `--${OUTPUT_FILE_NAME_URL_MAP_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_URL_TITLE_OPTION_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
     ]);
-    const expectedFiles = ['urlToFileNameMap.json'];
+    const expectedFiles = [DEFAULT_OUTPUT_URL_TO_FILENAME_MAP];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
       return assertExpectedFilesExists(expectedFiles);

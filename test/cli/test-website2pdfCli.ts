@@ -311,6 +311,18 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.chromiumFlags).to.be.equal(SPECIFIC_CHROMIUM_FLAGS);
     });
   });
+  it(`parse should display error and exit when ${CHROMIUM_FLAGS_OPTION} option is empty`, () => {
+    setChaiAsPromised();
+    sinonMock.consoleError = true;
+    sinonMock.processExit = true;
+    sinonMock.sinonSetStubs();
+    mockArgs([`--${CHROMIUM_FLAGS_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(() => {
+      expect(console.error).to.be.called;
+      expect(process.exit).to.be.called;
+    });
+  });
   it(`parse should have specific ${CHROMIUM_HEADLESS_OPTION} argument when ${CHROMIUM_HEADLESS_OPTION} option`, () => {
     setChaiAsPromised();
     mockArgs([`--${CHROMIUM_HEADLESS_OPTION}=${SPECIFIC_CHROMIUM_HEADLESS}`]);
@@ -319,12 +331,12 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.chromiumHeadless).to.be.equal(SPECIFIC_CHROMIUM_HEADLESS);
     });
   });
-  it(`parse should display error and exit when ${CHROMIUM_FLAGS_OPTION} option is empty`, () => {
+  it(`parse should display error and exit when ${CHROMIUM_HEADLESS_OPTION} option is empty`, () => {
     setChaiAsPromised();
     sinonMock.consoleError = true;
     sinonMock.processExit = true;
     sinonMock.sinonSetStubs();
-    mockArgs([`--${CHROMIUM_FLAGS_OPTION}`]);
+    mockArgs([`--${CHROMIUM_HEADLESS_OPTION}`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(() => {
       expect(console.error).to.be.called;
@@ -407,7 +419,6 @@ describe('Website2Pdf CLI tests', () => {
       expect(process.exit).to.be.called;
     });
   });
-  // Write test for outputFileNameUrlMap
   it(`parse should have specific ${OUTPUT_FILE_NAME_URL_MAP_OPTION} argument when ${OUTPUT_FILE_NAME_URL_MAP_OPTION} option`, () => {
     setChaiAsPromised();
     mockArgs([`--${OUTPUT_FILE_NAME_URL_MAP_OPTION}`]);
