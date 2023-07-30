@@ -116,3 +116,4 @@ __pycache__
 
 #website2pdf
 test/temp
+w2pdf_output/**

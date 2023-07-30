@@ -8,6 +8,7 @@ export interface IArgumentsParser extends Argv {
 
 export interface ICliArguments extends Arguments {
   chromiumFlags: string;
+  chromiumHeadless: unknown;
   debug: boolean;
   displayHeaderFooter: boolean;
   excludeUrls: string;

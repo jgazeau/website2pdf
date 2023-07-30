@@ -34,6 +34,7 @@ export const testTemplatesImagePath: string = path.join(
   `${DEFAULT_TEMPLATE_DIR}_image`
 );
 export const SPECIFIC_CHROMIUM_FLAGS = '--no-sandbox';
+export const SPECIFIC_CHROMIUM_HEADLESS = 'new';
 export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_EXCLUDE_REGEX = '\\/fr\\/';
 export const SPECIFIC_FORMAT = 'a3';
@@ -44,6 +45,7 @@ export const DUMMY_CLIARGS: ICliArguments = {
   _: [],
   $0: '',
   chromiumFlags: '',
+  chromiumHeadless: 'true',
   debug: false,
   displayHeaderFooter: false,
   excludeUrls: SPECIFIC_EXCLUDE_REGEX,

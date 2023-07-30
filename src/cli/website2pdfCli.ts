@@ -2,7 +2,9 @@ import kleur = require('kleur');
 import {hideBin} from 'yargs/helpers';
 import {
   CHROMIUM_FLAGS_OPTION,
+  CHROMIUM_HEADLESS_OPTION,
   CLI_USAGE,
+  DEFAULT_CHROMIUM_HEADLESS,
   DEFAULT_FORMAT,
   DEFAULT_HEADER_FOOTER,
   DEFAULT_MARGIN_MAX,
@@ -97,6 +99,10 @@ export class Website2PdfCli {
           'Use specific chromium options at Puppeteer launch',
         ],
         [
+          `$0 --${CHROMIUM_HEADLESS_OPTION}="new"`,
+          'Use specific chromium headless option at Puppeteer launch',
+        ],
+        [
           `$0 --${EXCLUDE_URLS_OPTION}="\\/fr\\/"`,
           'Exclude urls of french language',
         ],
@@ -185,6 +191,14 @@ export class Website2PdfCli {
           alias: [`${CHROMIUM_FLAGS_OPTION}`],
           type: 'string',
           description: 'Chromium flags set at Puppeteer launch',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
+        },
+        chromiumHeadless: {
+          alias: [`${CHROMIUM_HEADLESS_OPTION}`],
+          type: 'string',
+          default: DEFAULT_CHROMIUM_HEADLESS,
+          description: 'Chromium headless option set at Puppeteer launch',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },

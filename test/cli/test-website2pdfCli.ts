@@ -4,6 +4,8 @@ import {Website2PdfCli} from '../../src/cli/website2pdfCli';
 import {Website} from '../../src/model/website';
 import {
   CHROMIUM_FLAGS_OPTION,
+  CHROMIUM_HEADLESS_OPTION,
+  DEFAULT_CHROMIUM_HEADLESS,
   DEFAULT_FORMAT,
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
@@ -30,6 +32,7 @@ import {
 } from '../../src/utils/const';
 import {
   SPECIFIC_CHROMIUM_FLAGS,
+  SPECIFIC_CHROMIUM_HEADLESS,
   SPECIFIC_DIR,
   SPECIFIC_EXCLUDE_REGEX,
   SPECIFIC_FORMAT,
@@ -83,6 +86,7 @@ describe('Website2Pdf CLI tests', () => {
     mockArgs([]);
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
+      expect(argv.chromiumHeadless).to.be.equal(DEFAULT_CHROMIUM_HEADLESS);
       expect(argv.displayHeaderFooter).to.be.equal(false);
       expect(argv.format).to.be.equal(DEFAULT_FORMAT);
       expect(argv.marginTop).to.be.equal(DEFAULT_MARGIN_MIN);
@@ -304,6 +308,14 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.chromiumFlags).to.be.equal(SPECIFIC_CHROMIUM_FLAGS);
+    });
+  });
+  it(`parse should have specific ${CHROMIUM_HEADLESS_OPTION} argument when ${CHROMIUM_HEADLESS_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${CHROMIUM_HEADLESS_OPTION}=${SPECIFIC_CHROMIUM_HEADLESS}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.chromiumHeadless).to.be.equal(SPECIFIC_CHROMIUM_HEADLESS);
     });
   });
   it(`parse should display error and exit when ${CHROMIUM_FLAGS_OPTION} option is empty`, () => {

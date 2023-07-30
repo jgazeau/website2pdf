@@ -56,6 +56,8 @@ Common options:
       --marginLeft, --margin-left                     Margin left                              [string] [default: "0px"]
       --marginRight, --margin-right                   Margin right                             [string] [default: "0px"]
       --chromiumFlags, --chromium-flags               Chromium flags set at Puppeteer launch                    [string]
+      --chromiumHeadless, --chromium-headless         Chromium headless option set at Puppeteer launch
+                                                                                              [string] [default: "true"]
       --excludeUrls, --exclude-urls                   Exclude urls matching a regex from printing process       [string]
       --safeTitle, --safe-title                       Safely generate file title by replacing special chars
                                                                                               [boolean] [default: false]
@@ -80,6 +82,8 @@ Examples:
   --margin-right="50px"
   website2pdf --chromium-flags="--no-sandbox                    Use specific chromium options at Puppeteer launch
   --disable-dev-shm-usage"
+  website2pdf --chromium-headless="new"                         Use specific chromium headless option at Puppeteer
+                                                                launch
   website2pdf --exclude-urls="\/fr\/"                           Exclude urls of french language
   website2pdf --safe-title                                      Safely generate file title by replacing special chars
   website2pdf --url-title                                       Generate file title using last URL fragment

@@ -7,7 +7,11 @@ import {Color, white} from 'kleur';
 import {PuppeteerNodeLaunchOptions} from 'puppeteer';
 import {ICliArguments} from '../cli/iArgumentsParser';
 import {Website2PdfError} from '../model/website2pdfError';
-import {MAX_TTY_LENGTH, WEBSITE2PDF_HEADER} from './const';
+import {
+  DEFAULT_CHROMIUM_HEADLESS,
+  MAX_TTY_LENGTH,
+  WEBSITE2PDF_HEADER,
+} from './const';
 import {logger} from './logger';
 
 export function validateClassObjectSync(object: Object): void {
@@ -94,7 +98,15 @@ export function imageEncode(path: fs.PathOrFileDescriptor): string {
 }
 
 export function puppeteerBrowserLaunchArgs(
-  chromiumFlags: string
+  chromiumFlags: string,
+  chromiumHeadless: any = DEFAULT_CHROMIUM_HEADLESS
 ): PuppeteerNodeLaunchOptions {
-  return chromiumFlags ? {args: [...chromiumFlags.split(' ')]} : {};
+  return chromiumFlags
+    ? {
+        headless: chromiumHeadless,
+        args: [...chromiumFlags.split(' ')],
+      }
+    : {
+        headless: chromiumHeadless,
+      };
 }
