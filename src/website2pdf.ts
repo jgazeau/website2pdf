@@ -12,6 +12,7 @@ import {Website2PdfCli} from './cli/website2pdfCli';
 import {PdfTemplate} from './model/pdfTemplate';
 import {Website} from './model/website';
 import {WebsiteSitemap} from './model/websiteSitemap';
+import {DEFAULT_OUTPUT_URL_TO_FILENAME_MAP} from './utils/const';
 import {
   headerFactory,
   interpolate,
@@ -23,6 +24,13 @@ import {logger} from './utils/logger';
 import {PrintResults, STATUS_ERROR, STATUS_PRINTED} from './utils/stats';
 
 export class Website2Pdf {
+  private static _urlToFileNameMap: {[key: string]: string} = {};
+  /* c8 ignore start */
+  public static get urlToFileNameMap(): {[key: string]: string} {
+    return Website2Pdf._urlToFileNameMap;
+  }
+  /* c8 ignore stop */
+
   static async main(): Promise<void> {
     return new Website2PdfCli().parse().then(async cliArgs => {
       headerFactory();
@@ -33,6 +41,9 @@ export class Website2Pdf {
           return website.build().then(async (website: Website) => {
             if (website.sitemaps.length !== 0) {
               await processSitemaps(cliArgs, website);
+              if (cliArgs.outputFileNameUrlMap) {
+                await saveToUrlMapFile(cliArgs);
+              }
             } else {
               logger().warn(
                 `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`
@@ -44,6 +55,13 @@ export class Website2Pdf {
           return website.postActions();
         });
     });
+  }
+
+  public static addToUrlToFileNameMap(url: string, fileName: string): void {
+    logger().debug(
+      `Adding url ${url.toString()} to ${DEFAULT_OUTPUT_URL_TO_FILENAME_MAP}`
+    );
+    this._urlToFileNameMap[url] = fileName;
   }
 }
 
@@ -136,7 +154,6 @@ async function sitemapToPDF(
     })
     .then(async () => {
       logger().info(`Printing ${sitemap.urls.length} PDF(s) to ${outputDir}`);
-      const urlToFileNameMap: {[key: string]: string} = {};
 
       await PromisePool.for(sitemap.urls)
         .withConcurrency(cliArgs.processPool)
@@ -145,34 +162,8 @@ async function sitemapToPDF(
             `Processing pool for url ${url.href} (${index}/${sitemap.urls.length}))`
           );
           await pageToPDF(browserContext, cliArgs, outputDir, url, pdfTemplate);
-          if (cliArgs.outputFileNameUrlMap) {
-            if (cliArgs.debug) {
-              logger().debug(
-                `Adding url ${url.toString()} to urlToFileNameMap.json`
-              );
-            }
-
-            await saveToUrlMapFile(outputDir, url, cliArgs, urlToFileNameMap);
-          }
         });
     });
-}
-
-async function saveToUrlMapFile(
-  outputDir: string,
-  url: URL,
-  cliArgs: ICliArguments,
-  urlToFileNameMap: {[key: string]: string}
-) {
-  const filename = `${toFilename(url.pathname.substring(1), url, cliArgs)}.pdf`;
-
-  urlToFileNameMap[url.toString()] = filename;
-
-  await fs.writeJson(
-    path.join(outputDir, 'urlToFileNameMap.json'),
-    urlToFileNameMap,
-    {spaces: 2}
-  );
 }
 
 async function pageToPDF(
@@ -186,6 +177,7 @@ async function pageToPDF(
     page.setDefaultNavigationTimeout(0);
     const metadatas = new Map<string, string>();
     const fileDir = path.join(outputDir, toFilePath(url));
+    let filename: string;
     await fs
       .ensureDir(fileDir)
       .then((result: any) => {
@@ -199,6 +191,11 @@ async function pageToPDF(
           .then(() => {
             page.title().then(title => {
               metadatas.set('title', title);
+              filename = `${toFilename(
+                metadatas.get('title')?.toString(),
+                url,
+                cliArgs
+              )}.pdf`;
             });
           })
           .then(() => {
@@ -221,14 +218,7 @@ async function pageToPDF(
               });
           })
           .then(async metadatas => {
-            const filePath = path.join(
-              fileDir,
-              `${toFilename(
-                metadatas.get('title')?.toString(),
-                url,
-                cliArgs
-              )}.pdf`
-            );
+            const filePath = path.join(fileDir, filename);
             logger().debug(`Printing page ${filePath} from url ${url}`);
             await page
               .pdf({
@@ -255,8 +245,20 @@ async function pageToPDF(
               });
           })
           .finally(async () => {
+            Website2Pdf.addToUrlToFileNameMap(url.toString(), filename);
             await page.close();
           });
       });
   });
+}
+
+async function saveToUrlMapFile(cliArgs: ICliArguments) {
+  await fs.writeJson(
+    path.join(
+      path.normalize(cliArgs.outputDir.toString()),
+      'urlToFileNameMap.json'
+    ),
+    Website2Pdf.urlToFileNameMap,
+    {spaces: 2}
+  );
 }
