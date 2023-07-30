@@ -5,6 +5,8 @@ import * as path from 'path';
 import {Website2PdfError} from '../../src/model/website2pdfError';
 import {
   CHROMIUM_FLAGS_OPTION,
+  CHROMIUM_HEADLESS_OPTION,
+  DEFAULT_CHROMIUM_HEADLESS,
   DEFAULT_SITEMAP_HOST,
   MAX_TTY_LENGTH,
 } from '../../src/utils/const';
@@ -15,13 +17,17 @@ import {
   imageEncode,
   interpolate,
   puppeteerBrowserLaunchArgs,
-  toFilename,
   toFilePath,
+  toFilename,
   toSafeLastSegment,
   toSafeString,
 } from '../../src/utils/helpers';
 import {logger} from '../../src/utils/logger';
-import {DUMMY_CLIARGS, testResourcesImagePath} from '../testUtils/const';
+import {
+  DUMMY_CLIARGS,
+  SPECIFIC_CHROMIUM_HEADLESS,
+  testResourcesImagePath,
+} from '../testUtils/const';
 import {setChaiAsPromised} from '../testUtils/helpers';
 import {SinonStubs} from '../testUtils/sinonStubs';
 
@@ -158,11 +164,21 @@ describe('Helpers tests', () => {
   it(`puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when ${CHROMIUM_FLAGS_OPTION}`, () => {
     const chromiumFlags = '--no-sandbox --disable-dev-shm-usage';
     expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({
+      headless: DEFAULT_CHROMIUM_HEADLESS,
       args: ['--no-sandbox', '--disable-dev-shm-usage'],
     });
   });
-  it(`puppeteerBrowserLaunchArgs should return empty PuppeteerNodeLaunchOptions when empty ${CHROMIUM_FLAGS_OPTION}`, () => {
+  it(`puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when ${CHROMIUM_HEADLESS_OPTION}`, () => {
+    expect(
+      puppeteerBrowserLaunchArgs('', SPECIFIC_CHROMIUM_HEADLESS)
+    ).to.deep.equal({
+      headless: SPECIFIC_CHROMIUM_HEADLESS,
+    });
+  });
+  it(`puppeteerBrowserLaunchArgs should return default PuppeteerNodeLaunchOptions when empty ${CHROMIUM_FLAGS_OPTION}`, () => {
     const chromiumFlags = '';
-    expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({});
+    expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({
+      headless: DEFAULT_CHROMIUM_HEADLESS,
+    });
   });
 });

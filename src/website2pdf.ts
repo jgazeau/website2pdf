@@ -57,7 +57,12 @@ async function processSitemaps(
   website: Website
 ): Promise<void> {
   await puppeteer
-    .launch(puppeteerBrowserLaunchArgs(cliArgs.chromiumFlags))
+    .launch(
+      puppeteerBrowserLaunchArgs(
+        cliArgs.chromiumFlags,
+        cliArgs.chromiumHeadless
+      )
+    )
     .then(async browser => {
       await browser
         .version()

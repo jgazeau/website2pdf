@@ -1,6 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {Transform, Type} from 'class-transformer';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {IsDefined} from 'class-validator';
 import {URL} from 'url';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {WebsiteURL} from './websiteURL';
 
 export class XmlURL {

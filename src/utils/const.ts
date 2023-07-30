@@ -5,6 +5,7 @@ import {cyan} from 'kleur';
 export const MAX_TTY_LENGTH = 120;
 
 export const CHROMIUM_FLAGS_OPTION = 'chromium-flags';
+export const CHROMIUM_HEADLESS_OPTION = 'chromium-headless';
 export const DISPLAY_HEADER_FOOTER_OPTION = 'display-header-footer';
 export const EXCLUDE_URLS_OPTION = 'exclude-urls';
 export const MARGIN_BOTTOM_OPTION = 'margin-bottom';
@@ -20,6 +21,7 @@ export const SITEMAP_URL_OPTION = 'sitemap-url';
 export const TEMPLATE_DIR_OPTION = 'template-dir';
 export const URL_TITLE_OPTION = 'url-title';
 
+export const DEFAULT_CHROMIUM_HEADLESS = 'true';
 export const DEFAULT_FOOTER_FILE = 'footer.html';
 export const DEFAULT_FORMAT = 'a4';
 export const DEFAULT_HEADER_FILE = 'header.html';
