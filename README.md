@@ -56,10 +56,12 @@ Common options:
       --marginLeft, --margin-left                         Margin left                          [string] [default: "0px"]
       --marginRight, --margin-right                       Margin right                         [string] [default: "0px"]
       --marginTop, --margin-top                           Margin top (50px or 0px)                              [string]
-      --mergeAll, --merge-all                             Merge all PDF generated into a single one            [boolean]
+      --mergeAll, --merge-all                             Merge all PDF generated into a single one (merged.pdf)
+                                                                                                               [boolean]
   -o, --outputDir, --output-dir                           Relative path of the output directory
                                                                                              [default: "./w2pdf_output"]
-      --outputFileNameUrlMap, --output-file-name-url-map  Output file name to URL map in JSON format           [boolean]
+      --outputFileNameUrlMap, --output-file-name-url-map  Output file name to URL map in JSON format
+                                                          (urlToFileNameMap.json)                              [boolean]
       --processPool, --process-pool                       Pool of parallelized process            [number] [default: 10]
       --safeTitle, --safe-title                           Safely generate file title by replacing special chars
                                                                                               [boolean] [default: false]
@@ -86,9 +88,10 @@ Examples:
   --margin-right="50px"
   website2pdf --exclude-urls="\/fr\/"                           Exclude urls of french language
   website2pdf --format="a3"                                     Set PaperFormat type
-  website2pdf --merge-all                                       Merge all PDF generated into a single one
+  website2pdf --merge-all                                       Merge all PDF generated into a single one (merged.pdf)
   website2pdf --output-dir="./output"                           Use specific output directory
   website2pdf --output-file-name-url-map                        Output file name to URL map in JSON format
+                                                                (urlToFileNameMap.json)
   website2pdf --process-pool=20                                 Use specific count of parallelized process
   website2pdf --safe-title                                      Safely generate file title by replacing special chars
   website2pdf --serve-sitemap="sitemap.xml"                     Serve a local sitemap
