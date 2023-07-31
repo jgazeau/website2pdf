@@ -46,27 +46,29 @@ NB2: Margins have default values depending on the option used:
 -      margin-left = margin-right  = 0px
 
 Common options:
-  -s, --sitemapUrl, --sitemap-url                     Sitemap URL[string] [default: "http://localhost:1313/sitemap.xml"]
-      --displayHeaderFooter, --display-header-footer  Turn on header and footer printing      [boolean] [default: false]
-  -t, --templateDir, --template-dir                   Relative path of the templates directory
-                                                                                           [default: "./w2pdf_template"]
-  -o, --outputDir, --output-dir                       Relative path of the output directory  [default: "./w2pdf_output"]
-      --marginTop, --margin-top                       Margin top (50px or 0px)                                  [string]
-      --marginBottom, --margin-bottom                 Margin bottom (50px or 0px)                               [string]
-      --marginLeft, --margin-left                     Margin left                              [string] [default: "0px"]
-      --marginRight, --margin-right                   Margin right                             [string] [default: "0px"]
-      --chromiumFlags, --chromium-flags               Chromium flags set at Puppeteer launch                    [string]
-      --chromiumHeadless, --chromium-headless         Chromium headless option set at Puppeteer launch
+      --chromiumFlags, --chromium-flags                   Chromium flags set at Puppeteer launch                [string]
+      --chromiumHeadless, --chromium-headless             Chromium headless option set at Puppeteer launch
                                                                                               [string] [default: "true"]
-      --excludeUrls, --exclude-urls                   Exclude urls matching a regex from printing process       [string]
-      --safeTitle, --safe-title                       Safely generate file title by replacing special chars
+      --displayHeaderFooter, --display-header-footer      Turn on header and footer printing  [boolean] [default: false]
+      --excludeUrls, --exclude-urls                       Exclude urls matching a regex from printing process   [string]
+      --format, --format                                  Set PaperFormat of generated PDF      [string] [default: "a4"]
+      --marginBottom, --margin-bottom                     Margin bottom (50px or 0px)                           [string]
+      --marginLeft, --margin-left                         Margin left                          [string] [default: "0px"]
+      --marginRight, --margin-right                       Margin right                         [string] [default: "0px"]
+      --marginTop, --margin-top                           Margin top (50px or 0px)                              [string]
+      --mergeAll, --merge-all                             Merge all PDF generated into a single one            [boolean]
+  -o, --outputDir, --output-dir                           Relative path of the output directory
+                                                                                             [default: "./w2pdf_output"]
+      --outputFileNameUrlMap, --output-file-name-url-map  Output file name to URL map in JSON format           [boolean]
+      --processPool, --process-pool                       Pool of parallelized process            [number] [default: 10]
+      --safeTitle, --safe-title                           Safely generate file title by replacing special chars
                                                                                               [boolean] [default: false]
-      --urlTitle, --url-title                         Generate file title using last URL fragment
-                                                                                              [boolean] [default: false]
-      --format, --format                              Set PaperFormat of generated PDF          [string] [default: "a4"]
-      --processPool, --process-pool                   Pool of parallelized process                [number] [default: 10]
-      --serveSitemap, --serve-sitemap                 Serve local sitemap                                       [string]
-      --output-file-name-url-map                      Saves a mapping of url to filenames called 'urlToFileNameMap.json'
+      --serveSitemap, --serve-sitemap                     Serve local sitemap                                   [string]
+  -s, --sitemapUrl, --sitemap-url                         Sitemap URL
+                                                                 [string] [default: "http://localhost:1313/sitemap.xml"]
+  -t, --templateDir, --template-dir                       Relative path of the templates directory
+                                                                                           [default: "./w2pdf_template"]
+      --urlTitle, --url-title                             Generate file title using last URL fragment
                                                                                               [boolean] [default: false]
 
 Other Options:
@@ -75,22 +77,24 @@ Other Options:
   -h, --help     Show help                                                                                     [boolean]
 
 Examples:
-  website2pdf --sitemap-url="http://localhost:80/sitemap.xml"   Use specific sitemap URL
-  website2pdf --display-header-footer                           Print PDFs with header and footer
-  website2pdf --template-dir="./templates"                      Use specific template directory
-  website2pdf --output-dir="./output"                           Use specific output directory
-  website2pdf --format="a3"                                     Set PaperFormat type
-  website2pdf --display-header-footer --margin-left="50px"      Use header and footer and set specific margins
-  --margin-right="50px"
   website2pdf --chromium-flags="--no-sandbox                    Use specific chromium options at Puppeteer launch
   --disable-dev-shm-usage"
   website2pdf --chromium-headless="new"                         Use specific chromium headless option at Puppeteer
                                                                 launch
+  website2pdf --display-header-footer                           Print PDFs with header and footer
+  website2pdf --display-header-footer --margin-left="50px"      Use header and footer and set specific margins
+  --margin-right="50px"
   website2pdf --exclude-urls="\/fr\/"                           Exclude urls of french language
-  website2pdf --safe-title                                      Safely generate file title by replacing special chars
-  website2pdf --url-title                                       Generate file title using last URL fragment
+  website2pdf --format="a3"                                     Set PaperFormat type
+  website2pdf --merge-all                                       Merge all PDF generated into a single one
+  website2pdf --output-dir="./output"                           Use specific output directory
+  website2pdf --output-file-name-url-map                        Output file name to URL map in JSON format
   website2pdf --process-pool=20                                 Use specific count of parallelized process
+  website2pdf --safe-title                                      Safely generate file title by replacing special chars
   website2pdf --serve-sitemap="sitemap.xml"                     Serve a local sitemap
+  website2pdf --sitemap-url="http://localhost:80/sitemap.xml"   Use specific sitemap URL
+  website2pdf --template-dir="./templates"                      Use specific template directory
+  website2pdf --url-title                                       Generate file title using last URL fragment
 
 Additional information:
   GitHub: https://github.com/jgazeau/website2pdf.git

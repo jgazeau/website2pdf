@@ -17,12 +17,13 @@ export interface ICliArguments extends Arguments {
   marginLeft: string;
   marginRight: string;
   marginTop: string;
+  mergeAll: boolean;
   outputDir: PathLike;
+  outputFileNameUrlMap: boolean;
   processPool: number;
   safeTitle: boolean;
   serveSitemap: string;
   sitemapUrl: string;
   templateDir: PathLike;
   urlTitle: boolean;
-  outputFileNameUrlMap: boolean;
 }

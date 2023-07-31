@@ -54,14 +54,15 @@ export const DUMMY_CLIARGS: ICliArguments = {
   marginLeft: DEFAULT_MARGIN_MIN,
   marginRight: DEFAULT_MARGIN_MIN,
   marginTop: DEFAULT_MARGIN_MIN,
+  mergeAll: false,
   outputDir: DEFAULT_OUTPUT_DIR,
+  outputFileNameUrlMap: false,
   processPool: DEFAULT_PROCESS_POOL,
   safeTitle: false,
   serveSitemap: DEFAULT_SITEMAP_NAME,
   sitemapUrl: DEFAULT_SITEMAP_URL,
   templateDir: DEFAULT_TEMPLATE_DIR,
   urlTitle: false,
-  outputFileNameUrlMap: false,
 };
 
 export const ABSOLUTE_URL = 'absolute/url';

@@ -22,6 +22,7 @@ import {
   MARGIN_LEFT_OPTION,
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
+  MERGE_ALL_OPTION,
   OUTPUT_DIR_OPTION,
   OUTPUT_FILE_NAME_URL_MAP_OPTION,
   PROCESS_POOL_OPTION,
@@ -425,6 +426,14 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.outputFileNameUrlMap).to.be.equal(true);
+    });
+  });
+  it(`parse should have specific ${MERGE_ALL_OPTION} argument when ${MERGE_ALL_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${MERGE_ALL_OPTION}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.mergeAll).to.be.equal(true);
     });
   });
 });
