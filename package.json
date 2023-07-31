@@ -50,6 +50,7 @@
     "fast-xml-parser": "^4.2.5",
     "fs-extra": "^11.1.0",
     "kleur": "^4.1.5",
+    "pdf-merger-js": "^4.3.0",
     "puppeteer": "^19.8.0",
     "reflect-metadata": "^0.1.13",
     "table": "^6.8.1",

@@ -3,12 +3,14 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import {
   CHROMIUM_FLAGS_OPTION,
+  DEFAULT_MERGED_PDF,
   DEFAULT_OUTPUT_URL_TO_FILENAME_MAP,
   DEFAULT_SITEMAP_HOST,
   DEFAULT_SITEMAP_NAME,
   DEFAULT_TEMPLATE_DIR,
   DISPLAY_HEADER_FOOTER_OPTION,
   EXCLUDE_URLS_OPTION,
+  MERGE_ALL_OPTION,
   OUTPUT_DIR_OPTION,
   OUTPUT_FILE_NAME_URL_MAP_OPTION,
   SAFE_TITLE_OPTION,
@@ -390,6 +392,19 @@ describe('Website2pdf tests', () => {
       `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
     ]);
     const expectedFiles = [DEFAULT_OUTPUT_URL_TO_FILENAME_MAP];
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      return assertExpectedFilesExists(expectedFiles);
+    });
+  });
+  it(`website2pdf should create ${DEFAULT_MERGED_PDF} file when ${MERGE_ALL_OPTION}`, () => {
+    setChaiAsPromised();
+    mockArgs([
+      `--${MERGE_ALL_OPTION}`,
+      `--${SITEMAP_URL_OPTION}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+    ]);
+    const expectedFiles = [DEFAULT_MERGED_PDF];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
       return assertExpectedFilesExists(expectedFiles);

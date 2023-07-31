@@ -9,7 +9,9 @@ import {
   DEFAULT_HEADER_FOOTER,
   DEFAULT_MARGIN_MAX,
   DEFAULT_MARGIN_MIN,
+  DEFAULT_MERGED_PDF,
   DEFAULT_OUTPUT_DIR,
+  DEFAULT_OUTPUT_URL_TO_FILENAME_MAP,
   DEFAULT_PROCESS_POOL,
   DEFAULT_SAFE_TITLE,
   DEFAULT_SITEMAP_URL,
@@ -22,6 +24,7 @@ import {
   MARGIN_LEFT_OPTION,
   MARGIN_RIGHT_OPTION,
   MARGIN_TOP_OPTION,
+  MERGE_ALL_OPTION,
   OUTPUT_DIR_OPTION,
   OUTPUT_FILE_NAME_URL_MAP_OPTION,
   PROCESS_POOL_OPTION,
@@ -75,27 +78,6 @@ export class Website2PdfCli {
       .alias('h', 'help')
       .example([
         [
-          `$0 --${SITEMAP_URL_OPTION}="http://localhost:80/sitemap.xml"`,
-          'Use specific sitemap URL',
-        ],
-        [
-          `$0 --${DISPLAY_HEADER_FOOTER_OPTION}`,
-          'Print PDFs with header and footer',
-        ],
-        [
-          `$0 --${TEMPLATE_DIR_OPTION}="./templates"`,
-          'Use specific template directory',
-        ],
-        [
-          `$0 --${OUTPUT_DIR_OPTION}="./output"`,
-          'Use specific output directory',
-        ],
-        [`$0 --${FORMAT_OPTION}="a3"`, 'Set PaperFormat type'],
-        [
-          `$0 --${DISPLAY_HEADER_FOOTER_OPTION} --${MARGIN_LEFT_OPTION}="50px" --${MARGIN_RIGHT_OPTION}="50px"`,
-          'Use header and footer and set specific margins',
-        ],
-        [
           `$0 --${CHROMIUM_FLAGS_OPTION}="--no-sandbox --disable-dev-shm-usage"`,
           'Use specific chromium options at Puppeteer launch',
         ],
@@ -104,40 +86,72 @@ export class Website2PdfCli {
           'Use specific chromium headless option at Puppeteer launch',
         ],
         [
+          `$0 --${DISPLAY_HEADER_FOOTER_OPTION}`,
+          'Print PDFs with header and footer',
+        ],
+        [
+          `$0 --${DISPLAY_HEADER_FOOTER_OPTION} --${MARGIN_LEFT_OPTION}="50px" --${MARGIN_RIGHT_OPTION}="50px"`,
+          'Use header and footer and set specific margins',
+        ],
+        [
           `$0 --${EXCLUDE_URLS_OPTION}="\\/fr\\/"`,
           'Exclude urls of french language',
         ],
+        [`$0 --${FORMAT_OPTION}="a3"`, 'Set PaperFormat type'],
         [
-          `$0 --${SAFE_TITLE_OPTION}`,
-          'Safely generate file title by replacing special chars',
+          `$0 --${MERGE_ALL_OPTION}`,
+          `Merge all PDF generated into a single one (${DEFAULT_MERGED_PDF})`,
         ],
         [
-          `$0 --${URL_TITLE_OPTION}`,
-          'Generate file title using last URL fragment',
+          `$0 --${OUTPUT_DIR_OPTION}="./output"`,
+          'Use specific output directory',
+        ],
+        [
+          `$0 --${OUTPUT_FILE_NAME_URL_MAP_OPTION}`,
+          `Output file name to URL map in JSON format (${DEFAULT_OUTPUT_URL_TO_FILENAME_MAP})`,
         ],
         [
           `$0 --${PROCESS_POOL_OPTION}=20`,
           'Use specific count of parallelized process',
         ],
+        [
+          `$0 --${SAFE_TITLE_OPTION}`,
+          'Safely generate file title by replacing special chars',
+        ],
         [`$0 --${SERVE_SITEMAP_OPTION}="sitemap.xml"`, 'Serve a local sitemap'],
         [
-          `$0 --${OUTPUT_FILE_NAME_URL_MAP_OPTION}`,
-          'Output file name to URL map in JSON format',
+          `$0 --${SITEMAP_URL_OPTION}="http://localhost:80/sitemap.xml"`,
+          'Use specific sitemap URL',
+        ],
+        [
+          `$0 --${TEMPLATE_DIR_OPTION}="./templates"`,
+          'Use specific template directory',
+        ],
+        [
+          `$0 --${URL_TITLE_OPTION}`,
+          'Generate file title using last URL fragment',
         ],
       ])
       .options({
+        chromiumFlags: {
+          alias: [`${CHROMIUM_FLAGS_OPTION}`],
+          type: 'string',
+          description: 'Chromium flags set at Puppeteer launch',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
+        },
+        chromiumHeadless: {
+          alias: [`${CHROMIUM_HEADLESS_OPTION}`],
+          type: 'string',
+          default: DEFAULT_CHROMIUM_HEADLESS,
+          description: 'Chromium headless option set at Puppeteer launch',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
+        },
         debug: {
           type: 'boolean',
           default: false,
           description: 'Turn on debug logging',
-        },
-        sitemapUrl: {
-          alias: ['s', `${SITEMAP_URL_OPTION}`],
-          type: 'string',
-          default: DEFAULT_SITEMAP_URL,
-          description: 'Sitemap URL',
-          group: this.GROUPS.COMMONS,
-          nargs: 1,
         },
         displayHeaderFooter: {
           alias: [`${DISPLAY_HEADER_FOOTER_OPTION}`],
@@ -146,26 +160,18 @@ export class Website2PdfCli {
           description: 'Turn on header and footer printing',
           group: this.GROUPS.COMMONS,
         },
-        templateDir: {
-          alias: ['t', `${TEMPLATE_DIR_OPTION}`],
-          type: 'PathLike',
-          default: DEFAULT_TEMPLATE_DIR,
-          description: 'Relative path of the templates directory',
-          group: this.GROUPS.COMMONS,
-          nargs: 1,
-        },
-        outputDir: {
-          alias: ['o', `${OUTPUT_DIR_OPTION}`],
-          type: 'PathLike',
-          default: DEFAULT_OUTPUT_DIR,
-          description: 'Relative path of the output directory',
-          group: this.GROUPS.COMMONS,
-          nargs: 1,
-        },
-        marginTop: {
-          alias: [`${MARGIN_TOP_OPTION}`],
+        excludeUrls: {
+          alias: [`${EXCLUDE_URLS_OPTION}`],
           type: 'string',
-          description: 'Margin top (50px or 0px)',
+          description: 'Exclude urls matching a regex from printing process',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
+        },
+        format: {
+          alias: [`${FORMAT_OPTION}`],
+          type: 'string',
+          default: DEFAULT_FORMAT,
+          description: 'Set PaperFormat of generated PDF',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
@@ -192,25 +198,38 @@ export class Website2PdfCli {
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
-        chromiumFlags: {
-          alias: [`${CHROMIUM_FLAGS_OPTION}`],
+        marginTop: {
+          alias: [`${MARGIN_TOP_OPTION}`],
           type: 'string',
-          description: 'Chromium flags set at Puppeteer launch',
+          description: 'Margin top (50px or 0px)',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
-        chromiumHeadless: {
-          alias: [`${CHROMIUM_HEADLESS_OPTION}`],
-          type: 'string',
-          default: DEFAULT_CHROMIUM_HEADLESS,
-          description: 'Chromium headless option set at Puppeteer launch',
+        mergeAll: {
+          alias: [`${MERGE_ALL_OPTION}`],
+          type: 'boolean',
+          description: `Merge all PDF generated into a single one (${DEFAULT_MERGED_PDF})`,
+          group: this.GROUPS.COMMONS,
+        },
+        outputDir: {
+          alias: ['o', `${OUTPUT_DIR_OPTION}`],
+          type: 'PathLike',
+          default: DEFAULT_OUTPUT_DIR,
+          description: 'Relative path of the output directory',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
-        excludeUrls: {
-          alias: [`${EXCLUDE_URLS_OPTION}`],
-          type: 'string',
-          description: 'Exclude urls matching a regex from printing process',
+        outputFileNameUrlMap: {
+          alias: [`${OUTPUT_FILE_NAME_URL_MAP_OPTION}`],
+          type: 'boolean',
+          description: `Output file name to URL map in JSON format (${DEFAULT_OUTPUT_URL_TO_FILENAME_MAP})`,
+          group: this.GROUPS.COMMONS,
+        },
+        processPool: {
+          alias: [`${PROCESS_POOL_OPTION}`],
+          type: 'number',
+          default: DEFAULT_PROCESS_POOL,
+          description: 'Pool of parallelized process',
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
@@ -221,29 +240,6 @@ export class Website2PdfCli {
           description: 'Safely generate file title by replacing special chars',
           group: this.GROUPS.COMMONS,
         },
-        urlTitle: {
-          alias: [`${URL_TITLE_OPTION}`],
-          type: 'boolean',
-          default: DEFAULT_URL_TITLE,
-          description: 'Generate file title using last URL fragment',
-          group: this.GROUPS.COMMONS,
-        },
-        format: {
-          alias: [`${FORMAT_OPTION}`],
-          type: 'string',
-          default: DEFAULT_FORMAT,
-          description: 'Set PaperFormat of generated PDF',
-          group: this.GROUPS.COMMONS,
-          nargs: 1,
-        },
-        processPool: {
-          alias: [`${PROCESS_POOL_OPTION}`],
-          type: 'number',
-          default: DEFAULT_PROCESS_POOL,
-          description: 'Pool of parallelized process',
-          group: this.GROUPS.COMMONS,
-          nargs: 1,
-        },
         serveSitemap: {
           alias: [`${SERVE_SITEMAP_OPTION}`],
           type: 'string',
@@ -251,10 +247,27 @@ export class Website2PdfCli {
           group: this.GROUPS.COMMONS,
           nargs: 1,
         },
-        outputFileNameUrlMap: {
-          alias: [`${OUTPUT_FILE_NAME_URL_MAP_OPTION}`],
+        sitemapUrl: {
+          alias: ['s', `${SITEMAP_URL_OPTION}`],
+          type: 'string',
+          default: DEFAULT_SITEMAP_URL,
+          description: 'Sitemap URL',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
+        },
+        templateDir: {
+          alias: ['t', `${TEMPLATE_DIR_OPTION}`],
+          type: 'PathLike',
+          default: DEFAULT_TEMPLATE_DIR,
+          description: 'Relative path of the templates directory',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
+        },
+        urlTitle: {
+          alias: [`${URL_TITLE_OPTION}`],
           type: 'boolean',
-          description: 'Output file name to URL map in JSON format',
+          default: DEFAULT_URL_TITLE,
+          description: 'Generate file title using last URL fragment',
           group: this.GROUPS.COMMONS,
         },
       })

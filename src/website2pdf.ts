@@ -12,16 +12,20 @@ import {Website2PdfCli} from './cli/website2pdfCli';
 import {PdfTemplate} from './model/pdfTemplate';
 import {Website} from './model/website';
 import {WebsiteSitemap} from './model/websiteSitemap';
-import {DEFAULT_OUTPUT_URL_TO_FILENAME_MAP} from './utils/const';
+import {
+  DEFAULT_MERGED_PDF,
+  DEFAULT_OUTPUT_URL_TO_FILENAME_MAP,
+} from './utils/const';
 import {
   headerFactory,
   interpolate,
   puppeteerBrowserLaunchArgs,
-  toFilename,
   toFilePath,
+  toFilename,
 } from './utils/helpers';
 import {logger} from './utils/logger';
 import {PrintResults, STATUS_ERROR, STATUS_PRINTED} from './utils/stats';
+import PDFMerger = require('pdf-merger-js');
 
 export class Website2Pdf {
   private static _urlToFileNameMap: {[key: string]: string} = {};
@@ -29,9 +33,13 @@ export class Website2Pdf {
   public static get urlToFileNameMap(): {[key: string]: string} {
     return Website2Pdf._urlToFileNameMap;
   }
+  public static set urlToFileNameMap(value: {[key: string]: string}) {
+    Website2Pdf._urlToFileNameMap = value;
+  }
   /* c8 ignore stop */
 
   static async main(): Promise<void> {
+    Website2Pdf.urlToFileNameMap = {};
     return new Website2PdfCli().parse().then(async cliArgs => {
       headerFactory();
       const website = new Website(cliArgs);
@@ -41,9 +49,7 @@ export class Website2Pdf {
           return website.build().then(async (website: Website) => {
             if (website.sitemaps.length !== 0) {
               await processSitemaps(cliArgs, website);
-              if (cliArgs.outputFileNameUrlMap) {
-                await saveToUrlMapFile(cliArgs);
-              }
+              await postActions(cliArgs);
             } else {
               logger().warn(
                 `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`
@@ -178,6 +184,7 @@ async function pageToPDF(
     const metadatas = new Map<string, string>();
     const fileDir = path.join(outputDir, toFilePath(url));
     let filename: string;
+    let filePath: string;
     await fs
       .ensureDir(fileDir)
       .then((result: any) => {
@@ -196,6 +203,7 @@ async function pageToPDF(
                 url,
                 cliArgs
               )}.pdf`;
+              filePath = path.join(fileDir, filename);
             });
           })
           .then(() => {
@@ -218,7 +226,6 @@ async function pageToPDF(
               });
           })
           .then(async metadatas => {
-            const filePath = path.join(fileDir, filename);
             logger().debug(`Printing page ${filePath} from url ${url}`);
             await page
               .pdf({
@@ -245,20 +252,41 @@ async function pageToPDF(
               });
           })
           .finally(async () => {
-            Website2Pdf.addToUrlToFileNameMap(url.toString(), filename);
+            Website2Pdf.addToUrlToFileNameMap(url.toString(), filePath);
             await page.close();
           });
       });
   });
 }
 
-async function saveToUrlMapFile(cliArgs: ICliArguments) {
+async function postActions(cliArgs: ICliArguments) {
+  if (cliArgs.outputFileNameUrlMap) {
+    await saveUrlToFileNameMapFile(cliArgs);
+  }
+  if (cliArgs.mergeAll) {
+    await mergeAllPdfToOne(cliArgs);
+  }
+}
+
+async function saveUrlToFileNameMapFile(cliArgs: ICliArguments) {
   await fs.writeJson(
     path.join(
       path.normalize(cliArgs.outputDir.toString()),
-      'urlToFileNameMap.json'
+      DEFAULT_OUTPUT_URL_TO_FILENAME_MAP
     ),
     Website2Pdf.urlToFileNameMap,
     {spaces: 2}
+  );
+}
+
+async function mergeAllPdfToOne(cliArgs: ICliArguments) {
+  const merger = new PDFMerger();
+  for (const [, value] of Object.entries(Website2Pdf.urlToFileNameMap)) {
+    logger().debug(`Merging ${path.resolve(value)} file`);
+    console.log(`Merging ${path.resolve(value)} file`);
+    await merger.add(path.resolve(value));
+  }
+  await merger.save(
+    path.join(path.normalize(cliArgs.outputDir.toString()), DEFAULT_MERGED_PDF)
   );
 }
