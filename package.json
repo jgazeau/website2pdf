@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@sinonjs/fake-timers": "^11.0.0",
-    "@types/chai": "^4.3.4",
+    "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
     "@types/fs-extra": "^11.0.1",
     "@types/mocha": "^10.0.1",
