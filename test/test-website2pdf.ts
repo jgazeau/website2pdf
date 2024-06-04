@@ -17,6 +17,7 @@ import {
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
   URL_TITLE_OPTION,
+  WAIT_UNTIL_OPTION,
 } from '../src/utils/const';
 import {PrintResults} from '../src/utils/stats';
 import {Website2Pdf} from '../src/website2pdf';
@@ -24,47 +25,54 @@ import {
   ABSOLUTE_URL,
   ABSOLUTE_URL_TITLE,
   ABSOLUTE_URL_TITLE_FILENAME,
-  DUMMY_PAGE,
   EN_ABSOLUTE_FILENAME,
-  EN_ABSOLUTE_PAGE,
   EN_ABSOLUTE_SAFE_FILENAME,
   EN_ABSOLUTE_URL,
   EN_HOMEPAGE_FILENAME,
-  EN_HOMEPAGE_PAGE,
   EN_HOMEPAGE_SAFE_FILENAME,
   EN_HOMEPAGE_URL,
   EN_RELATIVE_FILENAME,
-  EN_RELATIVE_PAGE,
   EN_RELATIVE_SAFE_FILENAME,
   EN_RELATIVE_URL,
   FR_ABSOLUTE_FILENAME,
-  FR_ABSOLUTE_PAGE,
   FR_ABSOLUTE_URL,
   FR_HOMEPAGE_FILENAME,
-  FR_HOMEPAGE_PAGE,
   FR_HOMEPAGE_URL,
   FR_RELATIVE_FILENAME,
-  FR_RELATIVE_PAGE,
   FR_RELATIVE_URL,
+  HTML_DUMMY_FILE,
+  HTML_EN_ABSOLUTE_FILE,
+  HTML_EN_HOMEPAGE_FILE,
+  HTML_EN_RELATIVE_FILE,
+  HTML_FR_ABSOLUTE_FILE,
+  HTML_FR_HOMEPAGE_FILE,
+  HTML_FR_RELATIVE_FILE,
+  HTML_WAIT_UNTIL_FILE,
   RELATIVE_URL,
   RELATIVE_URL_TITLE,
   RELATIVE_URL_TITLE_FILENAME,
-  SITEMAPINDEX_EMPTY_PAGE,
-  SITEMAPINDEX_EMPTY_RELURL,
-  SITEMAPINDEX_EMPTY_URL_PAGE,
-  SITEMAPINDEX_EMPTY_URL_RELURL,
-  SITEMAP_EMPTY_PAGE,
-  SITEMAP_EMPTY_RELURL,
-  SITEMAP_EN_PAGE,
+  SITEMAPINDEX_EMPTY_FILE,
+  SITEMAPINDEX_EMPTY_FILENAME,
+  SITEMAPINDEX_EMPTY_URL_FILE,
+  SITEMAPINDEX_EMPTY_URL_FILENAME,
+  SITEMAP_EMPTY_FILE,
+  SITEMAP_EMPTY_FILENAME,
+  SITEMAP_EN_FILE,
   SITEMAP_EN_RELURL,
-  SITEMAP_EXTENDED_PAGE,
-  SITEMAP_EXTENDED_RELURL,
-  SITEMAP_FR_PAGE,
+  SITEMAP_EXTENDED_FILE,
+  SITEMAP_EXTENDED_FILENAME,
+  SITEMAP_FR_FILE,
   SITEMAP_FR_RELURL,
-  SITEMAP_STANDARD_PAGE,
-  SITEMAP_URL_TITLE_OPTION_PAGE,
-  SITEMAP_URL_TITLE_OPTION_RELURL,
+  SITEMAP_STANDARD,
+  SITEMAP_URL_TITLE_OPTION_FILE,
+  SITEMAP_URL_TITLE_OPTION_FILENAME,
+  SITEMAP_WAIT_UNTIL_FILE,
+  SITEMAP_WAIT_UNTIL_FILENAME,
+  SPECIFIC_CHROMIUM_DISABLE_DEV_SHM_USAGE,
   SPECIFIC_EXCLUDE_REGEX,
+  SPECIFIC_WAIT_UNTIL,
+  WAIT_UNTIL_FILENAME,
+  WAIT_UNTIL_URL_TITLE,
   rootPath,
   testOutputDir,
   testTempPath,
@@ -83,47 +91,53 @@ import {SinonStubs} from './testUtils/sinonStubs';
 const testRequests: TestRequest[] = [
   new TestRequest(
     `/${DEFAULT_SITEMAP_NAME}`,
-    SITEMAP_STANDARD_PAGE,
+    SITEMAP_STANDARD,
     'application/xml'
   ),
-  new TestRequest('/', EN_HOMEPAGE_PAGE),
-  new TestRequest(`/${ABSOLUTE_URL}/`, EN_ABSOLUTE_PAGE),
-  new TestRequest(`/${RELATIVE_URL}/`, EN_RELATIVE_PAGE),
+  new TestRequest('/', HTML_EN_HOMEPAGE_FILE),
+  new TestRequest(`/${ABSOLUTE_URL}/`, HTML_EN_ABSOLUTE_FILE),
+  new TestRequest(`/${RELATIVE_URL}/`, HTML_EN_RELATIVE_FILE),
   new TestRequest(
-    `/${SITEMAP_EXTENDED_RELURL}`,
-    SITEMAP_EXTENDED_PAGE,
+    `/${SITEMAP_EXTENDED_FILENAME}`,
+    SITEMAP_EXTENDED_FILE,
     'application/xml'
   ),
-  new TestRequest(`/${SITEMAP_EN_RELURL}`, SITEMAP_EN_PAGE, 'application/xml'),
-  new TestRequest(`/${SITEMAP_FR_RELURL}`, SITEMAP_FR_PAGE, 'application/xml'),
+  new TestRequest(`/${SITEMAP_EN_RELURL}`, SITEMAP_EN_FILE, 'application/xml'),
+  new TestRequest(`/${SITEMAP_FR_RELURL}`, SITEMAP_FR_FILE, 'application/xml'),
   new TestRequest(
-    `/${SITEMAP_EMPTY_RELURL}`,
-    SITEMAP_EMPTY_PAGE,
-    'application/xml'
-  ),
-  new TestRequest(
-    `/${SITEMAPINDEX_EMPTY_RELURL}`,
-    SITEMAPINDEX_EMPTY_PAGE,
+    `/${SITEMAP_EMPTY_FILENAME}`,
+    SITEMAP_EMPTY_FILE,
     'application/xml'
   ),
   new TestRequest(
-    `/${SITEMAPINDEX_EMPTY_URL_RELURL}`,
-    SITEMAPINDEX_EMPTY_URL_PAGE,
+    `/${SITEMAPINDEX_EMPTY_FILENAME}`,
+    SITEMAPINDEX_EMPTY_FILE,
     'application/xml'
   ),
-  new TestRequest(`/${EN_HOMEPAGE_URL}/`, EN_HOMEPAGE_PAGE),
-  new TestRequest(`/${EN_ABSOLUTE_URL}/`, EN_ABSOLUTE_PAGE),
-  new TestRequest(`/${EN_RELATIVE_URL}/`, EN_RELATIVE_PAGE),
-  new TestRequest(`/${FR_HOMEPAGE_URL}/`, FR_HOMEPAGE_PAGE),
-  new TestRequest(`/${FR_ABSOLUTE_URL}/`, FR_ABSOLUTE_PAGE),
-  new TestRequest(`/${FR_RELATIVE_URL}/`, FR_RELATIVE_PAGE),
   new TestRequest(
-    `/${SITEMAP_URL_TITLE_OPTION_RELURL}`,
-    SITEMAP_URL_TITLE_OPTION_PAGE,
+    `/${SITEMAPINDEX_EMPTY_URL_FILENAME}`,
+    SITEMAPINDEX_EMPTY_URL_FILE,
     'application/xml'
   ),
-  new TestRequest(`/${ABSOLUTE_URL_TITLE}`, DUMMY_PAGE),
-  new TestRequest(`/${RELATIVE_URL_TITLE}`, DUMMY_PAGE),
+  new TestRequest(
+    `/${SITEMAP_WAIT_UNTIL_FILENAME}`,
+    SITEMAP_WAIT_UNTIL_FILE,
+    'application/xml'
+  ),
+  new TestRequest(`/${EN_HOMEPAGE_URL}/`, HTML_EN_HOMEPAGE_FILE),
+  new TestRequest(`/${EN_ABSOLUTE_URL}/`, HTML_EN_ABSOLUTE_FILE),
+  new TestRequest(`/${EN_RELATIVE_URL}/`, HTML_EN_RELATIVE_FILE),
+  new TestRequest(`/${FR_HOMEPAGE_URL}/`, HTML_FR_HOMEPAGE_FILE),
+  new TestRequest(`/${FR_ABSOLUTE_URL}/`, HTML_FR_ABSOLUTE_FILE),
+  new TestRequest(`/${FR_RELATIVE_URL}/`, HTML_FR_RELATIVE_FILE),
+  new TestRequest(
+    `/${SITEMAP_URL_TITLE_OPTION_FILENAME}`,
+    SITEMAP_URL_TITLE_OPTION_FILE,
+    'application/xml'
+  ),
+  new TestRequest(`/${ABSOLUTE_URL_TITLE}`, HTML_DUMMY_FILE),
+  new TestRequest(`/${RELATIVE_URL_TITLE}`, HTML_DUMMY_FILE),
+  new TestRequest(`/${WAIT_UNTIL_URL_TITLE}`, HTML_WAIT_UNTIL_FILE),
 ];
 const testServer = new TestServer(testRequests);
 
@@ -140,7 +154,7 @@ describe('Website2pdf tests', () => {
     cleanTestTempDirectory();
     process.chdir(rootPath);
     sinonMock.logger = true;
-    sinonMock.consoleLog = false;
+    sinonMock.consoleLog = true;
     sinonMock.sinonSetStubs();
   });
   afterEach(() => {
@@ -150,7 +164,7 @@ describe('Website2pdf tests', () => {
     setChaiAsPromised();
     mockArgs([
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EMPTY_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EMPTY_FILENAME}`,
     ]);
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
@@ -163,7 +177,7 @@ describe('Website2pdf tests', () => {
     setChaiAsPromised();
     mockArgs([
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAPINDEX_EMPTY_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAPINDEX_EMPTY_FILENAME}`,
     ]);
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
@@ -176,7 +190,7 @@ describe('Website2pdf tests', () => {
     setChaiAsPromised();
     mockArgs([
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAPINDEX_EMPTY_URL_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAPINDEX_EMPTY_URL_FILENAME}`,
     ]);
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
@@ -216,7 +230,7 @@ describe('Website2pdf tests', () => {
     mockArgs([
       `--${DISPLAY_HEADER_FOOTER_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_FILENAME}`,
     ]);
     const expectedFiles = [
       path.join(EN_HOMEPAGE_URL, EN_HOMEPAGE_FILENAME),
@@ -253,7 +267,7 @@ describe('Website2pdf tests', () => {
     mockArgs([
       `--${DISPLAY_HEADER_FOOTER_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_FILENAME}`,
       `--${TEMPLATE_DIR_OPTION}`,
       `${testTemplatesPath}`,
       `--${OUTPUT_DIR_OPTION}`,
@@ -276,7 +290,7 @@ describe('Website2pdf tests', () => {
     mockArgs([
       `--${DISPLAY_HEADER_FOOTER_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_FILENAME}`,
       `--${TEMPLATE_DIR_OPTION}`,
       `${testTemplatesMetaPath}`,
       `--${OUTPUT_DIR_OPTION}`,
@@ -299,7 +313,7 @@ describe('Website2pdf tests', () => {
     mockArgs([
       `--${DISPLAY_HEADER_FOOTER_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_FILENAME}`,
       `--${TEMPLATE_DIR_OPTION}`,
       `${testTemplatesImagePath}`,
       `--${OUTPUT_DIR_OPTION}`,
@@ -319,7 +333,9 @@ describe('Website2pdf tests', () => {
   });
   it(`website2pdf should work when standard sitemap and ${CHROMIUM_FLAGS_OPTION}`, () => {
     setChaiAsPromised();
-    mockArgs([`--${CHROMIUM_FLAGS_OPTION}="--disable-dev-shm-usage"`]);
+    mockArgs([
+      `--${CHROMIUM_FLAGS_OPTION}=${SPECIFIC_CHROMIUM_DISABLE_DEV_SHM_USAGE}`,
+    ]);
     const expectedFiles = [
       EN_HOMEPAGE_FILENAME,
       path.join(ABSOLUTE_URL, EN_ABSOLUTE_FILENAME),
@@ -334,7 +350,7 @@ describe('Website2pdf tests', () => {
     setChaiAsPromised();
     mockArgs([
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_FILENAME}`,
       `--${EXCLUDE_URLS_OPTION}`,
       `${SPECIFIC_EXCLUDE_REGEX}`,
     ]);
@@ -373,7 +389,7 @@ describe('Website2pdf tests', () => {
     mockArgs([
       `--${URL_TITLE_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_URL_TITLE_OPTION_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_URL_TITLE_OPTION_FILENAME}`,
     ]);
     const expectedFiles = [
       ABSOLUTE_URL_TITLE_FILENAME,
@@ -389,7 +405,7 @@ describe('Website2pdf tests', () => {
     mockArgs([
       `--${OUTPUT_FILE_NAME_URL_MAP_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_FILENAME}`,
     ]);
     const expectedFiles = [DEFAULT_OUTPUT_URL_TO_FILENAME_MAP];
     process.chdir(testTempPath);
@@ -402,9 +418,22 @@ describe('Website2pdf tests', () => {
     mockArgs([
       `--${MERGE_ALL_OPTION}`,
       `--${SITEMAP_URL_OPTION}`,
-      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_RELURL}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_EXTENDED_FILENAME}`,
     ]);
     const expectedFiles = [DEFAULT_MERGED_PDF];
+    process.chdir(testTempPath);
+    return Website2Pdf.main().then(() => {
+      return assertExpectedFilesExists(expectedFiles);
+    });
+  });
+  it('website2pdf should wait until', () => {
+    setChaiAsPromised();
+    mockArgs([
+      `--${WAIT_UNTIL_OPTION}=${SPECIFIC_WAIT_UNTIL}`,
+      `--${SITEMAP_URL_OPTION}`,
+      `${DEFAULT_SITEMAP_HOST}/${SITEMAP_WAIT_UNTIL_FILENAME}`,
+    ]);
+    const expectedFiles = [WAIT_UNTIL_FILENAME];
     process.chdir(testTempPath);
     return Website2Pdf.main().then(() => {
       return assertExpectedFilesExists(expectedFiles);

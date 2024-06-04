@@ -72,6 +72,9 @@ Common options:
                                                                                            [default: "./w2pdf_template"]
       --urlTitle, --url-title                             Generate file title using last URL fragment
                                                                                               [boolean] [default: false]
+      --waitUntil, --wait-until                           Comma-separated list of PuppeteerLifeCycleEvent used to wait
+                                                          until specific event is fired on page
+                                                                     [string] [default: "domcontentloaded,networkidle2"]
 
 Other Options:
       --debug    Turn on debug logging                                                        [boolean] [default: false]
@@ -98,6 +101,8 @@ Examples:
   website2pdf --sitemap-url="http://localhost:80/sitemap.xml"   Use specific sitemap URL
   website2pdf --template-dir="./templates"                      Use specific template directory
   website2pdf --url-title                                       Generate file title using last URL fragment
+  website2pdf --wait-until='domcontentloaded,networkidle0'      Wait until both domcontentloaded and networkidle0 events
+                                                                are fired on page
 
 Additional information:
   GitHub: https://github.com/jgazeau/website2pdf.git

@@ -17,6 +17,7 @@ import {
   DEFAULT_SITEMAP_URL,
   DEFAULT_TEMPLATE_DIR,
   DEFAULT_URL_TITLE,
+  DEFAULT_WAIT_UNTIL,
   DISPLAY_HEADER_FOOTER_OPTION,
   EXCLUDE_URLS_OPTION,
   FORMAT_OPTION,
@@ -33,6 +34,7 @@ import {
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
   URL_TITLE_OPTION,
+  WAIT_UNTIL_OPTION,
 } from '../utils/const';
 import {getOutputWidth} from '../utils/helpers';
 import {IArgumentsParser, ICliArguments} from './iArgumentsParser';
@@ -130,6 +132,10 @@ export class Website2PdfCli {
         [
           `$0 --${URL_TITLE_OPTION}`,
           'Generate file title using last URL fragment',
+        ],
+        [
+          `$0 --${WAIT_UNTIL_OPTION}='domcontentloaded,networkidle0'`,
+          'Wait until both domcontentloaded and networkidle0 events are fired on page',
         ],
       ])
       .options({
@@ -269,6 +275,15 @@ export class Website2PdfCli {
           default: DEFAULT_URL_TITLE,
           description: 'Generate file title using last URL fragment',
           group: this.GROUPS.COMMONS,
+        },
+        waitUntil: {
+          alias: [`${WAIT_UNTIL_OPTION}`],
+          type: 'string',
+          default: DEFAULT_WAIT_UNTIL,
+          description:
+            'Comma-separated list of PuppeteerLifeCycleEvent used to wait until specific event is fired on page',
+          group: this.GROUPS.COMMONS,
+          nargs: 1,
         },
       })
       .wrap(getOutputWidth())

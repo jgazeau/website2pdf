@@ -31,16 +31,18 @@ import {
   SITEMAP_URL_OPTION,
   TEMPLATE_DIR_OPTION,
   URL_TITLE_OPTION,
+  WAIT_UNTIL_OPTION,
 } from '../../src/utils/const';
 import {
-  SPECIFIC_CHROMIUM_FLAGS,
   SPECIFIC_CHROMIUM_HEADLESS,
+  SPECIFIC_CHROMIUM_NO_SANDBOX,
   SPECIFIC_DIR,
   SPECIFIC_EXCLUDE_REGEX,
   SPECIFIC_FORMAT,
   SPECIFIC_PROCESS_POOL,
   SPECIFIC_SERVED_SITEMAP,
   SPECIFIC_URL,
+  SPECIFIC_WAIT_UNTIL,
 } from '../testUtils/const';
 import {mockArgs, setChaiAsPromised} from '../testUtils/helpers';
 import {SinonStubs} from '../testUtils/sinonStubs';
@@ -306,10 +308,10 @@ describe('Website2Pdf CLI tests', () => {
   });
   it(`parse should have specific ${CHROMIUM_FLAGS_OPTION} argument when ${CHROMIUM_FLAGS_OPTION} option`, () => {
     setChaiAsPromised();
-    mockArgs([`--${CHROMIUM_FLAGS_OPTION}=${SPECIFIC_CHROMIUM_FLAGS}`]);
+    mockArgs([`--${CHROMIUM_FLAGS_OPTION}=${SPECIFIC_CHROMIUM_NO_SANDBOX}`]);
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
-      expect(argv.chromiumFlags).to.be.equal(SPECIFIC_CHROMIUM_FLAGS);
+      expect(argv.chromiumFlags).to.be.equal(SPECIFIC_CHROMIUM_NO_SANDBOX);
     });
   });
   it(`parse should display error and exit when ${CHROMIUM_FLAGS_OPTION} option is empty`, () => {
@@ -434,6 +436,14 @@ describe('Website2Pdf CLI tests', () => {
     const cli = new Website2PdfCli();
     return cli.parse().then(argv => {
       expect(argv.mergeAll).to.be.equal(true);
+    });
+  });
+  it(`parse should have specific ${WAIT_UNTIL_OPTION} argument when ${WAIT_UNTIL_OPTION} option`, () => {
+    setChaiAsPromised();
+    mockArgs([`--${WAIT_UNTIL_OPTION}=${SPECIFIC_WAIT_UNTIL}`]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.waitUntil).to.be.equal(SPECIFIC_WAIT_UNTIL);
     });
   });
 });
