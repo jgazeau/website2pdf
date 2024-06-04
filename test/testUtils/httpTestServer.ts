@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 /* c8 ignore start */
+import * as fs from 'fs-extra';
 import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
 import {DEFAULT_PORT} from '../../src/utils/const';
 
@@ -11,13 +12,6 @@ export class TestRequest {
   public set url(value: string) {
     this._url = value;
   }
-  private _response: string;
-  public get response(): string {
-    return this._response;
-  }
-  public set response(value: string) {
-    this._response = value;
-  }
   private _contentType: string;
   public get contentType(): string {
     return this._contentType;
@@ -25,14 +19,21 @@ export class TestRequest {
   public set contentType(value: string) {
     this._contentType = value;
   }
+  private _filePath: string;
+  public get filePath(): string {
+    return this._filePath;
+  }
+  public set filePath(value: string) {
+    this._filePath = value;
+  }
 
   constructor(
     url: string,
-    response: string,
+    filePath: string,
     contentType = 'text/html; charset=UTF-8'
   ) {
     this.url = url;
-    this.response = response;
+    this.filePath = filePath;
     this.contentType = contentType;
   }
 }
@@ -46,15 +47,32 @@ export class TestServer {
         let defaultResponse = true;
         for (const testRequest of testRequests) {
           if (request.url === testRequest.url && request.method === 'GET') {
-            //console.log(`Reaching URL: '${testRequest.url}'`);
-            response.setHeader('Content-Type', testRequest.contentType);
-            response.end(testRequest.response);
-            defaultResponse = false;
+            if (fs.existsSync(testRequest.filePath)) {
+              const s = fs.createReadStream(testRequest.filePath);
+              s.on('open', () => {
+                response.setHeader('Content-Type', testRequest.contentType);
+                s.pipe(response);
+              });
+              s.on('error', () => {
+                response.setHeader('Content-Type', 'text/plain');
+                response.statusCode = 404;
+                response.end(`Error reaching ${testRequest.url}`);
+              });
+              defaultResponse = false;
+              break;
+            } else {
+              response.setHeader('Content-Type', 'text/plain');
+              response.statusCode = 404;
+              response.end(`File ${testRequest.filePath} not found`);
+              defaultResponse = false;
+              break;
+            }
           }
         }
         if (defaultResponse) {
           response.statusCode = 404;
-          response.end();
+          response.setHeader('Content-Type', 'text/plain');
+          response.end('Unable to find appropriate request');
         }
       }
     );

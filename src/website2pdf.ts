@@ -5,6 +5,7 @@ import * as fs from 'fs-extra';
 import {red} from 'kleur';
 import * as path from 'path';
 import * as puppeteer from 'puppeteer';
+import {PuppeteerLifeCycleEvent} from 'puppeteer';
 import 'reflect-metadata';
 import {URL} from 'url';
 import {ICliArguments} from './cli/iArgumentsParser';
@@ -194,7 +195,11 @@ async function pageToPDF(
       })
       .then(async () => {
         await page
-          .goto(url.toString(), {waitUntil: 'networkidle2'})
+          .goto(url.toString(), {
+            waitUntil: [
+              ...(cliArgs.waitUntil.split(',') as PuppeteerLifeCycleEvent[]),
+            ],
+          })
           .then(() => {
             page.title().then(title => {
               metadatas.set('title', title);

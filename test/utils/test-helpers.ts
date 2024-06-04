@@ -25,7 +25,9 @@ import {
 import {logger} from '../../src/utils/logger';
 import {
   DUMMY_CLIARGS,
+  SPECIFIC_CHROMIUM_DISABLE_DEV_SHM_USAGE,
   SPECIFIC_CHROMIUM_HEADLESS,
+  SPECIFIC_CHROMIUM_NO_SANDBOX,
   testResourcesImagePath,
 } from '../testUtils/const';
 import {setChaiAsPromised} from '../testUtils/helpers';
@@ -162,10 +164,13 @@ describe('Helpers tests', () => {
     );
   });
   it(`puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when ${CHROMIUM_FLAGS_OPTION}`, () => {
-    const chromiumFlags = '--no-sandbox --disable-dev-shm-usage';
+    const chromiumFlags = `${SPECIFIC_CHROMIUM_NO_SANDBOX} ${SPECIFIC_CHROMIUM_DISABLE_DEV_SHM_USAGE}`;
     expect(puppeteerBrowserLaunchArgs(chromiumFlags)).to.deep.equal({
       headless: DEFAULT_CHROMIUM_HEADLESS,
-      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+      args: [
+        SPECIFIC_CHROMIUM_NO_SANDBOX,
+        SPECIFIC_CHROMIUM_DISABLE_DEV_SHM_USAGE,
+      ],
     });
   });
   it(`puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when ${CHROMIUM_HEADLESS_OPTION}`, () => {

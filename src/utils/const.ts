@@ -22,6 +22,7 @@ export const SERVE_SITEMAP_OPTION = 'serve-sitemap';
 export const SITEMAP_URL_OPTION = 'sitemap-url';
 export const TEMPLATE_DIR_OPTION = 'template-dir';
 export const URL_TITLE_OPTION = 'url-title';
+export const WAIT_UNTIL_OPTION = 'wait-until';
 
 export const DEFAULT_CHROMIUM_HEADLESS = 'true';
 export const DEFAULT_FOOTER_FILE = 'footer.html';
@@ -42,10 +43,12 @@ export const DEFAULT_SITEMAP_NAME = 'sitemap.xml';
 export const DEFAULT_SITEMAP_URL = `${DEFAULT_SITEMAP_HOST}/${DEFAULT_SITEMAP_NAME}`;
 export const DEFAULT_TEMPLATE_DIR = './w2pdf_template';
 export const DEFAULT_URL_TITLE = false;
+export const DEFAULT_WAIT_UNTIL = 'domcontentloaded,networkidle2';
 export const fxpOptions = {
   ignoreAttributes: true,
   parseNodeValue: true,
   trimValues: true,
+  isArray: (tagName: string) => ['sitemap', 'url'].includes(tagName),
 };
 
 // Force ipv4 for Axios client

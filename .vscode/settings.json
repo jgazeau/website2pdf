@@ -3,7 +3,7 @@
   "mochaExplorer.files": "test/**/test-*.ts",
   "mochaExplorer.esmLoader": false,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true
+    "source.organizeImports": "explicit"
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
