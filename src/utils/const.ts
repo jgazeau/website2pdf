@@ -24,7 +24,7 @@ export const TEMPLATE_DIR_OPTION = 'template-dir';
 export const URL_TITLE_OPTION = 'url-title';
 export const WAIT_UNTIL_OPTION = 'wait-until';
 
-export const DEFAULT_CHROMIUM_HEADLESS = 'true';
+export const DEFAULT_CHROMIUM_HEADLESS = 'shell';
 export const DEFAULT_FOOTER_FILE = 'footer.html';
 export const DEFAULT_FORMAT = 'a4';
 export const DEFAULT_HEADER_FILE = 'header.html';

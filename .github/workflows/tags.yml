@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: 'latest'
           cache: 'npm'
       - name: Publish release on Npm
         run: |

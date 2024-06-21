@@ -36,7 +36,7 @@ export const testTemplatesImagePath: string = path.join(
 export const SPECIFIC_CHROMIUM_NO_SANDBOX = '--no-sandbox';
 export const SPECIFIC_CHROMIUM_DISABLE_DEV_SHM_USAGE =
   '--disable-dev-shm-usage';
-export const SPECIFIC_CHROMIUM_HEADLESS = 'new';
+export const SPECIFIC_CHROMIUM_HEADLESS = 'true';
 export const SPECIFIC_DIR = './aSpecificDir/';
 export const SPECIFIC_EXCLUDE_REGEX = '\\/fr\\/';
 export const SPECIFIC_FORMAT = 'a3';
@@ -48,7 +48,7 @@ export const DUMMY_CLIARGS: ICliArguments = {
   _: [],
   $0: '',
   chromiumFlags: '',
-  chromiumHeadless: 'true',
+  chromiumHeadless: 'shell',
   debug: false,
   displayHeaderFooter: false,
   excludeUrls: SPECIFIC_EXCLUDE_REGEX,

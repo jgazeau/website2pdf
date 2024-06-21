@@ -95,26 +95,17 @@ async function processSitemaps(
           logger().debug(`Starting browser instance: ${version}`);
         })
         .then(async () => {
-          await browser
-            .createIncognitoBrowserContext()
-            .then(async browserContext => {
-              logger().debug(
-                `Creating incognito browser context: ${browserContext.isIncognito()}`
-              );
-              await PromisePool.for(website.sitemaps)
-                .withConcurrency(1)
-                .process(async (sitemap, index) => {
-                  logger().debug(
-                    `Processing pool for sitemap ${sitemap.rootUrl.href} (${index}/${website.sitemaps.length}))`
-                  );
-                  await processSitemap(
-                    cliArgs,
-                    website,
-                    sitemap,
-                    browserContext
-                  );
-                });
-            });
+          await browser.createBrowserContext().then(async browserContext => {
+            logger().debug('Creating incognito browser context');
+            await PromisePool.for(website.sitemaps)
+              .withConcurrency(1)
+              .process(async (sitemap, index) => {
+                logger().debug(
+                  `Processing pool for sitemap ${sitemap.rootUrl.href} (${index}/${website.sitemaps.length}))`
+                );
+                await processSitemap(cliArgs, website, sitemap, browserContext);
+              });
+          });
         })
         .finally(async () => {
           PrintResults.printResults();
@@ -235,6 +226,7 @@ async function pageToPDF(
             await page
               .pdf({
                 timeout: 0,
+                tagged: false,
                 path: filePath,
                 format: cliArgs.format,
                 displayHeaderFooter: cliArgs.displayHeaderFooter,

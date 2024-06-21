@@ -48,7 +48,7 @@ NB2: Margins have default values depending on the option used:
 Common options:
       --chromiumFlags, --chromium-flags                   Chromium flags set at Puppeteer launch                [string]
       --chromiumHeadless, --chromium-headless             Chromium headless option set at Puppeteer launch
-                                                                                              [string] [default: "true"]
+                                                                                             [string] [default: "shell"]
       --displayHeaderFooter, --display-header-footer      Turn on header and footer printing  [boolean] [default: false]
       --excludeUrls, --exclude-urls                       Exclude urls matching a regex from printing process   [string]
       --format, --format                                  Set PaperFormat of generated PDF      [string] [default: "a4"]
@@ -84,7 +84,7 @@ Other Options:
 Examples:
   website2pdf --chromium-flags="--no-sandbox                    Use specific chromium options at Puppeteer launch
   --disable-dev-shm-usage"
-  website2pdf --chromium-headless="new"                         Use specific chromium headless option at Puppeteer
+  website2pdf --chromium-headless="true"                        Use specific chromium headless option at Puppeteer
                                                                 launch
   website2pdf --display-header-footer                           Print PDFs with header and footer
   website2pdf --display-header-footer --margin-left="50px"      Use header and footer and set specific margins
