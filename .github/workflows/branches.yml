@@ -9,8 +9,8 @@ on:
     paths:
       - '**'
 env:
-  NPM_CACHE_NAME: "npm-cache"
-  NPM_CACHE_PATH: "~/.npm"
+  NPM_CACHE_NAME: 'npm-cache'
+  NPM_CACHE_PATH: '~/.npm'
 jobs:
   Test:
     name: Test
@@ -24,7 +24,7 @@ jobs:
       - name: Cache node modules
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: 'latest'
           cache: 'npm'
       - name: Npm install
         run: |

@@ -3,7 +3,7 @@
   "version": "0.0.16",
   "description": "Tool to export a website in PDFs based on its sitemap",
   "engines": {
-    "node": ">=14.14.0"
+    "node": ">=20.15.0"
   },
   "bin": {
     "website2pdf": "build/src/website2pdf.js"

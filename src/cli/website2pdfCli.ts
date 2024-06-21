@@ -84,7 +84,7 @@ export class Website2PdfCli {
           'Use specific chromium options at Puppeteer launch',
         ],
         [
-          `$0 --${CHROMIUM_HEADLESS_OPTION}="new"`,
+          `$0 --${CHROMIUM_HEADLESS_OPTION}="true"`,
           'Use specific chromium headless option at Puppeteer launch',
         ],
         [
