@@ -4,6 +4,7 @@ import {PromisePool} from '@supercharge/promise-pool';
 import * as fs from 'fs-extra';
 import {red} from 'kleur';
 import * as path from 'path';
+import PDFMerger from 'pdf-merger-js';
 import * as puppeteer from 'puppeteer';
 import {PuppeteerLifeCycleEvent} from 'puppeteer';
 import 'reflect-metadata';
@@ -26,7 +27,6 @@ import {
 } from './utils/helpers';
 import {logger} from './utils/logger';
 import {PrintResults, STATUS_ERROR, STATUS_PRINTED} from './utils/stats';
-import PDFMerger = require('pdf-merger-js');
 
 export class Website2Pdf {
   private static _urlToFileNameMap: {[key: string]: string} = {};
