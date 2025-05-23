@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 /* c8 ignore start */
 import * as fs from 'fs-extra';
-import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
-import {DEFAULT_PORT} from '../../src/utils/const';
+import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
+import { DEFAULT_PORT } from '../../src/utils/const';
 
 export class TestRequest {
   private _url: string;
@@ -79,7 +79,7 @@ export class TestServer {
   }
   start() {
     this.testServer.on('error', (error: Error) => {
-      console.log(`Error occured when running test server: ${error.message}`);
+      console.log(`Error occurred when running test server: ${error.message}`);
     });
     this.testServer.listen(
       {
@@ -96,7 +96,7 @@ export class TestServer {
       //console.log('Closing test server...');
       if (error) {
         console.log(
-          `Error occured when closing test server: ${error.message}(${error.code})`
+          `Error occurred when closing test server: ${error.message}(${error.code})`
         );
       }
     });
