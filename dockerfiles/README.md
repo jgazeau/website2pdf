@@ -49,7 +49,7 @@ docker build \
 
 * Generate PDFs from a local Hugo website's sitemap
     1. Copy your Hugo website content in the `HUGO_WORKDIR`
-    1. Start the Hugo embedded server as a brackground process
+    1. Start the Hugo embedded server as a background process
         ```Shell
         setsid nohup hugo serve > nohup.out &
         ```

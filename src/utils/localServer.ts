@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
-import {Website2PdfError} from '../model/website2pdfError';
-import {DEFAULT_PORT} from './const';
-import {logger} from './logger';
+import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
+import { Website2PdfError } from '../model/website2pdfError';
+import { DEFAULT_PORT } from './const';
+import { logger } from './logger';
 
 export class LocalServer {
   private CONTENT_TYPE = 'text/html';
@@ -41,7 +41,7 @@ export class LocalServer {
       this.server?.on('error', (error: Error) => {
         reject(
           new Website2PdfError(
-            `Error occured when running test server: ${error.message}`
+            `Error occurred when running test server: ${error.message}`
           )
         );
       });
@@ -65,7 +65,7 @@ export class LocalServer {
         if (error) {
           reject(
             new Website2PdfError(
-              `Error occured when closing local server: ${error.message}(${error.code})`
+              `Error occurred when closing local server: ${error.message}(${error.code})`
             )
           );
         } else {
