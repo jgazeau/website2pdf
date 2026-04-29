@@ -16,6 +16,7 @@ import {
   DEFAULT_TEMPLATE_DIR,
   DEFAULT_URL_TITLE,
   DISPLAY_HEADER_FOOTER_OPTION,
+  ENV_PREFIX,
   EXCLUDE_URLS_OPTION,
   FORMAT_OPTION,
   MARGIN_BOTTOM_OPTION,
@@ -324,6 +325,20 @@ describe('Website2Pdf CLI tests', () => {
     return cli.parse().then(() => {
       expect(console.error).to.be.called;
       expect(process.exit).to.be.called;
+    });
+  });
+  it(`parse should have specific ${CHROMIUM_FLAGS_OPTION} argument when ${ENV_PREFIX}_${CHROMIUM_FLAGS_OPTION.toUpperCase().replace(/-/g, '_')} env variable`, () => {
+    setChaiAsPromised();
+    process.env[
+      `${ENV_PREFIX}_${CHROMIUM_FLAGS_OPTION.toUpperCase().replace(/-/g, '_')}`
+    ] = SPECIFIC_CHROMIUM_NO_SANDBOX;
+    mockArgs([]);
+    const cli = new Website2PdfCli();
+    return cli.parse().then(argv => {
+      expect(argv.chromiumFlags).to.be.equal(SPECIFIC_CHROMIUM_NO_SANDBOX);
+      delete process.env[
+        `${ENV_PREFIX}_${CHROMIUM_FLAGS_OPTION.toUpperCase().replace(/-/g, '_')}`
+      ];
     });
   });
   it(`parse should have specific ${CHROMIUM_HEADLESS_OPTION} argument when ${CHROMIUM_HEADLESS_OPTION} option`, () => {

@@ -4,6 +4,8 @@ import {cyan} from 'kleur';
 
 export const MAX_TTY_LENGTH = 120;
 
+export const ENV_PREFIX = 'W2PDF';
+
 export const CHROMIUM_FLAGS_OPTION = 'chromium-flags';
 export const CHROMIUM_HEADLESS_OPTION = 'chromium-headless';
 export const DISPLAY_HEADER_FOOTER_OPTION = 'display-header-footer';

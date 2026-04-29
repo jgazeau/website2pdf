@@ -10,7 +10,7 @@ _NB: this tool was originally created to print pages from a Hugo website, that's
 ## How it works?
 
 - Website2pdf will crawl the website based on the **sitemapUrl** option to retrieve all URLs that have to be printed
-- Website2pdf will add header/footer in each file based on the **displayHeaderFooter** option, and use **header.html** and **footer.html** if found in the directory based on the **templateDir** option.
+- Website2pdf will add header/footer to each file based on the **displayHeaderFooter** option, and use **header.html** and **footer.html** if found in the directory based on the **templateDir** option.
 - Website2pdf will save all PDF file in the directory based on the **outputDir** option.
 - Generated PDFs are named using the `<title>` html tag by default (unless specific option is used)
 
@@ -34,7 +34,7 @@ npm install website2pdf
 
 Usage: website2pdf [options]
 
-NB1: Website2Pdf will search for header.html and footer.html files from the template-dir and use them respectively as
+NB1: Website2pdf will search for header.html and footer.html files in the template-dir and use them respectively as
 header and footer definition when printing PDFs.
 
 NB2: Margins have default values depending on the option used:
@@ -44,6 +44,8 @@ NB2: Margins have default values depending on the option used:
 ===> when display-header-footer=false
 -      margin-top  = margin-bottom = 0px
 -      margin-left = margin-right  = 0px
+
+NB3: All options can be set via environment variables with the W2PDF_ prefix (e.g., W2PDF_CHROMIUM_FLAGS, W2PDF_OUTPUT_DIR)
 
 Common options:
       --chromiumFlags, --chromium-flags                   Chromium flags set at Puppeteer launch                [string]

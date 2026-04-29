@@ -19,6 +19,7 @@ import {
   DEFAULT_URL_TITLE,
   DEFAULT_WAIT_UNTIL,
   DISPLAY_HEADER_FOOTER_OPTION,
+  ENV_PREFIX,
   EXCLUDE_URLS_OPTION,
   FORMAT_OPTION,
   MARGIN_BOTTOM_OPTION,
@@ -78,6 +79,7 @@ export class Website2PdfCli {
       .usage(`${CLI_USAGE}`)
       .alias('v', 'version')
       .alias('h', 'help')
+      .env(`${ENV_PREFIX}`)
       .example([
         [
           `$0 --${CHROMIUM_FLAGS_OPTION}="--no-sandbox --disable-dev-shm-usage"`,

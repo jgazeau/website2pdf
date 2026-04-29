@@ -11,6 +11,7 @@ on:
 env:
   NPM_CACHE_NAME: 'npm-cache'
   NPM_CACHE_PATH: '~/.npm'
+  W2PDF_CHROMIUM_FLAGS: '--no-sandbox --disable-dev-shm-usage'
 jobs:
   Test:
     name: Test
