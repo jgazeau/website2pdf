@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any*/
 import {bold, Color, green, red, white} from 'kleur';
 import {getBorderCharacters, table, TableUserConfig} from 'table';
 import {URL} from 'url';
@@ -7,7 +6,7 @@ import {logger} from './logger';
 export class PrintEntry {
   constructor(
     public readonly content: string,
-    public readonly color: Color = white
+    public readonly color: Color = white,
   ) {}
 }
 
@@ -99,8 +98,10 @@ export class PrintResults {
     this.orderResults();
     this.tableResultsConfig();
     this.enhanceTableResults();
-    this.table.length
-      ? logger().info(`\n${table(this.table, this.tableConfig)}`)
-      : logger().error('No results available');
+    if (this.table.length) {
+      logger().info(`\n${table(this.table, this.tableConfig)}`);
+    } else {
+      logger().error('No results available');
+    }
   }
 }

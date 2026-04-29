@@ -1,6 +1,6 @@
 /* c8 ignore start */
 import * as chai from 'chai';
-import * as chaiAsPromised from 'chai-as-promised';
+import chaiAsPromised from 'chai-as-promised';
 import * as fs from 'fs-extra';
 import {testTempPath} from './const';
 

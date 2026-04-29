@@ -67,9 +67,9 @@ export const CLI_USAGE = `${WEBSITE2PDF_HEADER}
 Usage: $0 [options]
 
 NB1: Website2Pdf will search for ${cyan(DEFAULT_HEADER_FILE)} and ${cyan(
-  DEFAULT_FOOTER_FILE
+  DEFAULT_FOOTER_FILE,
 )} files from the ${cyan(
-  TEMPLATE_DIR_OPTION
+  TEMPLATE_DIR_OPTION,
 )} and use them respectively as header and footer definition when printing PDFs.
 
 NB2: Margins have default values depending on the option used:

@@ -4,7 +4,7 @@ import {randomUUID} from 'crypto';
 import * as fs from 'fs-extra';
 import {PathLike} from 'fs-extra';
 import {Color, white} from 'kleur';
-import {PuppeteerNodeLaunchOptions} from 'puppeteer';
+import {LaunchOptions} from 'puppeteer';
 import {ICliArguments} from '../cli/iArgumentsParser';
 import {Website2PdfError} from '../model/website2pdfError';
 import {
@@ -14,12 +14,12 @@ import {
 } from './const';
 import {logger} from './logger';
 
-export function validateClassObjectSync(object: Object): void {
+export function validateClassObjectSync(object: object): void {
   const objectTypeMessage = typeof object;
   const validationErrors: ValidationError[] = validateSync(object);
   if (validationErrors.length > 0) {
     throw new Error(
-      `Validation failed on ${objectTypeMessage}  with following(s) error(s): \n ${validationErrors}`
+      `Validation failed on ${objectTypeMessage}  with following(s) error(s): \n ${validationErrors}`,
     );
   }
 }
@@ -45,17 +45,17 @@ export function getOutputWidth(): number {
 export function toFilename(
   title: string | undefined,
   url: URL,
-  cliArgs: ICliArguments
+  cliArgs: ICliArguments,
 ): string {
   return title
     ? cliArgs.safeTitle
       ? toSafeString(title)
       : cliArgs.urlTitle
-      ? toSafeLastSegment(url)
-      : title
+        ? toSafeLastSegment(url)
+        : title
     : cliArgs.urlTitle
-    ? toSafeLastSegment(url)
-    : randomUUID();
+      ? toSafeLastSegment(url)
+      : randomUUID();
 }
 
 export function toSafeString(str: string) {
@@ -78,7 +78,7 @@ export function toFilePath(url: URL): string {
 
 export function interpolate(
   str: string | undefined,
-  variableMap: Map<string, string>
+  variableMap: Map<string, string>,
 ) {
   variableMap.forEach((value: string, key: string) => {
     str = str?.replace(`$\{${key}}`, value);
@@ -99,8 +99,8 @@ export function imageEncode(path: fs.PathOrFileDescriptor): string {
 
 export function puppeteerBrowserLaunchArgs(
   chromiumFlags: string,
-  chromiumHeadless: any = DEFAULT_CHROMIUM_HEADLESS
-): PuppeteerNodeLaunchOptions {
+  chromiumHeadless: any = DEFAULT_CHROMIUM_HEADLESS,
+): LaunchOptions {
   return chromiumFlags
     ? {
         headless: chromiumHeadless,

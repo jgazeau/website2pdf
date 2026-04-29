@@ -19,19 +19,19 @@ export const testTempPath: string = path.join(rootPath, 'test/temp');
 export const testOutputDir = path.join(testTempPath, DEFAULT_OUTPUT_DIR);
 export const testResourcesImagePath: string = path.join(
   testResourcesPath,
-  '/html/static/images'
+  '/html/static/images',
 );
 export const testTemplatesPath: string = path.join(
   testResourcesPath,
-  DEFAULT_TEMPLATE_DIR
+  DEFAULT_TEMPLATE_DIR,
 );
 export const testTemplatesMetaPath: string = path.join(
   testResourcesPath,
-  `${DEFAULT_TEMPLATE_DIR}_meta`
+  `${DEFAULT_TEMPLATE_DIR}_meta`,
 );
 export const testTemplatesImagePath: string = path.join(
   testResourcesPath,
-  `${DEFAULT_TEMPLATE_DIR}_image`
+  `${DEFAULT_TEMPLATE_DIR}_image`,
 );
 export const SPECIFIC_CHROMIUM_NO_SANDBOX = '--no-sandbox';
 export const SPECIFIC_CHROMIUM_DISABLE_DEV_SHM_USAGE =
@@ -109,78 +109,78 @@ export const SITEMAPINDEX_EMPTY_URL_FILENAME = `empty_url/${SITEMAP_EXTENDED_FIL
 //
 export const SITEMAP_STANDARD = path.join(
   testResourcesPath,
-  DEFAULT_SITEMAP_NAME
+  DEFAULT_SITEMAP_NAME,
 );
 //
 export const SITEMAP_EN_FILE = path.join(testResourcesPath, 'sitemap_en.xml');
 export const SITEMAP_FR_FILE = path.join(testResourcesPath, 'sitemap_fr.xml');
 export const SITEMAP_EXTENDED_FILE = path.join(
   testResourcesPath,
-  SITEMAP_EXTENDED_FILENAME
+  SITEMAP_EXTENDED_FILENAME,
 );
 export const SITEMAP_UNKNOWN_FILE = path.join(
   testResourcesPath,
-  'sitemap_unknown.xml'
+  'sitemap_unknown.xml',
 );
 export const SITEMAP_INVALID_FILE = path.join(
   testResourcesPath,
-  'sitemap_invalid.xml'
+  'sitemap_invalid.xml',
 );
 export const SITEMAP_SINGLE_ENTRY_FILE = path.join(
   testResourcesPath,
-  'sitemap_single_entry.xml'
+  'sitemap_single_entry.xml',
 );
 export const SITEMAP_WAIT_UNTIL_FILE = path.join(
   testResourcesPath,
-  'sitemap_wait_until.xml'
+  'sitemap_wait_until.xml',
 );
 export const SITEMAP_URL_TITLE_OPTION_FILE = path.join(
   testResourcesPath,
-  SITEMAP_URL_TITLE_OPTION_FILENAME
+  SITEMAP_URL_TITLE_OPTION_FILENAME,
 );
 export const SITEMAP_EMPTY_FILE = path.join(
   testResourcesPath,
-  'sitemap_empty.xml'
+  'sitemap_empty.xml',
 );
 export const SITEMAPINDEX_EMPTY_FILE = path.join(
   testResourcesPath,
-  'sitemapindex_empty.xml'
+  'sitemapindex_empty.xml',
 );
 export const SITEMAPINDEX_EMPTY_URL_FILE = path.join(
   testResourcesPath,
-  'sitemapindex_empty_url.xml'
+  'sitemapindex_empty_url.xml',
 );
 export const SITEMAPINDEX_SINGLE_ENTRY_FILE = path.join(
   testResourcesPath,
-  'sitemapindex_single_entry.xml'
+  'sitemapindex_single_entry.xml',
 );
 export const HTML_EN_HOMEPAGE_FILE = path.join(
   testResourcesPath,
-  `html/${EN_HOMEPAGE_URL}/homepage.html`
+  `html/${EN_HOMEPAGE_URL}/homepage.html`,
 );
 export const HTML_EN_ABSOLUTE_FILE = path.join(
   testResourcesPath,
-  `html/${EN_HOMEPAGE_URL}/absolute.html`
+  `html/${EN_HOMEPAGE_URL}/absolute.html`,
 );
 export const HTML_EN_RELATIVE_FILE = path.join(
   testResourcesPath,
-  `html/${EN_HOMEPAGE_URL}/relative.html`
+  `html/${EN_HOMEPAGE_URL}/relative.html`,
 );
 export const HTML_FR_HOMEPAGE_FILE = path.join(
   testResourcesPath,
-  `html/${FR_HOMEPAGE_URL}/homepage.html`
+  `html/${FR_HOMEPAGE_URL}/homepage.html`,
 );
 export const HTML_FR_ABSOLUTE_FILE = path.join(
   testResourcesPath,
-  `html/${FR_HOMEPAGE_URL}/absolute.html`
+  `html/${FR_HOMEPAGE_URL}/absolute.html`,
 );
 export const HTML_FR_RELATIVE_FILE = path.join(
   testResourcesPath,
-  `html/${FR_HOMEPAGE_URL}/relative.html`
+  `html/${FR_HOMEPAGE_URL}/relative.html`,
 );
 export const HTML_DUMMY_FILE = path.join(testResourcesPath, 'html/dummy.html');
 export const HTML_WAIT_UNTIL_FILE = path.join(
   testResourcesPath,
-  'html/wait_until.html'
+  'html/wait_until.html',
 );
 /* c8 ignore stop */

@@ -14,7 +14,7 @@ import {SinonStubs} from '../testUtils/sinonStubs';
 function mockResultEntry(
   url: URL,
   filePath: string,
-  status: PrintEntry
+  status: PrintEntry,
 ): ResultEntry {
   return [new PrintEntry(url.pathname), new PrintEntry(filePath), status];
 }
@@ -23,17 +23,17 @@ const orderedResults: ResultEntry[] = [
   mockResultEntry(
     new URL('http://localhost:1313/a'),
     `${DEFAULT_OUTPUT_DIR}/File1`,
-    STATUS_PRINTED
+    STATUS_PRINTED,
   ),
   mockResultEntry(
     new URL('http://localhost:1313/b'),
     `${DEFAULT_OUTPUT_DIR}/File2`,
-    STATUS_ERROR
+    STATUS_ERROR,
   ),
   mockResultEntry(
     new URL('http://localhost:1313/c'),
     `${DEFAULT_OUTPUT_DIR}/File3`,
-    STATUS_PRINTED
+    STATUS_PRINTED,
   ),
 ];
 
@@ -45,17 +45,17 @@ describe('Stats tests', () => {
     PrintResults.storeResult(
       new URL('http://localhost:1313/c'),
       `${DEFAULT_OUTPUT_DIR}/File3`,
-      STATUS_PRINTED
+      STATUS_PRINTED,
     );
     PrintResults.storeResult(
       new URL('http://localhost:1313/b'),
       `${DEFAULT_OUTPUT_DIR}/File2`,
-      STATUS_ERROR
+      STATUS_ERROR,
     );
     PrintResults.storeResult(
       new URL('http://localhost:1313/a'),
       `${DEFAULT_OUTPUT_DIR}/File1`,
-      STATUS_PRINTED
+      STATUS_PRINTED,
     );
   });
   afterEach(() => {

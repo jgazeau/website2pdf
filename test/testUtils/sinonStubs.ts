@@ -2,7 +2,7 @@
 import axios, {AxiosStatic} from 'axios';
 import * as chai from 'chai';
 import * as sinon from 'sinon';
-import * as sinonChai from 'sinon-chai';
+import sinonChai from 'sinon-chai';
 import {logger} from '../../src/utils/logger';
 
 export class SinonStubs {
@@ -90,7 +90,7 @@ export class AxiosMethodStub {
 
 export function setAxiosStub(
   method: keyof AxiosStatic,
-  methodStubs: Array<AxiosMethodStub>
+  methodStubs: Array<AxiosMethodStub>,
 ) {
   const stub: sinon.SinonStub = sandbox.stub(axios, method);
   for (const methodStub of methodStubs) {

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
-import { Website2PdfError } from '../model/website2pdfError';
-import { DEFAULT_PORT } from './const';
-import { logger } from './logger';
+import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
+import {Website2PdfError} from '../model/website2pdfError';
+import {DEFAULT_PORT} from './const';
+import {logger} from './logger';
 
 export class LocalServer {
   private CONTENT_TYPE = 'text/html';
@@ -33,7 +33,7 @@ export class LocalServer {
           response.statusCode = 404;
           response.end();
         }
-      }
+      },
     );
   }
   start(): Promise<void> {
@@ -41,8 +41,8 @@ export class LocalServer {
       this.server?.on('error', (error: Error) => {
         reject(
           new Website2PdfError(
-            `Error occurred when running test server: ${error.message}`
-          )
+            `Error occurred when running test server: ${error.message}`,
+          ),
         );
       });
       this.server.listen(
@@ -53,7 +53,7 @@ export class LocalServer {
           this.isStarted = true;
           logger().debug('Starting local server...');
           resolve();
-        }
+        },
       );
     });
   }
@@ -65,8 +65,8 @@ export class LocalServer {
         if (error) {
           reject(
             new Website2PdfError(
-              `Error occurred when closing local server: ${error.message}(${error.code})`
-            )
+              `Error occurred when closing local server: ${error.message}(${error.code})`,
+            ),
           );
         } else {
           resolve();

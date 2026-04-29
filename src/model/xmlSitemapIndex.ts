@@ -1,6 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {Transform, Type} from 'class-transformer';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import {IsArray, IsDefined, IsOptional, ValidateNested} from 'class-validator';
 import {XmlURL} from './xmlURL';
 

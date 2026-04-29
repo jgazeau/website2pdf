@@ -8,7 +8,10 @@
     "sourceMap": true,
     "outDir": "build",
     "rootDir": ".",
-    "lib": ["dom"]
+    "lib": ["dom"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "types": ["mocha"]
   },
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["test/resources/**/*"]

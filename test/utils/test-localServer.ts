@@ -11,12 +11,8 @@ import {setChaiAsPromised} from '../testUtils/helpers';
 
 describe('LocalServer tests', () => {
   let localServer: LocalServer;
-  afterEach(done => {
-    if (localServer?.isStarted) {
-      localServer.close().then(done);
-    } else {
-      done();
-    }
+  afterEach(() => {
+    return localServer?.isStarted ? localServer.close() : undefined;
   });
   it('localServer should start and serve simple file', () => {
     setChaiAsPromised();
@@ -36,7 +32,7 @@ describe('LocalServer tests', () => {
     localServer = new LocalServer(DEFAULT_SITEMAP_NAME, content);
     return localServer.start().then(() => {
       return expect(
-        axios.get(`${DEFAULT_SITEMAP_HOST}/bad_url`)
+        axios.get(`${DEFAULT_SITEMAP_HOST}/bad_url`),
       ).to.eventually.be.rejectedWith('404');
     });
   });
@@ -57,7 +53,7 @@ describe('LocalServer tests', () => {
             .close()
             .then(() => {
               return expect(
-                axios.get(DEFAULT_SITEMAP_URL)
+                axios.get(DEFAULT_SITEMAP_URL),
               ).to.eventually.be.rejectedWith(Error, 'ECONNREFUSED');
             })
             .then(() => {

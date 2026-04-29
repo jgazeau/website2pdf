@@ -4,6 +4,7 @@ import {PromisePool} from '@supercharge/promise-pool';
 import * as fs from 'fs-extra';
 import {red} from 'kleur';
 import * as path from 'path';
+import PDFMerger from 'pdf-merger-js';
 import * as puppeteer from 'puppeteer';
 import {PuppeteerLifeCycleEvent} from 'puppeteer';
 import 'reflect-metadata';
@@ -26,7 +27,6 @@ import {
 } from './utils/helpers';
 import {logger} from './utils/logger';
 import {PrintResults, STATUS_ERROR, STATUS_PRINTED} from './utils/stats';
-import PDFMerger = require('pdf-merger-js');
 
 export class Website2Pdf {
   private static _urlToFileNameMap: {[key: string]: string} = {};
@@ -53,7 +53,7 @@ export class Website2Pdf {
               await postActions(cliArgs, website);
             } else {
               logger().warn(
-                `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`
+                `No sitemap found. Please check ${website.websiteURL.sitemapURL.toString()}`,
               );
             }
           });
@@ -66,7 +66,7 @@ export class Website2Pdf {
 
   public static addToUrlToFileNameMap(url: string, fileName: string): void {
     logger().debug(
-      `Adding url ${url.toString()} to ${DEFAULT_OUTPUT_URL_TO_FILENAME_MAP}`
+      `Adding url ${url.toString()} to ${DEFAULT_OUTPUT_URL_TO_FILENAME_MAP}`,
     );
     this._urlToFileNameMap[url] = fileName;
   }
@@ -79,14 +79,14 @@ Website2Pdf.main().catch((error: Error) => {
 
 async function processSitemaps(
   cliArgs: ICliArguments,
-  website: Website
+  website: Website,
 ): Promise<void> {
   await puppeteer
     .launch(
       puppeteerBrowserLaunchArgs(
         cliArgs.chromiumFlags,
-        cliArgs.chromiumHeadless
-      )
+        cliArgs.chromiumHeadless,
+      ),
     )
     .then(async browser => {
       await browser
@@ -101,7 +101,7 @@ async function processSitemaps(
               .withConcurrency(1)
               .process(async (sitemap, index) => {
                 logger().debug(
-                  `Processing pool for sitemap ${sitemap.rootUrl.href} (${index}/${website.sitemaps.length}))`
+                  `Processing pool for sitemap ${sitemap.rootUrl.href} (${index}/${website.sitemaps.length}))`,
                 );
                 await processSitemap(cliArgs, website, sitemap, browserContext);
               });
@@ -118,7 +118,7 @@ async function processSitemap(
   cliArgs: ICliArguments,
   website: Website,
   sitemap: WebsiteSitemap,
-  browserContext: puppeteer.BrowserContext
+  browserContext: puppeteer.BrowserContext,
 ) {
   if (sitemap.urls.length !== 0) {
     const outputDir = path.normalize(cliArgs.outputDir.toString());
@@ -127,11 +127,11 @@ async function processSitemap(
       cliArgs,
       outputDir,
       sitemap,
-      website.pdfTemplate
+      website.pdfTemplate,
     );
   } else {
     logger().warn(
-      `No URLs found for sitemap ${sitemap.rootUrl.toString()}. Please check ${website.websiteURL.sitemapURL.toString()}`
+      `No URLs found for sitemap ${sitemap.rootUrl.toString()}. Please check ${website.websiteURL.sitemapURL.toString()}`,
     );
   }
 }
@@ -141,14 +141,16 @@ async function sitemapToPDF(
   cliArgs: ICliArguments,
   outputDir: string,
   sitemap: WebsiteSitemap,
-  pdfTemplate: PdfTemplate
+  pdfTemplate: PdfTemplate,
 ): Promise<void> {
   await fs
     .ensureDir(outputDir)
     .then((result: any) => {
-      result
-        ? logger().debug(`Directory ${result} created`)
-        : logger().debug(`Directory ${outputDir} already exists`);
+      if (result) {
+        logger().debug(`Directory ${result} created`);
+      } else {
+        logger().debug(`Directory ${outputDir} already exists`);
+      }
     })
     .then(async () => {
       logger().info(`Printing ${sitemap.urls.length} PDF(s) to ${outputDir}`);
@@ -157,7 +159,7 @@ async function sitemapToPDF(
         .withConcurrency(cliArgs.processPool)
         .process(async (url, index) => {
           logger().debug(
-            `Processing pool for url ${url.href} (${index}/${sitemap.urls.length}))`
+            `Processing pool for url ${url.href} (${index}/${sitemap.urls.length}))`,
           );
           await pageToPDF(browserContext, cliArgs, outputDir, url, pdfTemplate);
         });
@@ -169,7 +171,7 @@ async function pageToPDF(
   cliArgs: ICliArguments,
   outputDir: string,
   url: URL,
-  pdfTemplate: PdfTemplate
+  pdfTemplate: PdfTemplate,
 ): Promise<void> {
   await browserContext.newPage().then(async page => {
     page.setDefaultNavigationTimeout(0);
@@ -180,9 +182,11 @@ async function pageToPDF(
     await fs
       .ensureDir(fileDir)
       .then((result: any) => {
-        result
-          ? logger().debug(`Directory ${result} created`)
-          : logger().debug(`Directory ${outputDir} already exists`);
+        if (result) {
+          logger().debug(`Directory ${result} created`);
+        } else {
+          logger().debug(`Directory ${outputDir} already exists`);
+        }
       })
       .then(async () => {
         await page
@@ -191,13 +195,13 @@ async function pageToPDF(
               ...(cliArgs.waitUntil.split(',') as PuppeteerLifeCycleEvent[]),
             ],
           })
-          .then(() => {
-            page.title().then(title => {
+          .then(async () => {
+            await page.title().then(title => {
               metadatas.set('title', title);
               filename = `${toFilename(
                 metadatas.get('title')?.toString(),
                 url,
-                cliArgs
+                cliArgs,
               )}.pdf`;
               filePath = path.join(fileDir, filename);
             });
@@ -212,7 +216,7 @@ async function pageToPDF(
                     return metaName
                       ? [metaName, meta.getAttribute('content')]
                       : null;
-                  })
+                  }),
               )
               .then(metas => {
                 metas.forEach(meta => {
@@ -269,10 +273,10 @@ async function saveUrlToFileNameMapFile(cliArgs: ICliArguments) {
   await fs.writeJson(
     path.join(
       path.normalize(cliArgs.outputDir.toString()),
-      DEFAULT_OUTPUT_URL_TO_FILENAME_MAP
+      DEFAULT_OUTPUT_URL_TO_FILENAME_MAP,
     ),
     Website2Pdf.urlToFileNameMap,
-    {spaces: 2}
+    {spaces: 2},
   );
 }
 
@@ -290,6 +294,6 @@ async function mergeAllPdfToOne(cliArgs: ICliArguments, website: Website) {
     }
   }
   await merger.save(
-    path.join(path.normalize(cliArgs.outputDir.toString()), DEFAULT_MERGED_PDF)
+    path.join(path.normalize(cliArgs.outputDir.toString()), DEFAULT_MERGED_PDF),
   );
 }

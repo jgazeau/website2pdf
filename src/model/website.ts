@@ -66,7 +66,7 @@ export class Website {
     this.cliArgs = cliArgs;
     this.pdfTemplate = new PdfTemplate(
       cliArgs?.displayHeaderFooter,
-      cliArgs?.templateDir
+      cliArgs?.templateDir,
     );
   }
 
@@ -117,7 +117,7 @@ export class Website {
       return Promise.resolve(parser.parse(body));
     } catch (error: any) {
       return Promise.reject(
-        new Website2PdfError(`${ERROR_PARSING_XML_SCHEMA}: ${error.message}`)
+        new Website2PdfError(`${ERROR_PARSING_XML_SCHEMA}: ${error.message}`),
       );
     }
   }
@@ -127,7 +127,7 @@ export class Website {
       const mappedXml: XmlSitemapIndex = plainToClass(XmlSitemapIndex, xml);
       validateClassObjectSync(mappedXml);
       return Promise.resolve(mappedXml);
-    } catch (error: any) {
+    } catch {
       return this.mapToSitemap(xml);
     }
   }
@@ -137,37 +137,38 @@ export class Website {
       const mappedXml: XmlSitemap = plainToClass(XmlSitemap, xml);
       validateClassObjectSync(mappedXml);
       return Promise.resolve(mappedXml);
-    } catch (error: any) {
+    } catch {
       return Promise.reject(new Website2PdfError(ERROR_UNKNOWN_XML_SCHEMA));
     }
   }
 
   private populate(
     rootUrl: URL,
-    json: XmlSitemapIndex | XmlSitemap
+    json: XmlSitemapIndex | XmlSitemap,
   ): Promise<void> {
     if (json instanceof XmlSitemap) {
-      json._urlset._url.length
-        ? this._sitemaps.push(
-            new WebsiteSitemap(
-              rootUrl,
-              json._urlset._url
-                .flatMap((xmlURL: XmlURL) => xmlURL._loc)
-                .filter(
-                  url =>
-                    this.cliArgs?.excludeUrls === undefined ||
-                    new RegExp(this.cliArgs?.excludeUrls).exec(url.href) ===
-                      null
-                )
-            )
-          )
-        : this._sitemaps.push(new WebsiteSitemap(rootUrl, []));
+      if (json._urlset._url.length) {
+        this._sitemaps.push(
+          new WebsiteSitemap(
+            rootUrl,
+            json._urlset._url
+              .flatMap((xmlURL: XmlURL) => xmlURL._loc)
+              .filter(
+                url =>
+                  this.cliArgs?.excludeUrls === undefined ||
+                  new RegExp(this.cliArgs?.excludeUrls).exec(url.href) === null,
+              ),
+          ),
+        );
+      } else {
+        this._sitemaps.push(new WebsiteSitemap(rootUrl, []));
+      }
       return Promise.resolve();
     } else {
       return Promise.all(
         json._sitemapindex._sitemap.map(xmlURL => {
           return this.populateSiteMap(xmlURL._loc);
-        })
+        }),
       ).then(() => {
         return Promise.resolve();
       });

@@ -1,5 +1,4 @@
-import {Logger} from 'tslog';
-import {ILogObj} from 'tslog/dist/types/interfaces';
+import {ILogObj, Logger} from 'tslog';
 import {Website2PdfCli} from '../cli/website2pdfCli';
 
 export class LoggerFactory {
@@ -19,10 +18,7 @@ export class LoggerFactory {
             ? 2
             : 3
           : 3;
-      this.logger = new Logger({
-        type: 'pretty',
-        minLevel: loggerLevel,
-      });
+      this.logger = new Logger({type: 'pretty', minLevel: loggerLevel});
     }
     return this.logger;
   }

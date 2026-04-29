@@ -50,7 +50,7 @@ describe('Helpers tests', () => {
     const filePath: PathLike = './NonExistingFile.tst';
     return expect(checkFilePath(filePath)).to.eventually.be.rejectedWith(
       Website2PdfError,
-      'File not found'
+      'File not found',
     );
   });
   it('getOutputWidth should return MAX_TTY_WIDTH at most', () => {
@@ -69,7 +69,7 @@ describe('Helpers tests', () => {
   });
   it('toSafeString should return string without specific chars', () => {
     expect(toSafeString('string_éè%$@ with spaces')).to.equal(
-      'string_éè_with_spaces'
+      'string_éè_with_spaces',
     );
   });
   it('toSafeLastSegment should return last segment of URL when exist', () => {
@@ -79,7 +79,7 @@ describe('Helpers tests', () => {
   it('toSafeLastSegment should return UUID when empty last segment', () => {
     const urlPath = 'http://test.com/';
     expect(toSafeLastSegment(new URL(urlPath))).to.match(
-      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/,
     );
   });
   it('toFilename should return title without specific chars when safeTitle', () => {
@@ -87,7 +87,7 @@ describe('Helpers tests', () => {
     const cliArgs = Object.assign({}, DUMMY_CLIARGS);
     cliArgs.safeTitle = true;
     expect(
-      toFilename('file_title_éè%$@ with spaces', new URL(urlPath), cliArgs)
+      toFilename('file_title_éè%$@ with spaces', new URL(urlPath), cliArgs),
     ).to.equal('file_title_éè_with_spaces');
   });
   it('toFilename should return title', () => {
@@ -96,8 +96,8 @@ describe('Helpers tests', () => {
       toFilename(
         'file_title_éè%$@ with spaces',
         new URL(urlPath),
-        DUMMY_CLIARGS
-      )
+        DUMMY_CLIARGS,
+      ),
     ).to.equal('file_title_éè%$@ with spaces');
   });
   it('toFilename should return last segment of URL when exist and urlTitle', () => {
@@ -105,7 +105,7 @@ describe('Helpers tests', () => {
     const cliArgs = Object.assign({}, DUMMY_CLIARGS);
     cliArgs.urlTitle = true;
     expect(
-      toFilename('file_title_éè%$@ with spaces', new URL(urlPath), cliArgs)
+      toFilename('file_title_éè%$@ with spaces', new URL(urlPath), cliArgs),
     ).to.equal('anotherSubdir');
   });
   it('toFilename should return last segment when urlTitle and empty title', () => {
@@ -113,7 +113,7 @@ describe('Helpers tests', () => {
     const cliArgs = Object.assign({}, DUMMY_CLIARGS);
     cliArgs.urlTitle = true;
     expect(toFilename(undefined, new URL(urlPath), cliArgs)).to.equal(
-      'anotherSubdir'
+      'anotherSubdir',
     );
   });
   it('toFilename should return UUID when urlTitle and empty last segment', () => {
@@ -121,13 +121,13 @@ describe('Helpers tests', () => {
     const cliArgs = Object.assign({}, DUMMY_CLIARGS);
     cliArgs.urlTitle = true;
     expect(toFilename(undefined, new URL(urlPath), cliArgs)).to.match(
-      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/,
     );
   });
   it('toFilename should return UUID when empty title', () => {
     const urlPath = 'http://test.com/dir/subdir/anotherSubdir';
     expect(toFilename(undefined, new URL(urlPath), DUMMY_CLIARGS)).to.match(
-      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+      /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/,
     );
   });
   it('toFilePath should return empty string when url contains only a host', () => {
@@ -154,13 +154,13 @@ describe('Helpers tests', () => {
     ]);
     const input = 'key1=${key1},key2=${key2}';
     expect(interpolate(input, variableMap)).to.be.equal(
-      'key1=value1,key2=value2'
+      'key1=value1,key2=value2',
     );
   });
   it('imageEncode should return source of image as base64', () => {
     const inputPath = path.join(testResourcesImagePath, 'test.png');
     expect(imageEncode(inputPath)).to.be.equal(
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U9tCF8gAAAAAAAAAG41HX4AASRYHnsAAAAASUVORK5CYII='
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U9tCF8gAAAAAAAAAG41HX4AASRYHnsAAAAASUVORK5CYII=',
     );
   });
   it(`puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when ${CHROMIUM_FLAGS_OPTION}`, () => {
@@ -175,7 +175,7 @@ describe('Helpers tests', () => {
   });
   it(`puppeteerBrowserLaunchArgs should return PuppeteerNodeLaunchOptions when ${CHROMIUM_HEADLESS_OPTION}`, () => {
     expect(
-      puppeteerBrowserLaunchArgs('', SPECIFIC_CHROMIUM_HEADLESS)
+      puppeteerBrowserLaunchArgs('', SPECIFIC_CHROMIUM_HEADLESS),
     ).to.deep.equal({
       headless: SPECIFIC_CHROMIUM_HEADLESS,
     });

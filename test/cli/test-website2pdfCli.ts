@@ -106,7 +106,7 @@ describe('Website2Pdf CLI tests', () => {
       expect(argv.urlTitle).to.be.equal(DEFAULT_URL_TITLE);
       const website: Website = new Website();
       expect(website.websiteURL.sitemapURL.toString()).to.equal(
-        DEFAULT_SITEMAP_URL
+        DEFAULT_SITEMAP_URL,
       );
     });
   });

@@ -92,7 +92,7 @@ const testRequests: TestRequest[] = [
   new TestRequest(
     `/${DEFAULT_SITEMAP_NAME}`,
     SITEMAP_STANDARD,
-    'application/xml'
+    'application/xml',
   ),
   new TestRequest('/', HTML_EN_HOMEPAGE_FILE),
   new TestRequest(`/${ABSOLUTE_URL}/`, HTML_EN_ABSOLUTE_FILE),
@@ -100,29 +100,29 @@ const testRequests: TestRequest[] = [
   new TestRequest(
     `/${SITEMAP_EXTENDED_FILENAME}`,
     SITEMAP_EXTENDED_FILE,
-    'application/xml'
+    'application/xml',
   ),
   new TestRequest(`/${SITEMAP_EN_RELURL}`, SITEMAP_EN_FILE, 'application/xml'),
   new TestRequest(`/${SITEMAP_FR_RELURL}`, SITEMAP_FR_FILE, 'application/xml'),
   new TestRequest(
     `/${SITEMAP_EMPTY_FILENAME}`,
     SITEMAP_EMPTY_FILE,
-    'application/xml'
+    'application/xml',
   ),
   new TestRequest(
     `/${SITEMAPINDEX_EMPTY_FILENAME}`,
     SITEMAPINDEX_EMPTY_FILE,
-    'application/xml'
+    'application/xml',
   ),
   new TestRequest(
     `/${SITEMAPINDEX_EMPTY_URL_FILENAME}`,
     SITEMAPINDEX_EMPTY_URL_FILE,
-    'application/xml'
+    'application/xml',
   ),
   new TestRequest(
     `/${SITEMAP_WAIT_UNTIL_FILENAME}`,
     SITEMAP_WAIT_UNTIL_FILE,
-    'application/xml'
+    'application/xml',
   ),
   new TestRequest(`/${EN_HOMEPAGE_URL}/`, HTML_EN_HOMEPAGE_FILE),
   new TestRequest(`/${EN_ABSOLUTE_URL}/`, HTML_EN_ABSOLUTE_FILE),
@@ -133,7 +133,7 @@ const testRequests: TestRequest[] = [
   new TestRequest(
     `/${SITEMAP_URL_TITLE_OPTION_FILENAME}`,
     SITEMAP_URL_TITLE_OPTION_FILE,
-    'application/xml'
+    'application/xml',
   ),
   new TestRequest(`/${ABSOLUTE_URL_TITLE}`, HTML_DUMMY_FILE),
   new TestRequest(`/${RELATIVE_URL_TITLE}`, HTML_DUMMY_FILE),
@@ -250,7 +250,7 @@ describe('Website2pdf tests', () => {
     mockArgs([`--${DISPLAY_HEADER_FOOTER_OPTION}`]);
     fs.copySync(
       testTemplatesPath,
-      path.join(testTempPath, DEFAULT_TEMPLATE_DIR)
+      path.join(testTempPath, DEFAULT_TEMPLATE_DIR),
     );
     const expectedFiles = [
       EN_HOMEPAGE_FILENAME,
@@ -443,14 +443,14 @@ describe('Website2pdf tests', () => {
 
 function assertExpectedFilesExists(
   files: string[],
-  outputDir: string = testOutputDir
+  outputDir: string = testOutputDir,
 ) {
   return fs.pathExists(outputDir).then(isDirExists => {
     expect(isDirExists).to.be.true;
     return Promise.all(
       files.map(file => {
         return fs.pathExists(path.join(outputDir, file));
-      })
+      }),
     ).then((values: boolean[]) => {
       values.forEach(value => {
         expect(value).to.be.true;
@@ -461,14 +461,14 @@ function assertExpectedFilesExists(
 
 function assertExpectedFilesDoesntExists(
   files: string[],
-  outputDir: string = testOutputDir
+  outputDir: string = testOutputDir,
 ) {
   return fs.pathExists(outputDir).then(isDirExists => {
     expect(isDirExists).to.be.true;
     return Promise.all(
       files.map(file => {
         return fs.pathExists(path.join(outputDir, file));
-      })
+      }),
     ).then((values: boolean[]) => {
       values.forEach(value => {
         expect(value).to.be.false;

@@ -6,7 +6,7 @@ export class WebsiteURL {
   private _sitemapURL: URL = new URL(
     Website2PdfCli.cliArgs !== undefined
       ? Website2PdfCli.cliArgs.sitemapUrl || DEFAULT_SITEMAP_URL
-      : DEFAULT_SITEMAP_URL
+      : DEFAULT_SITEMAP_URL,
   );
   /* c8 ignore start */
   public get sitemapURL(): URL {

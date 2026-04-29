@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 /* c8 ignore start */
 import * as fs from 'fs-extra';
-import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
-import { DEFAULT_PORT } from '../../src/utils/const';
+import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
+import {DEFAULT_PORT} from '../../src/utils/const';
 
 export class TestRequest {
   private _url: string;
@@ -30,7 +30,7 @@ export class TestRequest {
   constructor(
     url: string,
     filePath: string,
-    contentType = 'text/html; charset=UTF-8'
+    contentType = 'text/html; charset=UTF-8',
   ) {
     this.url = url;
     this.filePath = filePath;
@@ -74,7 +74,7 @@ export class TestServer {
           response.setHeader('Content-Type', 'text/plain');
           response.end('Unable to find appropriate request');
         }
-      }
+      },
     );
   }
   start() {
@@ -88,7 +88,7 @@ export class TestServer {
       },
       () => {
         //console.log('Starting test server...');
-      }
+      },
     );
   }
   close() {
@@ -96,7 +96,7 @@ export class TestServer {
       //console.log('Closing test server...');
       if (error) {
         console.log(
-          `Error occurred when closing test server: ${error.message}(${error.code})`
+          `Error occurred when closing test server: ${error.message}(${error.code})`,
         );
       }
     });

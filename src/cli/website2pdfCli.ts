@@ -292,12 +292,12 @@ export class Website2PdfCli {
   GitHub: ${kleur.green('https://github.com/jgazeau/website2pdf.git')}
   Documentation: ${kleur.blue('https://github.com/jgazeau/website2pdf#readme')}
   Issues: ${kleur.red('https://github.com/jgazeau/website2pdf/issues')}
-      `
+      `,
       );
   }
 
   parse(): Promise<ICliArguments> {
-    this._parser.argv;
+    void this._parser.argv;
     this.defaultValues(Website2PdfCli.cliArgs);
     return Promise.resolve(Website2PdfCli.cliArgs);
   }

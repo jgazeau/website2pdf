@@ -49,14 +49,14 @@ describe('Website model tests', () => {
   beforeEach(() => {
     createSandbox();
   });
-  afterEach(done => {
+  afterEach(() => {
     restoreSandbox();
-    website ? website.postActions().then(done) : done();
+    return website ? website.postActions() : undefined;
   });
   it(`Website model should use default ${SITEMAP_URL_OPTION}`, () => {
     website = new Website();
     expect(website.websiteURL.sitemapURL.toString()).to.equal(
-      DEFAULT_SITEMAP_URL
+      DEFAULT_SITEMAP_URL,
     );
   });
   it('Website model should build and populate sitemaps when extended sitemap', () => {
@@ -64,22 +64,22 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAP_EXTENDED_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_EXTENDED_FILE, 'utf8'),
       ),
       new AxiosMethodStub(
         SITEMAP_EN_ABSURL,
-        fs.readFileSync(SITEMAP_EN_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_EN_FILE, 'utf8'),
       ),
       new AxiosMethodStub(
         SITEMAP_FR_ABSURL,
-        fs.readFileSync(SITEMAP_FR_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_FR_FILE, 'utf8'),
       ),
     ]);
     website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(2);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
-        SITEMAP_EN_ABSURL
+        SITEMAP_EN_ABSURL,
       );
       expect(website.sitemaps[0].urls).to.have.length(3);
       website.sitemaps[0].urls.forEach(url => {
@@ -90,7 +90,7 @@ describe('Website model tests', () => {
         ]);
       });
       expect(website.sitemaps[1].rootUrl.toString()).to.be.equal(
-        SITEMAP_FR_ABSURL
+        SITEMAP_FR_ABSURL,
       );
       expect(website.sitemaps[1].urls).to.have.length(3);
       website.sitemaps[1].urls.forEach(url => {
@@ -107,14 +107,14 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAP_STANDARD, 'utf8')
+        fs.readFileSync(SITEMAP_STANDARD, 'utf8'),
       ),
     ]);
     website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
-        DEFAULT_SITEMAP_URL
+        DEFAULT_SITEMAP_URL,
       );
       expect(website.sitemaps[0].urls).to.have.length(3);
       website.sitemaps[0].urls.forEach(url => {
@@ -131,18 +131,18 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAP_SINGLE_ENTRY_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_SINGLE_ENTRY_FILE, 'utf8'),
       ),
     ]);
     website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
-        DEFAULT_SITEMAP_URL
+        DEFAULT_SITEMAP_URL,
       );
       expect(website.sitemaps[0].urls).to.have.length(1);
       expect(website.sitemaps[0].urls[0].toString()).to.be.equal(
-        `${DEFAULT_SITEMAP_HOST}/`
+        `${DEFAULT_SITEMAP_HOST}/`,
       );
     });
   });
@@ -151,18 +151,18 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAPINDEX_SINGLE_ENTRY_FILE, 'utf8')
+        fs.readFileSync(SITEMAPINDEX_SINGLE_ENTRY_FILE, 'utf8'),
       ),
       new AxiosMethodStub(
         SITEMAP_EN_ABSURL,
-        fs.readFileSync(SITEMAP_EN_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_EN_FILE, 'utf8'),
       ),
     ]);
     website = new Website();
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(1);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
-        SITEMAP_EN_ABSURL
+        SITEMAP_EN_ABSURL,
       );
       expect(website.sitemaps[0].urls).to.have.length(3);
       website.sitemaps[0].urls.forEach(url => {
@@ -179,13 +179,13 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAP_UNKNOWN_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_UNKNOWN_FILE, 'utf8'),
       ),
     ]);
     website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
       Website2PdfError,
-      ERROR_UNKNOWN_XML_SCHEMA
+      ERROR_UNKNOWN_XML_SCHEMA,
     );
   });
   it('Website model should throw a Website2PdfError when invalid xml', () => {
@@ -193,13 +193,13 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAP_INVALID_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_INVALID_FILE, 'utf8'),
       ),
     ]);
     website = new Website();
     return expect(website.build()).to.eventually.be.rejectedWith(
       Website2PdfError,
-      ERROR_UNKNOWN_XML_SCHEMA
+      ERROR_UNKNOWN_XML_SCHEMA,
     );
   });
   it('Website model should build and populate sitemap when empty sitemapindex', () => {
@@ -207,7 +207,7 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAPINDEX_EMPTY_FILE, 'utf8')
+        fs.readFileSync(SITEMAPINDEX_EMPTY_FILE, 'utf8'),
       ),
     ]);
     website = new Website();
@@ -220,7 +220,7 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAP_EMPTY_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_EMPTY_FILE, 'utf8'),
       ),
     ]);
     website = new Website();
@@ -233,22 +233,22 @@ describe('Website model tests', () => {
     setAxiosStub('get', [
       new AxiosMethodStub(
         DEFAULT_SITEMAP_URL,
-        fs.readFileSync(SITEMAP_EXTENDED_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_EXTENDED_FILE, 'utf8'),
       ),
       new AxiosMethodStub(
         SITEMAP_EN_ABSURL,
-        fs.readFileSync(SITEMAP_EN_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_EN_FILE, 'utf8'),
       ),
       new AxiosMethodStub(
         SITEMAP_FR_ABSURL,
-        fs.readFileSync(SITEMAP_FR_FILE, 'utf8')
+        fs.readFileSync(SITEMAP_FR_FILE, 'utf8'),
       ),
     ]);
     website = new Website(DUMMY_CLIARGS);
     return website.build().then(() => {
       expect(website.sitemaps).to.have.length(2);
       expect(website.sitemaps[0].rootUrl.toString()).to.be.equal(
-        SITEMAP_EN_ABSURL
+        SITEMAP_EN_ABSURL,
       );
       expect(website.sitemaps[0].urls).to.have.length(3);
       website.sitemaps[0].urls.forEach(url => {
@@ -259,7 +259,7 @@ describe('Website model tests', () => {
         ]);
       });
       expect(website.sitemaps[1].rootUrl.toString()).to.be.equal(
-        SITEMAP_FR_ABSURL
+        SITEMAP_FR_ABSURL,
       );
       expect(website.sitemaps[1].urls).to.have.length(0);
     });
@@ -308,7 +308,7 @@ describe('Website model tests', () => {
         })
         .then(() => {
           return expect(
-            axios.get(DEFAULT_SITEMAP_URL)
+            axios.get(DEFAULT_SITEMAP_URL),
           ).to.eventually.be.rejectedWith(Error, 'ECONNREFUSED');
         });
     });
