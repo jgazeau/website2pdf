@@ -25,7 +25,7 @@ jobs:
       - name: Cache node modules
         uses: actions/setup-node@v6
         with:
-          node-version: 'latest'
+          node-version: '25'
           cache: 'npm'
       - name: Disable AppArmor
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
