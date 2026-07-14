@@ -5,7 +5,7 @@ const {defineConfig} = require('eslint/config');
 module.exports = defineConfig([
   ...gtsConfig,
   {
-    ignores: ['build/'],
+    ignores: ['build/', 'scripts/'],
   },
   {
     files: ['test/**/*.ts'],
