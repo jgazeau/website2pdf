@@ -1,8 +1,6 @@
-name: Tags
+name: Publish to NPMjs
 on:
   workflow_dispatch:
-  release:
-    types: [created]
 jobs:
   Publish:
     name: Publish
@@ -36,6 +34,7 @@ jobs:
           git tag ${TAG_NAME}
           git push
           git push -f origin ${TAG_NAME}
+          gh release create ${TAG_NAME} --generate-notes
       - name: Publish on Npm
         uses: JS-DevTools/npm-publish@v4
         with:
