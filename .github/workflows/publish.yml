@@ -1,46 +1,18 @@
 name: Publish to NPMjs
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Tag to publish'
-        required: true
-        type: string
+  push:
+    branches:
+      - main
+
 jobs:
-  Publish:
-    name: Publish
+  publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          ref: 'main'
-          submodules: recursive
-          fetch-depth: 1
-          token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          node-version: 'latest'
-          cache: 'npm'
-      - name: Publish release on Npm
-        run: |
-          export TAG_NAME=${{ inputs.tag }}
-          printf "%70s\n" | tr ' ' '-'
-          npm ci
-          printf "%70s\n" | tr ' ' '-'
-          npm version ${TAG_NAME} --no-git-tag-version
-          printf "%70s\n" | tr ' ' '-'
-          git add package.json
-          git add package-lock.json
-          printf "%70s\n" | tr ' ' '-'
-          git config --local user.name "GitHub Action"
-          git config --local user.email "action@github.com"
-          git commit -m "tag/${TAG_NAME}"
-          git tag ${TAG_NAME}
-          git push
-          git push -f origin ${TAG_NAME}
-          gh release create ${TAG_NAME} --generate-notes
-      - name: Publish on Npm
-        uses: JS-DevTools/npm-publish@v4
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+          node-version: "25"
+      - uses: JS-DevTools/npm-publish@v4
